@@ -1,0 +1,360 @@
+<title>Sentinela Bioacústica</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  --ground:#F4F8F7; --card:#FFFFFF; --ink:#16262A; --muted:#54696D; --line:#DCE6E4;
+  --accent:#00917C; --accent-soft:rgba(0,145,124,.12); --amber:#B0620A; --amber-soft:rgba(176,98,10,.14);
+  --good:#1B7A3D; --good-soft:rgba(27,122,61,.12); --warn:#9A4E08; --warn-soft:rgba(154,78,8,.12);
+  --track:#E6EEEC; --focus:#00917C;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1719; --card:#152124; --ink:#E3EDEB; --muted:#93A9A6; --line:#24363A;
+    --accent:#12A090; --accent-soft:rgba(18,160,144,.18); --amber:#BC7B2C; --amber-soft:rgba(188,123,44,.22);
+    --good:#3CA96A; --good-soft:rgba(60,169,106,.18); --warn:#D08A3E; --warn-soft:rgba(208,138,62,.18);
+    --track:#1D2C30; --focus:#12A090;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1719; --card:#152124; --ink:#E3EDEB; --muted:#93A9A6; --line:#24363A;
+  --accent:#12A090; --accent-soft:rgba(18,160,144,.18); --amber:#BC7B2C; --amber-soft:rgba(188,123,44,.22);
+  --good:#3CA96A; --good-soft:rgba(60,169,106,.18); --warn:#D08A3E; --warn-soft:rgba(208,138,62,.18);
+  --track:#1D2C30; --focus:#12A090;
+}
+*{box-sizing:border-box}
+body{background:var(--ground); color:var(--ink); font:16px/1.55 "Archivo",system-ui,sans-serif; margin:0; padding:28px 20px 56px;}
+.wrap{max-width:1060px; margin:0 auto;}
+.eyebrow{font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--accent); margin:0 0 6px;}
+h1{font-size:clamp(1.6rem,3.4vw,2.2rem); font-weight:800; letter-spacing:-.01em; margin:0 0 8px; text-wrap:balance;}
+.lede{color:var(--muted); max-width:62ch; margin:0 0 26px;}
+.grid{display:grid; grid-template-columns:330px 1fr; gap:20px; align-items:start;}
+@media (max-width:880px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card); border:1px solid var(--line); border-radius:10px; padding:20px;}
+.card h2{font-size:.78rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin:0 0 16px;}
+.field{margin:0 0 16px;}
+.field label{display:block; font-size:.85rem; font-weight:600; margin:0 0 5px;}
+.field input[type=number]{width:100%; padding:8px 10px; border:1px solid var(--line); border-radius:7px; background:var(--ground); color:var(--ink); font:600 .95rem "IBM Plex Mono",monospace;}
+.field input:focus-visible, .seg button:focus-visible, button:focus-visible, input[type=range]:focus-visible{outline:2px solid var(--focus); outline-offset:2px;}
+.hint{font-size:.76rem; color:var(--muted); margin-top:4px; font-variant-numeric:tabular-nums;}
+.seg{display:flex; gap:6px; flex-wrap:wrap;}
+.seg button{flex:1; padding:7px 4px; border:1px solid var(--line); border-radius:7px; background:var(--ground); color:var(--ink); font:600 .85rem "IBM Plex Mono",monospace; cursor:pointer;}
+.seg button[aria-pressed=true]{background:var(--accent); border-color:var(--accent); color:#fff;}
+.derived{border-top:1px dashed var(--line); padding-top:12px; font-size:.82rem; color:var(--muted); display:grid; gap:4px; font-variant-numeric:tabular-nums;}
+.derived b{color:var(--ink); font-family:"IBM Plex Mono",monospace;}
+.col{display:grid; gap:20px;}
+.hero{display:flex; flex-wrap:wrap; gap:20px; align-items:baseline;}
+.hero .big{font:700 clamp(2.2rem,5vw,3rem)/1.05 "IBM Plex Mono",monospace; color:var(--accent);}
+.hero .big small{font-size:.42em; font-weight:600; color:var(--ink); font-family:"Archivo",sans-serif;}
+.hero-sub{color:var(--muted); font-size:.9rem; max-width:40ch;}
+.sliderrow{display:flex; align-items:center; gap:14px; margin:14px 0 4px; flex-wrap:wrap;}
+input[type=range]{flex:1; min-width:160px; accent-color:var(--accent); height:6px;}
+.readout{font:600 1rem "IBM Plex Mono",monospace; font-variant-numeric:tabular-nums;}
+.pill{display:inline-block; padding:3px 10px; border-radius:99px; font-size:.78rem; font-weight:700;}
+.pill.good{background:var(--good-soft); color:var(--good);}
+.pill.warn{background:var(--warn-soft); color:var(--warn);}
+.chartbox{overflow-x:auto;}
+svg text{font:500 11px "Archivo",sans-serif; fill:var(--muted);}
+svg .axisline{stroke:var(--line);}
+svg .gridline{stroke:var(--line); stroke-dasharray:2 4;}
+.legend{display:flex; gap:16px; flex-wrap:wrap; font-size:.78rem; color:var(--muted); margin-top:10px;}
+.chip{display:inline-block; width:11px; height:11px; border-radius:3px; vertical-align:-1px; margin-right:5px;}
+canvas{width:100%; height:76px; display:block; border-radius:6px;}
+.simrow{display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-top:12px;}
+.btn{padding:8px 14px; border:1px solid var(--accent); border-radius:7px; background:var(--accent); color:#fff; font:600 .85rem "Archivo",sans-serif; cursor:pointer;}
+.btn.ghost{background:transparent; color:var(--accent);}
+.simres{font-size:.85rem; font-variant-numeric:tabular-nums;}
+.explain{font-size:.88rem; color:var(--muted); max-width:70ch;}
+.explain code{font:600 .82rem "IBM Plex Mono",monospace; color:var(--ink); background:var(--accent-soft); padding:1px 5px; border-radius:4px;}
+.tooltip{position:fixed; pointer-events:none; background:var(--card); border:1px solid var(--line); border-radius:7px; padding:6px 10px; font:600 .78rem "IBM Plex Mono",monospace; box-shadow:0 4px 14px rgba(0,0,0,.12); z-index:9; font-variant-numeric:tabular-nums;}
+[hidden]{display:none!important}
+</style>
+
+<div class="wrap">
+  <p class="eyebrow">Amostragem hipergeométrica · Proteção infantil</p>
+  <h1>Sentinela Bioacústica</h1>
+  <p class="lede">Quantas janelas de áudio de uma transmissão você precisa auditar para detectar a presença de voz infantil com a confiança que escolher — sem processar a live inteira. O cálculo usa a distribuição hipergeométrica: sorteio de janelas sem reposição.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Cenário</h2>
+      <div class="field">
+        <label for="dur">Duração da live (minutos)</label>
+        <input id="dur" type="number" min="1" max="1440" step="1" value="60">
+      </div>
+      <div class="field">
+        <label for="win">Tamanho da janela de análise (segundos)</label>
+        <input id="win" type="number" min="1" max="120" step="1" value="10">
+        <div class="hint">Cada janela é um trecho que o classificador analisa por inteiro.</div>
+      </div>
+      <div class="field">
+        <label for="pct">Presença mínima a detectar (% da live)</label>
+        <input id="pct" type="number" min="0.1" max="100" step="0.1" value="5">
+        <div class="hint" id="pctHint"></div>
+      </div>
+      <div class="field">
+        <label>Confiança de detecção desejada</label>
+        <div class="seg" id="confSeg" role="group" aria-label="Confiança desejada">
+          <button data-c="0.90">90%</button>
+          <button data-c="0.95" aria-pressed="true">95%</button>
+          <button data-c="0.99">99%</button>
+          <button data-c="0.999">99,9%</button>
+        </div>
+      </div>
+      <div class="derived" id="derived"></div>
+    </div>
+
+    <div class="col">
+      <div class="card">
+        <h2>Recomendação</h2>
+        <div class="hero">
+          <div class="big" id="heroN">—<small> janelas</small></div>
+          <div class="hero-sub" id="heroSub"></div>
+        </div>
+        <div class="sliderrow">
+          <label for="nSlider" style="font-size:.85rem; font-weight:600;">Seu orçamento de auditoria:</label>
+          <input id="nSlider" type="range" min="1" max="360" value="60" aria-label="Janelas auditadas">
+          <span class="readout" id="nReadout"></span>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+          <span style="font-size:.85rem;">Probabilidade de detectar pelo menos 1 janela com voz infantil:</span>
+          <span class="readout" id="pReadout" style="font-size:1.25rem;"></span>
+          <span class="pill" id="pPill"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Curva de detecção</h2>
+        <div class="chartbox"><svg id="chart" viewBox="0 0 640 300" width="100%" role="img" aria-label="Probabilidade de detecção em função do número de janelas auditadas"></svg></div>
+        <div class="legend">
+          <span><span class="chip" style="background:var(--accent)"></span>Probabilidade de detecção</span>
+          <span><span class="chip" style="background:transparent; border:1px dashed var(--muted); height:2px; border-radius:0; width:14px;"></span>Meta de confiança</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Simulação da linha do tempo</h2>
+        <canvas id="sim" height="76" aria-label="Linha do tempo da live com janelas sorteadas"></canvas>
+        <div class="legend">
+          <span><span class="chip" style="background:var(--amber)"></span>Janelas com voz infantil (posição ilustrativa)</span>
+          <span><span class="chip" style="background:var(--accent)"></span>Janelas auditadas</span>
+          <span><span class="chip" style="background:var(--good)"></span>Detecção (auditada e com voz)</span>
+        </div>
+        <div class="simrow">
+          <button class="btn" id="reroll">Sortear novamente</button>
+          <span class="simres" id="simRes"></span>
+        </div>
+        <div class="simrow"><span class="simres" id="empRes"></span></div>
+      </div>
+
+      <div class="card">
+        <h2>Como o cálculo funciona</h2>
+        <p class="explain">A live vira <code>N</code> janelas; <code>K</code> delas contêm voz infantil (o pior cenário que você quer garantir detectar); você audita <code>n</code> sorteadas ao acaso. A chance de <em>errar todas</em> é <code>C(N−K, n) / C(N, n)</code> — a mesma conta que faz zerar a Lotomania ser raríssimo. A probabilidade de detecção é 1 menos isso. Auditar aleatoriamente também tem valor de segurança: quem transmite não sabe quais trechos serão verificados.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const fmtN = new Intl.NumberFormat('pt-BR');
+  const fmtP = v => (v*100).toLocaleString('pt-BR',{minimumFractionDigits:1, maximumFractionDigits:1})+'%';
+  const fmtMin = m => m >= 60 ? Math.floor(m/60)+'h'+String(Math.round(m%60)).padStart(2,'0') : m.toLocaleString('pt-BR',{maximumFractionDigits:1})+' min';
+
+  let conf = 0.95;
+  let state = null;      // {N,K,n,winSec}
+  let userTouchedSlider = false;
+
+  // P(detectar >= 1) = 1 - prod_{i=0}^{n-1} (N-K-i)/(N-i)
+  function pDetect(N,K,n){
+    if(K<=0) return 0;
+    if(n>=N-K+1) return 1;
+    let miss = 0; // em log para estabilidade
+    for(let i=0;i<n;i++) miss += Math.log((N-K-i)/(N-i));
+    return 1 - Math.exp(miss);
+  }
+  function minSample(N,K,c){
+    let lo=1, hi=N;
+    while(lo<hi){ const mid=(lo+hi)>>1; if(pDetect(N,K,mid)>=c) hi=mid; else lo=mid+1; }
+    return lo;
+  }
+
+  function readScenario(){
+    const dur = Math.min(1440, Math.max(1, +$('dur').value || 60));
+    const winSec = Math.min(120, Math.max(1, +$('win').value || 10));
+    const pct = Math.min(100, Math.max(0.1, +$('pct').value || 5));
+    const N = Math.max(2, Math.round(dur*60/winSec));
+    const K = Math.min(N, Math.max(1, Math.round(pct/100*N)));
+    return {dur, winSec, pct, N, K};
+  }
+
+  function recompute(fromScenario){
+    const s = readScenario();
+    const nMin = minSample(s.N, s.K, conf);
+    const slider = $('nSlider');
+    slider.max = s.N;
+    if(fromScenario || !userTouchedSlider){ slider.value = nMin; userTouchedSlider = false; }
+    const n = Math.min(s.N, +slider.value);
+    state = {...s, n, nMin};
+
+    $('pctHint').textContent = '= ' + fmtN.format(s.K) + ' janelas (~' + fmtMin(s.K*s.winSec/60) + ' de fala)';
+    $('derived').innerHTML =
+      'Janelas na live (N): <b>' + fmtN.format(s.N) + '</b>' +
+      'Janelas com voz infantil (K): <b>' + fmtN.format(s.K) + '</b>' +
+      'Meta de confiança: <b>' + fmtP(conf) + '</b>';
+
+    $('heroN').innerHTML = fmtN.format(nMin) + '<small> janelas</small>';
+    $('heroSub').textContent = 'para ' + fmtP(conf) + ' de confiança — ' +
+      (100*nMin/s.N).toLocaleString('pt-BR',{maximumFractionDigits:1}) + '% da live, ' +
+      fmtMin(nMin*s.winSec/60) + ' de áudio processado.';
+
+    const p = pDetect(s.N, s.K, n);
+    $('nReadout').textContent = fmtN.format(n) + ' de ' + fmtN.format(s.N);
+    $('pReadout').textContent = fmtP(p);
+    const pill = $('pPill');
+    if(p >= conf){ pill.className='pill good'; pill.textContent='meta atingida'; }
+    else { pill.className='pill warn'; pill.textContent='abaixo da meta'; }
+
+    drawChart();
+    reroll();
+    runEmpirical();
+  }
+
+  // ---------- gráfico ----------
+  const svgNS = 'http://www.w3.org/2000/svg';
+  let chartGeom = null;
+  function css(v){ return getComputedStyle(document.documentElement).getPropertyValue(v).trim(); }
+  function el(name, attrs, parent){
+    const e = document.createElementNS(svgNS, name);
+    for(const k in attrs) e.setAttribute(k, attrs[k]);
+    parent.appendChild(e); return e;
+  }
+  function drawChart(){
+    const svg = $('chart');
+    svg.innerHTML = '';
+    const {N,K,n,nMin} = state;
+    const W=640,H=300, m={l:46,r:16,t:14,b:36};
+    const xMax = Math.min(N, Math.max(10, Math.ceil(Math.max(nMin*1.6, n*1.15))));
+    const x = v => m.l + (W-m.l-m.r)*v/xMax;
+    const y = v => H-m.b - (H-m.t-m.b)*v;
+    chartGeom = {xMax, x, y, m, W, H};
+
+    for(const t of [0,.25,.5,.75,1]){
+      el('line',{x1:m.l, x2:W-m.r, y1:y(t), y2:y(t), class:'gridline'},svg);
+      const lb = el('text',{x:m.l-8, y:y(t)+4, 'text-anchor':'end'},svg);
+      lb.textContent = (t*100)+'%';
+    }
+    el('line',{x1:m.l, x2:W-m.r, y1:y(0), y2:y(0), class:'axisline'},svg);
+    const xtStep = Math.max(1, Math.round(xMax/5/5)*5) || 1;
+    for(let t=0; t<=xMax; t+=xtStep){
+      const lb = el('text',{x:x(t), y:H-m.b+18, 'text-anchor':'middle'},svg);
+      lb.textContent = fmtN.format(t);
+    }
+    const xt = el('text',{x:(m.l+W-m.r)/2, y:H-4, 'text-anchor':'middle'},svg);
+    xt.textContent = 'janelas auditadas (n)';
+
+    // meta
+    el('line',{x1:m.l, x2:W-m.r, y1:y(conf), y2:y(conf), stroke:css('--muted'), 'stroke-dasharray':'5 4', 'stroke-width':1.2},svg);
+    const ml = el('text',{x:m.l+6, y:y(conf)-6, 'text-anchor':'start'},svg);
+    ml.textContent = 'meta ' + fmtP(conf);
+
+    // curva + área
+    const steps = 200, pts=[];
+    for(let i=0;i<=steps;i++){
+      const nn = Math.round(xMax*i/steps);
+      pts.push([x(nn), y(pDetect(N,K,nn))]);
+    }
+    const dLine = pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join('');
+    el('path',{d:dLine+'L'+x(xMax)+' '+y(0)+'L'+x(0)+' '+y(0)+'Z', fill:css('--accent-soft'), stroke:'none'},svg);
+    el('path',{d:dLine, fill:'none', stroke:css('--accent'), 'stroke-width':2},svg);
+
+    // marcador do n atual
+    const pNow = pDetect(N,K,n);
+    el('circle',{cx:x(Math.min(n,xMax)), cy:y(pNow), r:5, fill:css('--accent'), stroke:css('--card'), 'stroke-width':2},svg);
+    const mk = el('text',{x:Math.min(x(Math.min(n,xMax))+9, W-m.r-40), y:y(pNow)-9, 'font-weight':'700'},svg);
+    mk.setAttribute('fill', css('--ink'));
+    mk.textContent = 'n=' + fmtN.format(n) + ' · ' + fmtP(pNow);
+
+    // hover
+    svg.onmousemove = ev => {
+      const r = svg.getBoundingClientRect();
+      const px = (ev.clientX-r.left)*(W/r.width);
+      const nn = Math.max(0, Math.min(xMax, Math.round((px-m.l)/(W-m.l-m.r)*xMax)));
+      tip.hidden = false;
+      tip.textContent = 'n=' + fmtN.format(nn) + ' → ' + fmtP(pDetect(N,K,nn));
+      tip.style.left = (ev.clientX+14)+'px'; tip.style.top = (ev.clientY-10)+'px';
+      cross.setAttribute('x1', x(nn)); cross.setAttribute('x2', x(nn)); cross.style.display='';
+    };
+    svg.onmouseleave = () => { tip.hidden = true; cross.style.display='none'; };
+    const cross = el('line',{x1:0,x2:0,y1:m.t,y2:H-m.b, stroke:css('--muted'), 'stroke-width':1, style:'display:none'},svg);
+  }
+  const tip = document.createElement('div');
+  tip.className='tooltip'; tip.hidden=true; document.body.appendChild(tip);
+
+  // ---------- simulação ----------
+  function sampleSet(N, k){
+    // k índices distintos de [0,N)
+    const chosen = new Set();
+    if(k > N/2){
+      const excl = sampleSet(N, N-k), all = new Set();
+      for(let i=0;i<N;i++) if(!excl.has(i)) all.add(i);
+      return all;
+    }
+    while(chosen.size < k) chosen.add(Math.floor(Math.random()*N));
+    return chosen;
+  }
+  function reroll(){
+    const {N,K,n} = state;
+    const child = sampleSet(N,K), audit = sampleSet(N,n);
+    let hits = 0; for(const i of audit) if(child.has(i)) hits++;
+    const cv = $('sim'), ctx = cv.getContext('2d');
+    const wpx = cv.clientWidth || 600;
+    cv.width = wpx * (window.devicePixelRatio||1);
+    ctx.scale(window.devicePixelRatio||1, window.devicePixelRatio||1);
+    const h = 76, colW = wpx/N;
+    ctx.fillStyle = css('--track'); ctx.fillRect(0,0,wpx,h);
+    ctx.fillStyle = css('--amber');
+    for(const i of child) ctx.fillRect(i*colW, 0, Math.max(colW,1), h*0.5);
+    ctx.fillStyle = css('--accent');
+    for(const i of audit) ctx.fillRect(i*colW, h*0.55, Math.max(colW,1), h*0.45);
+    ctx.fillStyle = css('--good');
+    for(const i of audit) if(child.has(i)) ctx.fillRect(i*colW, 0, Math.max(colW,1.5), h);
+    $('simRes').innerHTML = hits > 0
+      ? 'Neste sorteio: <b style="color:var(--good)">detectado</b> — ' + fmtN.format(hits) + (hits>1?' janelas auditadas continham':' janela auditada continha') + ' voz infantil.'
+      : 'Neste sorteio: <b style="color:var(--warn)">não detectado</b> — nenhuma janela auditada caiu num trecho com voz.';
+  }
+  function runEmpirical(){
+    const {N,K,n} = state;
+    const trials = Math.max(200, Math.min(2000, Math.floor(3e6/N)));
+    let det = 0;
+    const idx = new Int32Array(N);
+    for(let t=0;t<trials;t++){
+      for(let i=0;i<N;i++) idx[i]=i;
+      let hit=false;
+      for(let i=0;i<n;i++){
+        const j = i + Math.floor(Math.random()*(N-i));
+        const v = idx[j]; idx[j]=idx[i]; idx[i]=v;
+        if(v < K){ hit=true; break; }
+      }
+      if(hit) det++;
+    }
+    $('empRes').textContent = 'Em ' + fmtN.format(trials) + ' sorteios simulados: detecção em ' +
+      fmtP(det/trials) + ' (teoria: ' + fmtP(pDetect(N,K,n)) + ').';
+  }
+
+  // ---------- eventos ----------
+  for(const id of ['dur','win','pct']) $(id).addEventListener('input', ()=>recompute(true));
+  $('confSeg').addEventListener('click', ev => {
+    const b = ev.target.closest('button'); if(!b) return;
+    for(const x of $('confSeg').children) x.setAttribute('aria-pressed','false');
+    b.setAttribute('aria-pressed','true');
+    conf = +b.dataset.c; recompute(true);
+  });
+  $('nSlider').addEventListener('input', ()=>{ userTouchedSlider = true; recompute(false); });
+  $('reroll').addEventListener('click', reroll);
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ()=>{ drawChart(); reroll(); });
+  addEventListener('resize', ()=>reroll());
+
+  recompute(true);
+})();
+</script>
