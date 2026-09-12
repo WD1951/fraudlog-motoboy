@@ -130,7 +130,76 @@ registro ingênuo.
   arquitetura de identificação persistente de componentes precisa ser
   projetada e validada.
 
-## 6. Caminho em fases
+## 6. Até onde o FraudLock entrega proteção (a régua de camadas)
+
+A pergunta certa não é "o FraudLock impede o roubo?" — não impede, e nenhum
+sistema impede. A pergunta é: **quanto ele consegue desestimular o mercado
+negro, e sob quais condições?** A resposta vem em três camadas, cada uma com
+sua entrega e seu limite honesto.
+
+### Camada 1 — Sozinho, desde o primeiro dia
+
+**Entrega:** registro consultável de procedência. O dono cadastra o
+aparelho, declara o roubo (com boletim de ocorrência como lastro) e
+qualquer pessoa consulta antes de comprar. Três efeitos reais:
+
+- O comprador honesto, que hoje compra usado "no escuro", passa a ter como
+  verificar — e quem vê 🔴 desiste.
+- O comprador desonesto perde a desculpa: com consulta pública e gratuita,
+  "não sabia" vira "não quis saber" — o que tem peso jurídico (receptação).
+- Identificadores adulterados não voltam "limpos": IMEI que não bate com o
+  número de série devolve 🟠, e aparelho laranja o comprador informado
+  também recusa.
+
+**Limite honesto:** esta camada só morde na proporção em que as pessoas
+consultam. O produto real da Fase 1 não é o banco de dados — é fazer a
+consulta virar hábito (lojas de usados, assistências, plataformas de
+venda).
+
+### Camada 2 — Com adesão do mercado
+
+**Entrega:** com assistências e lojas aderindo ("compra verificada"), o
+cerco fecha sobre as peças. Telas e placas com serial registrado carregam a
+origem, e a troca de placa-mãe deixa de limpar o aparelho — tela e câmera
+continuam apontando para o celular roubado. O desmonte, rota de fuga atual
+do crime, também perde valor.
+
+**Limite honesto:** depende de escala. É preciso massa crítica de
+assistências participando para que a peça 🔴 realmente não encontre
+comprador. Conquista comercial, não técnica.
+
+### Camada 3 — Só com fabricantes ou governo
+
+**Entrega possível:** bloqueio físico de peças (a peça se recusar a
+funcionar em outro aparelho, como faz a Apple). Exige identidade gravada no
+componente na fábrica.
+
+**Limite honesto:** o FraudLock **não consegue fazer isso sozinho e nunca
+deve prometer que consegue**. Este degrau só vem por parceria com
+fabricantes ou por regulação (por exemplo, a Anatel estendendo a lógica do
+bloqueio de IMEI à procedência de peças).
+
+### O que o FraudLock nunca vai entregar
+
+- Impedir o roubo em si.
+- Impedir a venda entre criminosos ou para quem escolhe não consultar.
+- Ser inviolável — a Frank Mobile mostrou que até o pareamento da Apple é
+  contornado. A vantagem estrutural do FraudLock é o registro viver no
+  servidor, fora do alcance do criminoso; mas a barreira final é sempre o
+  comprador que consulta.
+
+### A régua
+
+Se hoje o ladrão revende o aparelho roubado por uma fração relevante do
+valor de mercado, cada camada empurra essa fração para baixo: a consulta
+pública derruba a revenda como seminovo; a adesão das assistências derruba
+a venda de peças; a parceria com fabricantes fecharia o resto.
+
+**O roubo não acaba quando se torna impossível; acaba quando deixa de pagar
+o risco.** É até onde o FraudLock chega — e é exatamente onde ele precisa
+chegar.
+
+## 7. Caminho em fases
 
 1. **Fase 1 — viável hoje, sem fabricante**: registro de aparelhos por
    IMEI + número de série, status declarado pelo dono (com boletim de
@@ -147,7 +216,7 @@ registro ingênuo.
    público (o próprio MP-SP, como mostra a Frank Mobile, já atua nessa
    cadeia).
 
-## 7. Diagrama do ciclo econômico
+## 8. Diagrama do ciclo econômico
 
 ```
                  ROUBO
