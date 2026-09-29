@@ -14,8 +14,8 @@
 <style>
 :root{
   --bg:#0A0E14;--bg2:#0F1520;--bg3:#141C28;--surface:#131B27;
-  --teal:#28D9C8;--teal2:#38EFDE;--teal-dk:#107A70;
-  --teal-lt:rgba(40,217,200,.12);--teal-md:rgba(40,217,200,.25);
+  --teal:#00F0B8;--teal2:#00D4A0;--teal-dk:#007A5E;
+  --teal-lt:rgba(0,240,184,.12);--teal-md:rgba(0,240,184,.25);
   --ink:#F0F4F8;--ink2:#CBD5E1;--body:#B8C5D6;--muted:#8FA3B8;
   --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.14);
   --red:#FF5C5C;--amber:#FFB347;--amber-lt:rgba(255,179,71,.12);
@@ -27,18 +27,12 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .screen{display:none;position:fixed;top:0;left:0;right:0;bottom:0;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .screen.active{display:flex}
 .auth-bg{background:var(--bg);align-items:center;justify-content:flex-start;padding:16px}
-.auth-inner{position:relative;z-index:1;width:100%;max-width:390px;margin:auto}
-.auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:20px 18px;box-shadow:var(--shadow2)}
+.auth-inner{position:relative;z-index:1;width:100%;max-width:380px;margin:auto}
+.auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:18px 16px;box-shadow:var(--shadow2)}
 
-/* LOGOMARCA COMPACTA E FIEL À IMAGEM 3D */
-.logo-container{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:10px}
-.logo-badge-3d{width:62px;height:62px;position:relative;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 4px 10px rgba(40,217,200,0.35))}
-.logo-typography{display:flex;flex-direction:column;align-items:center;margin-top:6px}
-.logo-mob-tag{font-family:var(--sans);font-size:8px;font-weight:800;color:var(--teal);letter-spacing:1px;align-self:flex-end;margin-right:8px;margin-bottom:-4px}
-.logo-title-row{font-family:var(--sans);font-size:20px;font-weight:800;color:#FFFFFF;letter-spacing:-0.4px;text-shadow:0 2px 4px rgba(0,0,0,0.8)}
-.logo-sub-bullets{display:flex;align-items:center;gap:5px;margin-top:2px}
-.logo-sub-bullets span{font-size:7px;font-weight:800;letter-spacing:1.4px;color:var(--teal);text-transform:uppercase}
-.logo-dot{width:4px;height:4px;background:var(--teal);border-radius:50%}
+/* CADEADO REDUZIDO E COM VERDE LUMINOSO NÉON */
+.logo-container{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:8px;width:100%}
+.logo-svg-wrap{width:90px;height:80px;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 3px 10px rgba(0,240,184,0.4))}
 
 .app-slogan{text-align:center;font-size:12px;font-weight:700;color:var(--ink2);line-height:1.35;margin-bottom:12px}
 .app-slogan em{color:var(--teal);font-style:normal}
@@ -56,7 +50,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .auth-switch a{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:none}
 .app-header{background:rgba(15,21,32,.97);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .hbrand{display:flex;align-items:center;gap:8px}
-.hlogo-box{width:28px;height:28px;background:#09121a;border:1.5px solid var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.hlogo-box{width:26px;height:26px;background:#09121a;border:1.5px solid var(--teal);border-radius:7px;display:flex;align-items:center;justify-content:center}
 .hname-brand{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-1px}
 .hname-brand span{color:var(--teal)}
 .huser{display:flex;align-items:center;gap:7px}
@@ -101,12 +95,12 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   100%{transform:scale(1.7);opacity:0}
 }
 
-.cam-btn-circle{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,#0e4d45,#28D9C8);border:2.5px solid #38EFDE;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:2;box-shadow:0 0 24px rgba(40,217,200,.4);touch-action:manipulation}
+.cam-btn-circle{width:74px;height:74px;border-radius:50%;background:linear-gradient(135deg,#007A5E,#00F0B8);border:2.5px solid #00F0B8;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:2;box-shadow:0 0 24px rgba(0,240,184,.4);touch-action:manipulation}
 .cam-btn-circle:active{transform:scale(0.95)}
 .cam-btn-circle svg{width:32px;height:32px;fill:#000}
 
-.raw-flow-badge{margin-top:16px;background:rgba(40,217,200,.08);border:1px solid rgba(40,217,200,.2);border-radius:10px;padding:6px 12px;text-align:center}
-.rfb-t{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--teal2);letter-spacing:0.5px}
+.raw-flow-badge{margin-top:16px;background:rgba(0,240,184,.08);border:1px solid rgba(0,240,184,.2);border-radius:10px;padding:6px 12px;text-align:center}
+.rfb-t{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--teal);letter-spacing:0.5px}
 .rfb-s{font-size:9px;color:var(--muted);margin-top:1px}
 
 .photo-panel{background:var(--bg2);border-top:1px solid var(--border);padding:12px;flex-shrink:0}
@@ -115,7 +109,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .aprev strong{color:var(--ink)}
 .aprev .mono{font-family:var(--mono);font-size:10px;color:var(--teal)}
 .rcard{margin:12px;background:var(--surface);border:1px solid var(--border2);border-radius:16px;overflow:hidden}
-.rhead{background:linear-gradient(135deg,#093a34,#107A70);padding:12px 16px;display:flex;align-items:center;gap:8px}
+.rhead{background:linear-gradient(135deg,#004d3a,#007A5E);padding:12px 16px;display:flex;align-items:center;gap:8px}
 .rhead-t{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff}
 .rhead-s{font-size:10px;color:rgba(255,255,255,.7)}
 .rbody{padding:12px 14px}
@@ -124,9 +118,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .rlbl{font-size:8px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:1px}
 .rval{font-size:11px;font-weight:600;color:var(--ink);word-break:break-all}
 .rval.mono{font-family:var(--mono);font-size:9px;color:var(--teal)}
-.shbox{background:var(--bg);border:1px solid rgba(40,217,200,.3);border-radius:var(--r);padding:10px;margin:10px 0;text-align:center}
+.shbox{background:var(--bg);border:1px solid rgba(0,240,184,.3);border-radius:var(--r);padding:10px;margin:10px 0;text-align:center}
 .sh-lbl{font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:3px}
-.sh-val{font-family:var(--mono);font-size:9px;color:var(--teal2);word-break:break-all;line-height:1.4}
+.sh-val{font-family:var(--mono);font-size:9px;color:var(--teal);word-break:break-all;line-height:1.4}
 
 .qr-container{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;padding:12px;border-radius:var(--r);margin:10px 0}
 #qrcode-canvas{display:flex;justify-content:center}
@@ -157,27 +151,51 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   <div class="auth-inner">
     <div class="auth-card">
       <div class="logo-container">
-        <!-- Ícone do Cadeado Fiel à Imagem: Moldura Ciano, Fundo Escuro, Arco Cromado, Ponto Lateral -->
-        <div class="logo-badge-3d">
-          <svg width="60" height="60" viewBox="0 0 100 100" fill="none">
-            <rect x="10" y="10" width="80" height="80" rx="22" stroke="#28D9C8" stroke-width="6" fill="#0C1520"/>
-            <path d="M34 44V29C34 19 41 12 50 12C59 12 66 19 66 29V44" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
-            <path d="M34 44V29C34 19 41 12 50 12C59 12 66 19 66 29V44" stroke="#A6C2BE" stroke-width="4" stroke-linecap="round"/>
-            <rect x="24" y="38" width="52" height="46" rx="14" fill="#28D9C8" stroke="#38EFDE" stroke-width="2"/>
-            <circle cx="50" cy="58" r="8" fill="#081A1E" stroke="#124E48" stroke-width="2"/>
-            <path d="M50 64V73" stroke="#081A1E" stroke-width="5" stroke-linecap="round"/>
-            <circle cx="73" cy="30" r="4" fill="#28D9C8"/>
+        <!-- CADEADO REDUZIDO COM VERDE NÉON LUMINOSO -->
+        <div class="logo-svg-wrap">
+          <svg viewBox="0 0 160 150" width="85" height="75" fill="none">
+            <defs>
+              <linearGradient id="g-shackle-metal" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#FFFFFF"/>
+                <stop offset="50%" stop-color="#D9E6E8"/>
+                <stop offset="100%" stop-color="#729294"/>
+              </linearGradient>
+              <linearGradient id="g-body-neon" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00F0B8"/>
+                <stop offset="100%" stop-color="#00B88A"/>
+              </linearGradient>
+              <filter id="f-neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#00F0B8" flood-opacity="0.6"/>
+              </filter>
+            </defs>
+
+            <!-- Haste em Arco Superior (Aço Cromado Fiel) -->
+            <path d="M64 42V28C64 18 71 11 80 11C89 11 96 18 96 28V42" stroke="url(#g-shackle-metal)" stroke-width="7" stroke-linecap="round"/>
+            <path d="M66.5 42V29C66.5 20 72 14 80 14C88 14 93.5 20 93.5 29V42" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" opacity="0.9"/>
+
+            <!-- Corpo do Cadeado (Verde Luminoso Néon) -->
+            <rect x="56" y="38" width="48" height="42" rx="12" fill="url(#g-body-neon)" stroke="#00F0B8" stroke-width="1.2" filter="url(#f-neon-glow)"/>
+
+            <!-- Fechadura com Chanfro Profundo -->
+            <circle cx="80" cy="56" r="7" fill="#0C1520" stroke="#004D3A" stroke-width="1.5"/>
+            <path d="M80 61V70" stroke="#0C1520" stroke-width="5" stroke-linecap="round"/>
+
+            <!-- Ponto Cilíndrico Luminoso da Lateral Direita -->
+            <circle cx="100" cy="28" r="3.2" fill="#00F0B8" filter="url(#f-neon-glow)"/>
+
+            <!-- Tag MOB -->
+            <text x="100" y="94" fill="#00F0B8" font-family="sans-serif" font-weight="900" font-size="9" letter-spacing="1">MOB</text>
+
+            <!-- Tipografia Oficial FraudLöcB -->
+            <text x="6" y="116" fill="#FFFFFF" font-family="sans-serif" font-weight="900" font-size="23" letter-spacing="-0.5" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.85))">FraudLöcB</text>
+
+            <!-- Subtítulo em Verde Néon -->
+            <circle cx="12" cy="128" r="2" fill="#00F0B8"/>
+            <text x="20" y="131" fill="#00F0B8" font-family="sans-serif" font-weight="800" font-size="7.8" letter-spacing="1">DIGITAL VERIFICATION</text>
+            <circle cx="148" cy="128" r="2" fill="#00F0B8"/>
+
+            <text x="37" y="143" fill="#FFFFFF" font-family="sans-serif" font-weight="800" font-size="9" letter-spacing="1.5">REAL ESTATE</text>
           </svg>
-        </div>
-        <div class="logo-typography">
-          <div class="logo-mob-tag">MOB</div>
-          <div class="logo-title-row">FraudLöcB</div>
-          <div class="logo-sub-bullets">
-            <div class="logo-dot"></div>
-            <span>DIGITAL VERIFICATION</span>
-            <div class="logo-dot"></div>
-            <span>REAL ESTATE</span>
-          </div>
         </div>
       </div>
       <div class="app-slogan">O que protege o motoboy,<br><em>protege a empresa.</em></div>
@@ -195,19 +213,15 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   <div class="auth-inner">
     <div class="auth-card">
       <div class="logo-container">
-        <div class="logo-badge-3d">
-          <svg width="60" height="60" viewBox="0 0 100 100" fill="none">
-            <rect x="10" y="10" width="80" height="80" rx="22" stroke="#28D9C8" stroke-width="6" fill="#0C1520"/>
-            <path d="M34 44V29C34 19 41 12 50 12C59 12 66 19 66 29V44" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
-            <rect x="24" y="38" width="52" height="46" rx="14" fill="#28D9C8"/>
-            <circle cx="50" cy="58" r="8" fill="#081A1E"/>
-            <path d="M50 64V73" stroke="#081A1E" stroke-width="5" stroke-linecap="round"/>
-            <circle cx="73" cy="30" r="4" fill="#28D9C8"/>
+        <div class="logo-svg-wrap">
+          <svg viewBox="0 0 160 120" width="75" height="60" fill="none">
+            <path d="M64 42V28C64 18 71 11 80 11C89 11 96 18 96 28V42" stroke="#FFFFFF" stroke-width="7" stroke-linecap="round"/>
+            <rect x="56" y="38" width="48" height="42" rx="12" fill="#00F0B8"/>
+            <circle cx="80" cy="56" r="7" fill="#0C1520"/>
+            <path d="M80 61V70" stroke="#0C1520" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="100" cy="28" r="3" fill="#00F0B8"/>
+            <text x="6" y="106" fill="#FFFFFF" font-family="sans-serif" font-weight="900" font-size="23">FraudLöcB</text>
           </svg>
-        </div>
-        <div class="logo-typography">
-          <div class="logo-mob-tag">MOB</div>
-          <div class="logo-title-row">FraudLöcB</div>
         </div>
       </div>
       <div class="app-slogan">Cadastro do Entregador</div>
@@ -227,9 +241,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     <div class="hbrand">
       <div class="hlogo-box">
         <svg width="18" height="18" viewBox="0 0 100 100" fill="none">
-          <rect x="15" y="15" width="70" height="70" rx="18" stroke="#28D9C8" stroke-width="8" fill="#0C1520"/>
-          <rect x="30" y="44" width="40" height="34" rx="10" fill="#28D9C8"/>
           <path d="M38 44V32C38 24 43 18 50 18C57 18 62 24 62 32V44" stroke="#FFF" stroke-width="8"/>
+          <rect x="30" y="44" width="40" height="34" rx="10" fill="#00F0B8"/>
         </svg>
       </div>
       <span class="hname-brand">Fraud<span>Log</span></span>
@@ -357,9 +370,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     <div class="hbrand">
       <div class="hlogo-box">
         <svg width="18" height="18" viewBox="0 0 100 100" fill="none">
-          <rect x="15" y="15" width="70" height="70" rx="18" stroke="#28D9C8" stroke-width="8" fill="#0C1520"/>
-          <rect x="30" y="44" width="40" height="34" rx="10" fill="#28D9C8"/>
           <path d="M38 44V32C38 24 43 18 50 18C57 18 62 24 62 32V44" stroke="#FFF" stroke-width="8"/>
+          <rect x="30" y="44" width="40" height="34" rx="10" fill="#00F0B8"/>
         </svg>
       </div>
       <span class="hname-brand">Fraud<span>Log</span></span>
@@ -387,7 +399,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
           <div class="sh-val" id="r-sh">--</div>
         </div>
 
-        <!-- Renderizador do QR Code Dinâmico -->
         <div class="qr-container">
           <div id="qrcode-canvas"></div>
           <div class="qr-caption">Aponte a câmara para validar autenticidade</div>
@@ -396,7 +407,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     </div>
     <div class="rel-actions" id="area-botoes-cert">
       <button type="button" class="btn-wz" id="btn-enviar-coop">🏢 Cópia para a Cooperativa (WhatsApp)</button>
-      <button type="button" class="btn-wz" style="background:linear-gradient(135deg,#107A70,#28D9C8);color:#000" id="btn-enviar-moto">🏍️ Cópia para o Motoboy (WhatsApp)</button>
+      <button type="button" class="btn-wz" style="background:linear-gradient(135deg,#007A5E,#00F0B8);color:#000" id="btn-enviar-moto">🏍 Cópia para o Motoboy (WhatsApp)</button>
       <button type="button" class="btn-pdf" id="btn-pdf">📄 Imprimir / Salvar em PDF</button>
       <button type="button" class="btn-p" id="btn-nova" style="margin-top:6px">Iniciar Nova Entrega</button>
     </div>
@@ -430,8 +441,8 @@ function inicializarMapa(lat, lng) {
     }).addTo(mapaInstancia);
 
     marcadorOrigem = L.circleMarker([lat, lng], {
-      color: "#107A70",
-      fillColor: "#28D9C8",
+      color: "#007A5E",
+      fillColor: "#00F0B8",
       fillOpacity: 1,
       radius: 9,
       weight: 3
@@ -492,7 +503,7 @@ function recentralizarRota() {
       rotaPolylinha.setLatLngs(pts);
     } else {
       rotaPolylinha = L.polyline(pts, {
-        color: "#28D9C8",
+        color: "#00F0B8",
         weight: 4,
         dashArray: "6, 8",
         opacity: 0.95
@@ -808,7 +819,6 @@ window.onload = function() {
     document.getElementById("r-hash").textContent = S.hashImagem;
     document.getElementById("r-sh").textContent = S.starhash;
 
-    // Gerar QR Code Dinâmico com a URL de auditoria
     var linkAuditavel = gerarLinkAuditoria();
     gerarQRCodeDinamico(linkAuditavel);
 
@@ -852,7 +862,7 @@ function ativarBotaoAceite() {
   var btn = document.getElementById("btn-aceite");
   if (!btn) return;
   btn.disabled = false;
-  btn.style.background = "linear-gradient(135deg,#107A70,#28D9C8)";
+  btn.style.background = "linear-gradient(135deg,#007A5E,#00F0B8)";
   btn.style.color = "#000";
   btn.style.cursor = "pointer";
   document.getElementById("a-giro-icon").style.transform = "rotate(90deg)";
