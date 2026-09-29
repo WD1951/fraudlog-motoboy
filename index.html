@@ -6,7 +6,7 @@
 <title>FraudLog — App do Motoboy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
-<!-- Leaflet Engine -->
+<!-- Leaflet Engine Oficial Sem API Key -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -28,7 +28,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .auth-inner{position:relative;z-index:1;width:100%;max-width:420px;margin:auto}
 .auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:26px 20px;box-shadow:var(--shadow2)}
 .logo-wrap{text-align:center;margin-bottom:10px}
-.logo-img{width:84px;height:84px;object-fit:contain;border-radius:16px}
+.logo-img{width:96px;height:96px;object-fit:contain;border-radius:18px}
 .app-slogan{text-align:center;font-size:13px;font-weight:700;color:var(--ink2);line-height:1.4;margin-bottom:16px}
 .app-slogan em{color:var(--teal);font-style:normal}
 .badge{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:50px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
@@ -44,7 +44,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .auth-switch a{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:none}
 .app-header{background:rgba(15,21,32,.97);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .hbrand{display:flex;align-items:center;gap:8px}
-.hlogo{width:28px;height:28px;object-fit:contain;border-radius:7px}
+.hlogo{width:32px;height:32px;object-fit:contain;border-radius:8px}
 .hname-brand{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-1px}
 .hname-brand span{color:var(--teal)}
 .huser{display:flex;align-items:center;gap:7px}
@@ -59,10 +59,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .sl.active{color:var(--teal)}
 .ssep{width:8px;height:1px;background:var(--border);margin:0 2px}
 
-/* MAPA LIMPO E AMPLO */
-.map-wrap{position:relative;flex:1;min-height:300px;width:100%;background:#090d12}
+.map-wrap{position:relative;flex:1;min-height:300px;width:100%;background:#e5e3df}
 #mapa-real{width:100%;height:100%;min-height:300px}
-.btn-recenter{position:absolute;top:12px;right:12px;z-index:1000;background:rgba(15,21,32,.9);border:1px solid var(--teal);color:var(--teal);padding:8px 14px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+.btn-recenter{position:absolute;top:12px;right:12px;z-index:1000;background:rgba(15,21,32,.95);border:1px solid var(--teal);color:var(--teal);padding:8px 14px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.5)}
 .map-info-bar{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(10,14,20,.95);border:1px solid var(--border2);border-radius:var(--r);padding:8px 12px;display:flex;gap:10px;z-index:1000}
 .mic{flex:1}
 .mic-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
@@ -111,11 +110,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 <div id="s-login" class="screen auth-bg active">
   <div class="auth-inner">
     <div class="auth-card">
-      <div class="logo-wrap"><img id="logo1" class="logo-img" alt="FraudLog" src="static/logo.png"></div>
+      <div class="logo-wrap"><img id="logo1" class="logo-img" alt="FraudLog" src="logo.png"></div>
       <div class="app-slogan">O que protege o motoboy,<br><em>protege a empresa.</em></div>
       <div class="badge">App do Motoboy</div>
       <div class="fg"><label class="fl">CPF</label><input class="fi" id="l-cpf" type="text" placeholder="000.000.000-00" maxlength="14" inputmode="numeric"></div>
-      <div class="fg"><label class="fl">Celular do Motoboy (WhatsApp)</label><input class="fi" id="l-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">WhatsApp do Motoboy</label><input class="fi" id="l-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
       <button type="button" class="btn-p" id="btn-login">Entrar</button>
       <div class="auth-switch">Primeiro acesso? <a href="#" id="link-cad">Cadastre-se</a></div>
     </div>
@@ -126,11 +125,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 <div id="s-cad" class="screen auth-bg">
   <div class="auth-inner">
     <div class="auth-card">
-      <div class="logo-wrap"><img id="logo2" class="logo-img" alt="FraudLog" src="static/logo.png"></div>
+      <div class="logo-wrap"><img id="logo2" class="logo-img" alt="FraudLog" src="logo.png"></div>
       <div class="app-slogan">Cadastro do Entregador</div>
       <div class="fg"><label class="fl">Nome completo</label><input class="fi" id="c-nome" type="text" placeholder="Seu nome"></div>
       <div class="fg"><label class="fl">CPF</label><input class="fi" id="c-cpf" type="text" placeholder="000.000.000-00" maxlength="14" inputmode="numeric"></div>
-      <div class="fg"><label class="fl">WhatsApp Motoboy</label><input class="fi" id="c-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">WhatsApp do Motoboy</label><input class="fi" id="c-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
       <div class="fg"><label class="fl">Cooperativa / Empresa</label><input class="fi" id="c-coop" type="text" placeholder="Nome da cooperativa"></div>
       <button type="button" class="btn-p" id="btn-cad">Criar conta e iniciar</button>
       <div class="auth-switch">Já tem conta? <a href="#" id="link-login">Login</a></div>
@@ -138,10 +137,10 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   </div>
 </div>
 
-<!-- MAPA COM CONTROLE VISUAL E FIXAÇÃO DE ROTA -->
+<!-- MAPA COM OPENSTREETMAP NATIVO -->
 <div id="s-map" class="screen">
   <div class="app-header">
-    <div class="hbrand"><img id="logo3" class="hlogo" alt="FL" src="static/logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
+    <div class="hbrand"><img id="logo3" class="hlogo" alt="FL" src="logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
     <div class="huser"><div class="avatar" id="av">MB</div><div class="hname" id="hname">Motoboy</div></div>
   </div>
   <div class="steps">
@@ -177,7 +176,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 <!-- FOTO -->
 <div id="s-foto" class="screen">
   <div class="app-header">
-    <div class="hbrand"><img id="logo4" class="hlogo" alt="FL" src="static/logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
+    <div class="hbrand"><img id="logo4" class="hlogo" alt="FL" src="logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
     <button type="button" class="btn-back" id="btn-back1">voltar</button>
   </div>
   <div class="steps">
@@ -208,7 +207,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 <!-- LACRE E GIROSCÓPIO -->
 <div id="s-aceite" class="screen">
   <div class="app-header">
-    <div class="hbrand"><img id="logo5" class="hlogo" alt="FL" src="static/logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
+    <div class="hbrand"><img id="logo5" class="hlogo" alt="FL" src="logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
     <button type="button" class="btn-back" id="btn-back2">voltar</button>
   </div>
   <div class="steps">
@@ -255,7 +254,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 <!-- CERTIFICADO COM ENVIO PARA COOPERATIVA E MOTOBOY -->
 <div id="s-cert" class="screen">
   <div class="app-header">
-    <div class="hbrand"><img id="logo6" class="hlogo" alt="FL" src="static/logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
+    <div class="hbrand"><img id="logo6" class="hlogo" alt="FL" src="logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
     <div style="font-family:var(--mono);font-size:11px;color:var(--teal);font-weight:700">✓ CERTIFICADO</div>
   </div>
   <div class="steps">
@@ -307,7 +306,6 @@ var marcadorOrigem = null;
 var marcadorDestino = null;
 var rotaPolylinha = null;
 
-// INICIALIZADOR DO MAPA LIMPO COM ALTO CONTRASTE
 function inicializarMapa(lat, lng) {
   var container = document.getElementById("mapa-real");
   if (!container) return;
@@ -318,18 +316,16 @@ function inicializarMapa(lat, lng) {
       attributionControl: false
     }).setView([lat, lng], 15);
 
-    // Mosaico Limpo CartoDB Dark (sem cores berrantes, ruas em alto contraste)
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-      maxZoom: 19,
-      subdomains: "abcd"
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19
     }).addTo(mapaInstancia);
 
     marcadorOrigem = L.circleMarker([lat, lng], {
-      color: "#00D4A0",
+      color: "#007A5E",
       fillColor: "#00D4A0",
       fillOpacity: 1,
       radius: 9,
-      weight: 2
+      weight: 3
     }).addTo(mapaInstancia).bindPopup("<b>Você (Origem)</b>");
   } else {
     mapaInstancia.setView([lat, lng], 15);
@@ -341,7 +337,6 @@ function inicializarMapa(lat, lng) {
   }, 300);
 }
 
-// BUSCA E TRAÇADO DO DESTINO
 function atualizarDestinoNoMapa(endereco) {
   if (!endereco || endereco.length < 3) return;
 
@@ -362,11 +357,11 @@ function atualizarDestinoNoMapa(endereco) {
           marcadorDestino.setLatLng([dLat, dLng]);
         } else {
           marcadorDestino = L.circleMarker([dLat, dLng], {
-            color: "#FF5C5C",
+            color: "#900",
             fillColor: "#FF5C5C",
             fillOpacity: 1,
             radius: 9,
-            weight: 2
+            weight: 3
           }).addTo(mapaInstancia).bindPopup("<b>Destino</b>");
         }
 
@@ -390,8 +385,8 @@ function recentralizarRota() {
       rotaPolylinha.setLatLngs(pts);
     } else {
       rotaPolylinha = L.polyline(pts, {
-        color: "#00D4A0",
-        weight: 3,
+        color: "#007A5E",
+        weight: 4,
         dashArray: "6, 8",
         opacity: 0.95
       }).addTo(mapaInstancia);
@@ -514,7 +509,6 @@ function calcHash(file, cb) {
   reader.readAsArrayBuffer(file);
 }
 
-// MENSAGEM OFICIAL DE AUDITORIA PARA DISPARO WHATSAPP
 function dispararWhatsApp(numeroDestino) {
   var n = nums(numeroDestino);
   if (n.length < 10) { alert("Número de WhatsApp incompleto!"); return; }
@@ -635,7 +629,6 @@ window.onload = function() {
     goTo("s-cert");
   };
 
-  // Botões de envio direto
   document.getElementById("btn-enviar-coop").onclick = function() {
     dispararWhatsApp(S.coopPhone);
   };
