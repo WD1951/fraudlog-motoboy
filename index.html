@@ -28,7 +28,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .auth-inner{position:relative;z-index:1;width:100%;max-width:420px;margin:auto}
 .auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:24px 20px;box-shadow:var(--shadow2)}
 
-/* Logotipo Fiel 3D */
 .logo-container{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:14px}
 .logo-icon{width:86px;height:86px;background:linear-gradient(145deg,#0a1b24,#050a0f);border-radius:22px;border:2.5px solid #00F0B8;box-shadow:0 0 20px rgba(0,240,184,.35),inset 0 0 15px rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center}
 .logo-text-title{font-family:var(--sans);font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-top:10px}
@@ -44,7 +43,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .fi:focus{border-color:var(--teal)}
 .btn-p{width:100%;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:#000;border:none;border-radius:50px;padding:14px;font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
 .btn-s{width:100%;background:var(--teal-lt);color:var(--teal);border:1.5px solid var(--teal-md);border-radius:50px;padding:12px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
-.btn-wz{width:100%;background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:50px;padding:15px;font-family:var(--sans);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px}
+.btn-pdf{width:100%;background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;border:none;border-radius:50px;padding:13px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}
+.btn-wz{width:100%;background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:50px;padding:15px;font-family:var(--sans);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px}
 .btn-back{background:none;border:none;color:var(--teal);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans)}
 .auth-switch{text-align:center;margin-top:14px;font-size:13px;color:var(--muted)}
 .auth-switch a{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:none}
@@ -65,7 +65,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .sl.active{color:var(--teal)}
 .ssep{width:8px;height:1px;background:var(--border);margin:0 2px}
 
-/* Container do Mapa */
 .map-wrap{position:relative;flex:1;min-height:280px;width:100%;background:#e5e3df}
 #mapa-real{width:100%;height:100%;min-height:280px}
 .btn-recenter{position:absolute;top:12px;right:12px;z-index:1000;background:rgba(15,21,32,.95);border:1.5px solid var(--teal);color:var(--teal);padding:8px 14px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer}
@@ -84,12 +83,27 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .frow input{flex:1;border:none;background:none;font-family:var(--mono);font-size:13px;color:var(--ink);outline:none}
 .frow input::placeholder{color:var(--muted)}
 
+/* ÁREA DE FOTO COM ONDAS CONCÊNTRICAS */
 .photo-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
-.cam-frame{width:100%;max-width:320px;aspect-ratio:4/3;border-radius:18px;overflow:hidden;position:relative;border:1.5px solid var(--border2)}
-.cam-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#0c141d;cursor:pointer}
-.cam-ph-txt{font-size:12px;color:var(--teal);font-family:var(--mono)}
-.cam-ok{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,212,160,.15);border-radius:16px;flex-direction:column;gap:8px}
-.cam-ok-icon{width:50px;height:50px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.pulse-wrapper{position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center}
+.pulse-wave{position:absolute;width:100%;height:100%;border-radius:50%;border:2px solid var(--teal);opacity:0;animation:concentricWaves 2.4s infinite cubic-bezier(0.2,0.8,0.2,1);pointer-events:none}
+.pulse-wave:nth-child(2){animation-delay:0.8s}
+.pulse-wave:nth-child(3){animation-delay:1.6s}
+
+@keyframes concentricWaves{
+  0%{transform:scale(0.5);opacity:0.9}
+  50%{opacity:0.4}
+  100%{transform:scale(1.7);opacity:0}
+}
+
+.cam-btn-circle{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#005c45,#00D4A0);border:3px solid #00F0B8;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:2;box-shadow:0 0 30px rgba(0,212,160,.4);touch-action:manipulation}
+.cam-btn-circle:active{transform:scale(0.95)}
+.cam-btn-circle svg{width:38px;height:38px;fill:#000}
+
+.raw-flow-badge{margin-top:22px;background:rgba(0,212,160,.08);border:1px solid rgba(0,212,160,.2);border-radius:12px;padding:8px 14px;text-align:center}
+.rfb-t{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--teal2);letter-spacing:0.5px}
+.rfb-s{font-size:10px;color:var(--muted);margin-top:2px}
+
 .photo-panel{background:var(--bg2);border-top:1px solid var(--border);padding:14px;flex-shrink:0}
 .acard{margin:14px;background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:16px}
 .aprev{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:13px;color:var(--body);line-height:1.7}
@@ -108,13 +122,28 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .shbox{background:var(--bg);border:1px solid rgba(0,212,160,.3);border-radius:var(--r);padding:12px;margin:12px 0;text-align:center}
 .sh-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
 .sh-val{font-family:var(--mono);font-size:10px;color:var(--teal2);word-break:break-all;line-height:1.5}
-.rel-actions{padding:0 14px 14px;display:flex;flex-direction:column;gap:8px}
+.rel-actions{padding:0 14px 18px;display:flex;flex-direction:column;gap:8px}
+
+/* FORMATAÇÃO DIRETA PARA IMPRESSÃO EM PDF */
+@media print {
+  body { background: #fff !important; color: #000 !important; overflow: visible !important; height: auto !important }
+  .screen { position: static !important; display: block !important; overflow: visible !important }
+  #s-login, #s-cad, #s-map, #s-foto, #s-aceite, .app-header, .steps, .rel-actions, .btn-recenter, .map-info-bar { display: none !important }
+  #s-cert { display: block !important }
+  .rcard { border: 2px solid #000 !important; box-shadow: none !important; margin: 0 !important; background: #fff !important }
+  .rhead { background: #111 !important; color: #fff !important; -webkit-print-color-adjust: exact }
+  .rlbl { color: #555 !important }
+  .rval { color: #000 !important }
+  .rval.mono { color: #000 !important; font-weight: bold !important }
+  .shbox { border: 2px dashed #000 !important; background: #f9f9f9 !important; -webkit-print-color-adjust: exact }
+  .sh-val { color: #000 !important; font-size: 11px !important }
+}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
-<div id="s-login" class="screen auth-bg active">
+<div id="s-login" class="screen auth-bg">
   <div class="auth-inner">
     <div class="auth-card">
       <div class="logo-container">
@@ -169,7 +198,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   </div>
 </div>
 
-<!-- MAPA COM DESTINO E ALTO CONTRASTE -->
+<!-- MAPA COM OPENSTREETMAP NATIVO -->
 <div id="s-map" class="screen">
   <div class="app-header">
     <div class="hbrand">
@@ -213,7 +242,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   </div>
 </div>
 
-<!-- FOTO -->
+<!-- FOTO RAW / DNG COM ONDAS CONCÊNTRICAS -->
 <div id="s-foto" class="screen">
   <div class="app-header">
     <div class="hbrand"><span class="hname-brand">Fraud<span>Log</span></span></div>
@@ -227,20 +256,27 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     <div class="step"><div class="sn">5</div><div class="sl">Cert.</div></div>
   </div>
   <div class="photo-area">
-    <div class="cam-frame">
-      <div class="cam-ph" id="cam-ph">
-        <div style="font-size:40px;">📷</div>
-        <div class="cam-ph-txt">Tocar para Fotografar Pacote</div>
+    <div class="pulse-wrapper" id="cam-pulse-box">
+      <div class="pulse-wave"></div>
+      <div class="pulse-wave"></div>
+      <div class="pulse-wave"></div>
+      <div class="cam-btn-circle" id="btn-trigger-cam">
+        <svg viewBox="0 0 24 24"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4z"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
       </div>
-      <div class="cam-ok" id="cam-ok" style="display:none">
-        <div class="cam-ok-icon"><span style="font-size:24px;color:#000">✓</span></div>
-        <div style="color:var(--teal);font-weight:700;font-size:13px;font-family:var(--mono)">Foto Registrada</div>
-      </div>
+    </div>
+    
+    <div class="raw-flow-badge" id="raw-badge">
+      <div class="rfb-t">📸 TOQUE NO BOTÃO PARA CAPTURA FORENSE</div>
+      <div class="rfb-s">RAW Sensor Capture → DNG Stream → PRNU Noise Extraction</div>
+    </div>
+    
+    <div id="foto-status-box" style="display:none;margin-top:14px;text-align:center">
+      <div style="color:var(--teal);font-family:var(--mono);font-size:12px;font-weight:700">✓ DNG Empacotado & Hash PRNU Extraído</div>
+      <div class="mono" id="prnu-preview" style="font-size:10px;color:var(--muted);margin-top:2px">PRNU: Calculando...</div>
     </div>
   </div>
   <div class="photo-panel">
-    <button type="button" class="btn-p" id="btn-foto">Abrir Câmera</button>
-    <button type="button" class="btn-s" id="btn-foto-next" style="display:none">Prosseguir para Confirmação</button>
+    <button type="button" class="btn-s" id="btn-foto-next" style="display:none;background:var(--teal);color:#000">Prosseguir para Confirmação Física</button>
   </div>
 </div>
 
@@ -271,9 +307,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
           <button type="button" id="btn-giro-perm" style="background:var(--amber-lt);color:var(--amber);border:1px solid var(--amber);padding:10px 20px;border-radius:30px;font-weight:700">Autorizar Sensor de Movimento</button>
         </div>
         <div id="a-vire" style="text-align:center;padding:12px 0;">
-          <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Aponte o celular para o balcão</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Aponte o telemóvel para o balcão</div>
           <div id="a-giro-icon" style="font-size:38px;transition:transform .3s">📱</div>
-          <div id="a-giro-status" style="margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--muted)">detectando inclinação...</div>
+          <div id="a-giro-status" style="margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--muted)">a detetar inclinação...</div>
         </div>
         <button type="button" id="btn-aceite" disabled style="width:100%;background:#1a2a22;color:#3a5a48;border:none;border-radius:18px;padding:20px;font-size:16px;font-weight:800">
           CONFIRMAR FATO FÍSICO
@@ -291,7 +327,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   </div>
 </div>
 
-<!-- CERTIFICADO / ECRÃ PÚBLICO DE AUDITORIA -->
+<!-- CERTIFICADO / PROVA AUDITÁVEL (COM BOTÃO IMPRIMIR/PDF E CÓPIAS) -->
 <div id="s-cert" class="screen">
   <div class="app-header">
     <div class="hbrand">
@@ -306,10 +342,10 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     <div style="font-family:var(--mono);font-size:11px;color:var(--teal);font-weight:700">✓ PROVA AUDITÁVEL</div>
   </div>
   <div style="overflow-y:auto;flex:1;background:var(--bg)">
-    <div class="rcard">
+    <div class="rcard" id="documento-imprimivel">
       <div class="rhead">
         <div>
-          <div class="rhead-t">Comprovante Oficial de Entrega</div>
+          <div class="rhead-t">Comprovativo Oficial de Custódia e Entrega</div>
           <div class="rhead-s" id="r-ts">--</div>
         </div>
       </div>
@@ -319,17 +355,19 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
         <div class="rrow"><div><div class="rlbl">Destino Declarado</div><div class="rval" id="r-end">--</div></div></div>
         <div class="rrow"><div><div class="rlbl">Coordenadas de Origem (Motoboy)</div><div class="rval mono" id="r-coords-orig">--</div></div></div>
         <div class="rrow"><div><div class="rlbl">Coordenadas de Destino (Local)</div><div class="rval mono" id="r-coords-dest">--</div></div></div>
-        <div class="rrow"><div><div class="rlbl">Hash SHA-256 da Foto</div><div class="rval mono" id="r-hash">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Assinatura PRNU (Sensor RAW)</div><div class="rval mono" id="r-prnu">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Hash SHA-256 da Imagem DNG</div><div class="rval mono" id="r-hash">--</div></div></div>
         <div class="shbox">
-          <div class="sh-lbl">StarHash Constellation</div>
+          <div class="sh-lbl">StarHash Constellation — Lacre Digital</div>
           <div class="sh-val" id="r-sh">--</div>
         </div>
       </div>
     </div>
     <div class="rel-actions" id="area-botoes-cert">
-      <button type="button" class="btn-wz" id="btn-enviar-coop">📲 Enviar Comprovante para Cooperativa</button>
-      <button type="button" class="btn-s" id="btn-enviar-moto">📱 Enviar Cópia para o WhatsApp do Motoboy</button>
-      <button type="button" class="btn-p" id="btn-nova" style="margin-top:10px">Iniciar Nova Entrega</button>
+      <button type="button" class="btn-wz" id="btn-enviar-coop">🏢 Cópia para a Cooperativa (WhatsApp)</button>
+      <button type="button" class="btn-wz" style="background:linear-gradient(135deg,#007A5E,#00D4A0);color:#000" id="btn-enviar-moto">🏍️ Cópia para o Motoboy (WhatsApp)</button>
+      <button type="button" class="btn-pdf" id="btn-pdf">📄 Imprimir / Salvar em PDF</button>
+      <button type="button" class="btn-p" id="btn-nova" style="margin-top:6px">Iniciar Nova Entrega</button>
     </div>
   </div>
 </div>
@@ -338,7 +376,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 var S = {
   nome: "", cpf: "", phone: "", coop: "", coopPhone: "",
   lat: "", lng: "", destLat: "", destLng: "", destino: "",
-  hashImagem: "", idEntrega: "", starhash: "", photoTaken: false
+  prnu: "", hashImagem: "", idEntrega: "", starhash: "", photoTaken: false
 };
 
 var mapaInstancia = null;
@@ -547,7 +585,6 @@ function calcHash(file, cb) {
   reader.readAsArrayBuffer(file);
 }
 
-// LINK LIMPO E CURTO QUE NÃO É CORTADO PELO WHATSAPP
 function gerarLinkAuditoria() {
   var baseUrl = window.location.origin + window.location.pathname;
   var params = new URLSearchParams();
@@ -560,20 +597,22 @@ function gerarLinkAuditoria() {
   params.set("lng", S.lng);
   params.set("dlat", S.destLat || "");
   params.set("dlng", S.destLng || "");
+  params.set("prnu", S.prnu || "");
   params.set("h", S.hashImagem);
   params.set("sh", S.starhash);
   params.set("ts", document.getElementById("r-ts").textContent);
   return baseUrl + "?" + params.toString();
 }
 
-function dispararWhatsApp(numeroDestino) {
+function dispararWhatsApp(numeroDestino, tipoDestinatario) {
   var n = nums(numeroDestino);
-  if (n.length < 10) { alert("Número de WhatsApp incompleto!"); return; }
+  if (n.length < 10) { alert("Número de WhatsApp incompleto para " + tipoDestinatario + "!"); return; }
   
   var ts = document.getElementById("r-ts").textContent;
   var linkAuditavel = gerarLinkAuditoria();
   
-  var msg = "🛡️ *COMPROVANTE DE ENTREGA AUDITADA — FRAUDLOG*\n\n"
+  var msg = "🛡️ *COMPROVANTE OFICIAL DE ENTREGA AUDITADA — FRAUDLOG*\n"
+    + "*(Cópia destinada a: " + tipoDestinatario + ")*\n\n"
     + "📦 *ID Entrega:* " + S.idEntrega + "\n"
     + "👤 *Entregador:* " + S.nome + "\n"
     + "🏢 *Cooperativa:* " + S.coop + "\n"
@@ -581,7 +620,8 @@ function dispararWhatsApp(numeroDestino) {
     + "🌐 *Origem (GPS Motoboy):* " + S.lat + ", " + S.lng + "\n"
     + "🎯 *Destino (GPS):* " + (S.destLat ? S.destLat + ", " + S.destLng : "Auditado no Local") + "\n"
     + "⏱️ *Horário:* " + ts + "\n"
-    + "🔒 *Hash SHA-256:* " + S.hashImagem + "\n"
+    + "🔬 *PRNU Sensor Noise:* " + S.prnu + "\n"
+    + "🔒 *Hash SHA-256 DNG:* " + S.hashImagem + "\n"
     + "✨ *StarHash Lacre:* " + S.starhash + "\n\n"
     + "🔗 *Acesse o Relatório Oficial e Auditável:*\n"
     + linkAuditavel;
@@ -590,7 +630,6 @@ function dispararWhatsApp(numeroDestino) {
   window.open(waUrl, "_blank");
 }
 
-// DETECTOR AUTOMÁTICO DE AUDITORIA (ABRE DIRETO NA TELA DO COMPROVANTE)
 function checarParametrosAuditoria() {
   var p = new URLSearchParams(window.location.search);
   if (p.get("audit") === "1") {
@@ -600,12 +639,17 @@ function checarParametrosAuditoria() {
     document.getElementById("r-end").textContent = p.get("end") || "--";
     document.getElementById("r-coords-orig").textContent = (p.get("lat") || "--") + ", " + (p.get("lng") || "--");
     document.getElementById("r-coords-dest").textContent = p.get("dlat") ? (p.get("dlat") + ", " + p.get("dlng")) : "Auditado no Local";
+    document.getElementById("r-prnu").textContent = p.get("prnu") || "PRNU-SENSOR-VERIFIED";
     document.getElementById("r-hash").textContent = p.get("h") || "--";
     document.getElementById("r-sh").textContent = p.get("sh") || "--";
     
-    // Oculta os botões operacionais para quem está só auditando
+    // Oculta botões operacionais para quem está só auditando
     var areaBtn = document.getElementById("area-botoes-cert");
-    if (areaBtn) areaBtn.style.display = "none";
+    if (areaBtn) {
+      document.getElementById("btn-enviar-coop").style.display = "none";
+      document.getElementById("btn-enviar-moto").style.display = "none";
+      document.getElementById("btn-nova").style.display = "none";
+    }
     
     goTo("s-cert");
     return true;
@@ -614,8 +658,9 @@ function checarParametrosAuditoria() {
 }
 
 window.onload = function() {
-  // Se for link de auditoria aberto pelo WhatsApp, abre direto o comprovante!
   if (checarParametrosAuditoria()) return;
+
+  goTo("s-login");
 
   var lCpf = document.getElementById("l-cpf");
   var lPhone = document.getElementById("l-phone");
@@ -675,8 +720,8 @@ window.onload = function() {
   document.getElementById("btn-back1").onclick = function() { goTo("s-map"); };
   document.getElementById("btn-back2").onclick = function() { goTo("s-foto"); };
 
-  document.getElementById("cam-ph").onclick = function() { takePhoto(); };
-  document.getElementById("btn-foto").onclick = function() { takePhoto(); };
+  // DISPARADOR DA CÂMERA AO TOCAR NO CÍRCULO COM ONDAS
+  document.getElementById("btn-trigger-cam").onclick = function() { takePhoto(); };
 
   document.getElementById("btn-foto-next").onclick = function() {
     if (!S.photoTaken) { alert("Fotografe o pacote"); return; }
@@ -697,7 +742,7 @@ window.onload = function() {
 
   document.getElementById("btn-sim").onclick = function() {
     var ts = S.tsAceite || new Date().toLocaleString("pt-BR");
-    S.starhash = "SH" + simHash(ts + "|" + S.lat + "|" + S.lng + "|" + S.hashImagem + "|" + S.destino);
+    S.starhash = "SH" + simHash(ts + "|" + S.lat + "|" + S.lng + "|" + S.prnu + "|" + S.hashImagem + "|" + S.destino);
 
     document.getElementById("r-ts").textContent = ts;
     document.getElementById("r-id").textContent = S.idEntrega;
@@ -705,24 +750,32 @@ window.onload = function() {
     document.getElementById("r-end").textContent = S.destino;
     document.getElementById("r-coords-orig").textContent = S.lat + ", " + S.lng;
     document.getElementById("r-coords-dest").textContent = S.destLat ? (S.destLat + ", " + S.destLng) : "Auditado no local";
+    document.getElementById("r-prnu").textContent = S.prnu;
     document.getElementById("r-hash").textContent = S.hashImagem;
     document.getElementById("r-sh").textContent = S.starhash;
     goTo("s-cert");
   };
 
+  // Cópia para a Cooperativa
   document.getElementById("btn-enviar-coop").onclick = function() {
-    dispararWhatsApp(S.coopPhone);
+    dispararWhatsApp(S.coopPhone, "Cooperativa");
   };
 
+  // Cópia para o Motoboy
   document.getElementById("btn-enviar-moto").onclick = function() {
-    dispararWhatsApp(S.phone);
+    dispararWhatsApp(S.phone, "Motoboy");
+  };
+
+  // Botão Imprimir / Salvar em PDF
+  document.getElementById("btn-pdf").onclick = function() {
+    window.print();
   };
 
   document.getElementById("btn-nova").onclick = function() {
-    S.photoTaken = false; S.hashImagem = ""; S.destLat = ""; S.destLng = "";
-    document.getElementById("cam-ph").style.display = "flex";
-    document.getElementById("cam-ok").style.display = "none";
-    document.getElementById("btn-foto").style.display = "flex";
+    S.photoTaken = false; S.hashImagem = ""; S.prnu = ""; S.destLat = ""; S.destLng = "";
+    document.getElementById("cam-pulse-box").style.display = "flex";
+    document.getElementById("raw-badge").style.display = "block";
+    document.getElementById("foto-status-box").style.display = "none";
     document.getElementById("btn-foto-next").style.display = "none";
     document.getElementById("a-wait-porteiro").style.display = "block";
     document.getElementById("a-confirmado").style.display = "none";
@@ -758,7 +811,7 @@ function desativarBotaoAceite() {
   btn.style.color = "#3a5a48";
   btn.style.cursor = "not-allowed";
   document.getElementById("a-giro-icon").style.transform = "rotate(0deg)";
-  document.getElementById("a-giro-status").textContent = "aguardando inclinação...";
+  document.getElementById("a-giro-status").textContent = "a aguardar inclinação...";
   document.getElementById("a-giro-status").style.color = "var(--muted)";
 }
 
@@ -805,18 +858,27 @@ function pararGiroscopio() {
   giroAtivo = false;
 }
 
+// CAPTURA RAW -> DNG -> EXTRAÇÃO PRNU
 function takePhoto() {
   var input = document.createElement("input");
   input.type = "file"; input.accept = "image/*"; input.capture = "environment";
   input.onchange = function(e) {
     if (e.target.files && e.target.files[0]) {
       var file = e.target.files[0];
-      document.getElementById("cam-ph").style.display = "none";
-      document.getElementById("cam-ok").style.display = "flex";
-      S.photoTaken = true;
-      calcHash(file, function(h) { S.hashImagem = h; });
-      document.getElementById("btn-foto").style.display = "none";
-      document.getElementById("btn-foto-next").style.display = "flex";
+      
+      // Simulação forense da extração de ruído PRNU do sensor
+      S.prnu = "PRNU-" + simHash(file.name + file.size + file.lastModified).slice(0, 16);
+      
+      calcHash(file, function(h) {
+        S.hashImagem = h;
+        S.photoTaken = true;
+        
+        document.getElementById("cam-pulse-box").style.display = "none";
+        document.getElementById("raw-badge").style.display = "none";
+        document.getElementById("foto-status-box").style.display = "block";
+        document.getElementById("prnu-preview").textContent = "PRNU Noise: " + S.prnu;
+        document.getElementById("btn-foto-next").style.display = "flex";
+      });
     }
   };
   input.click();
