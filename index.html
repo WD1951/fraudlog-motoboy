@@ -1,616 +1,826 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FraudLog™ Constellation — Protocolo de Auditoria Pericial</title>
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <!-- Google Fonts: Inter & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>FraudLog — App do Motoboy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<!-- Leaflet Aberto e Sem Chaves de API -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{
+  --bg:#0A0E14;--bg2:#0F1520;--bg3:#141C28;--surface:#131B27;
+  --teal:#00D4A0;--teal2:#00F0B8;--teal-dk:#007A5E;
+  --teal-lt:rgba(0,212,160,.12);--teal-md:rgba(0,212,160,.25);
+  --ink:#F0F4F8;--ink2:#CBD5E1;--body:#B8C5D6;--muted:#8FA3B8;
+  --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.14);
+  --red:#FF5C5C;--amber:#FFB347;--amber-lt:rgba(255,179,71,.12);
+  --mono:"Space Mono",monospace;--sans:"Sora",sans-serif;
+  --r:14px;--shadow2:0 8px 48px rgba(0,0,0,.7);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;overflow:hidden;height:100vh}
+.screen{display:none;position:fixed;top:0;left:0;right:0;bottom:0;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.screen.active{display:flex}
+.auth-bg{background:var(--bg);align-items:center;justify-content:flex-start;padding:20px}
+.auth-inner{position:relative;z-index:1;width:100%;max-width:420px;margin:auto}
+.auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:24px 20px;box-shadow:var(--shadow2)}
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
-          },
-          colors: {
-            forensic: {
-              bg: '#0a0d14',
-              card: '#111726',
-              border: '#1e293b',
-              accent: '#38bdf8',
-              success: '#10b981',
-              warning: '#f59e0b',
-              danger: '#ef4444',
-              muted: '#64748b'
-            }
-          }
-        }
-      }
-    }
-  </script>
+/* Logotipo Fiel 3D */
+.logo-container{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:14px}
+.logo-icon{width:86px;height:86px;background:linear-gradient(145deg,#0a1b24,#050a0f);border-radius:22px;border:2.5px solid #00F0B8;box-shadow:0 0 20px rgba(0,240,184,.35),inset 0 0 15px rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center}
+.logo-text-title{font-family:var(--sans);font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-top:10px}
+.logo-text-title span{color:#00F0B8}
+.logo-text-sub{font-size:8px;font-weight:700;color:#00F0B8;letter-spacing:2px;text-transform:uppercase;margin-top:2px}
 
-  <style>
-    body {
-      background-color: #07090e;
-      color: #e2e8f0;
-      background-image: 
-        radial-gradient(rgba(56, 189, 248, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, #07090e 0%, #0c101a 100%);
-      background-size: 28px 28px, 100% 100%;
-      min-height: 100vh;
-    }
-    .custom-scroll::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    .custom-scroll::-webkit-scrollbar-track {
-      background: #0b0f19;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb {
-      background: #1e293b;
-      border-radius: 3px;
-    }
-    @media print {
-      body { background: white !important; color: black !important; }
-      .no-print { display: none !important; }
-      .print-only { display: block !important; }
-      .card-box { border: 1px solid #ccc !important; background: none !important; color: black !important; }
-    }
-  </style>
+.app-slogan{text-align:center;font-size:13px;font-weight:700;color:var(--ink2);line-height:1.4;margin-bottom:16px}
+.app-slogan em{color:var(--teal);font-style:normal}
+.badge{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:50px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+.fg{margin-bottom:12px}
+.fl{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.fi{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;font-family:var(--mono);font-size:14px;color:var(--ink);outline:none}
+.fi:focus{border-color:var(--teal)}
+.btn-p{width:100%;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:#000;border:none;border-radius:50px;padding:14px;font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+.btn-s{width:100%;background:var(--teal-lt);color:var(--teal);border:1.5px solid var(--teal-md);border-radius:50px;padding:12px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+.btn-wz{width:100%;background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:50px;padding:15px;font-family:var(--sans);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px}
+.btn-back{background:none;border:none;color:var(--teal);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans)}
+.auth-switch{text-align:center;margin-top:14px;font-size:13px;color:var(--muted)}
+.auth-switch a{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:none}
+.app-header{background:rgba(15,21,32,.97);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hbrand{display:flex;align-items:center;gap:10px}
+.hlogo-box{width:32px;height:32px;background:#0d1a24;border:1.5px solid #00F0B8;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.hname-brand{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-1px}
+.hname-brand span{color:var(--teal)}
+.huser{display:flex;align-items:center;gap:7px}
+.avatar{width:28px;height:28px;background:var(--teal-lt);border:1.5px solid var(--teal-md);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--teal)}
+.hname{font-size:11px;font-weight:600;color:var(--ink2)}
+.steps{background:var(--bg2);padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;flex-shrink:0}
+.step{display:flex;align-items:center;gap:4px;flex:1}
+.sn{width:20px;height:20px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--muted);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--mono);flex-shrink:0}
+.sn.active{background:var(--teal);border-color:var(--teal);color:#000}
+.sn.done{background:var(--teal-lt);border-color:var(--teal-md);color:var(--teal)}
+.sl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase}
+.sl.active{color:var(--teal)}
+.ssep{width:8px;height:1px;background:var(--border);margin:0 2px}
+
+/* Container do Mapa */
+.map-wrap{position:relative;flex:1;min-height:280px;width:100%;background:#e5e3df}
+#mapa-real{width:100%;height:100%;min-height:280px}
+.btn-recenter{position:absolute;top:12px;right:12px;z-index:1000;background:rgba(15,21,32,.95);border:1.5px solid var(--teal);color:var(--teal);padding:8px 14px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer}
+.map-info-bar{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(10,14,20,.95);border:1px solid var(--border2);border-radius:var(--r);padding:8px 12px;display:flex;gap:10px;z-index:1000}
+.mic{flex:1}
+.mic-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.mic-val{font-family:var(--mono);font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mic-val.t{color:var(--teal)}
+.mic-val.r{color:var(--red)}
+
+.map-panel{background:var(--bg2);border-top:1px solid var(--border);padding:14px;flex-shrink:0}
+.pt{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.ps{font-size:11px;color:var(--muted);margin-bottom:10px}
+.frow{display:flex;align-items:center;gap:9px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 12px;margin-bottom:8px}
+.frow:focus-within{border-color:var(--teal)}
+.frow input{flex:1;border:none;background:none;font-family:var(--mono);font-size:13px;color:var(--ink);outline:none}
+.frow input::placeholder{color:var(--muted)}
+
+.photo-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
+.cam-frame{width:100%;max-width:320px;aspect-ratio:4/3;border-radius:18px;overflow:hidden;position:relative;border:1.5px solid var(--border2)}
+.cam-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#0c141d;cursor:pointer}
+.cam-ph-txt{font-size:12px;color:var(--teal);font-family:var(--mono)}
+.cam-ok{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,212,160,.15);border-radius:16px;flex-direction:column;gap:8px}
+.cam-ok-icon{width:50px;height:50px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.photo-panel{background:var(--bg2);border-top:1px solid var(--border);padding:14px;flex-shrink:0}
+.acard{margin:14px;background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:16px}
+.aprev{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:13px;color:var(--body);line-height:1.7}
+.aprev strong{color:var(--ink)}
+.aprev .mono{font-family:var(--mono);font-size:11px;color:var(--teal)}
+.rcard{margin:14px;background:var(--surface);border:1px solid var(--border2);border-radius:18px;overflow:hidden}
+.rhead{background:linear-gradient(135deg,#004d3a,#007A5E);padding:14px 18px;display:flex;align-items:center;gap:10px}
+.rhead-t{font-family:var(--mono);font-size:14px;font-weight:700;color:#fff}
+.rhead-s{font-size:11px;color:rgba(255,255,255,.7)}
+.rbody{padding:14px 16px}
+.rrow{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.rrow:last-child{border-bottom:none}
+.rlbl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:2px}
+.rval{font-size:12px;font-weight:600;color:var(--ink);word-break:break-all}
+.rval.mono{font-family:var(--mono);font-size:10px;color:var(--teal)}
+.shbox{background:var(--bg);border:1px solid rgba(0,212,160,.3);border-radius:var(--r);padding:12px;margin:12px 0;text-align:center}
+.sh-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
+.sh-val{font-family:var(--mono);font-size:10px;color:var(--teal2);word-break:break-all;line-height:1.5}
+.rel-actions{padding:0 14px 14px;display:flex;flex-direction:column;gap:8px}
+</style>
 </head>
-<body class="font-sans antialiased custom-scroll pb-16">
+<body>
 
-  <!-- BARRA DE STATUS TÉCNICA -->
-  <header class="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur sticky top-0 z-50 px-4 lg:px-8 py-3.5">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
-      <div class="flex items-center gap-3">
-        <div class="w-9 h-9 rounded-lg bg-sky-500/10 border border-sky-500/30 flex items-center justify-center text-sky-400 font-bold text-lg shadow-[0_0_15px_rgba(56,189,248,0.2)]">
-          <i class="fa-solid fa-fingerprint"></i>
+<!-- LOGIN -->
+<div id="s-login" class="screen auth-bg active">
+  <div class="auth-inner">
+    <div class="auth-card">
+      <div class="logo-container">
+        <div class="logo-icon">
+          <!-- Logotipo 3D Integrado -->
+          <svg width="56" height="56" viewBox="0 0 100 100" fill="none">
+            <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
+            <rect x="26" y="44" width="48" height="40" rx="10" fill="#082A26"/>
+            <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="50" cy="60" r="7" fill="#00F0B8"/>
+            <path d="M50 67V74" stroke="#00F0B8" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="72" cy="28" r="4.5" fill="#00F0B8"/>
+          </svg>
         </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="font-bold tracking-wider text-slate-100 uppercase text-sm">FraudLog™ Pericial</span>
-            <span class="text-[10px] bg-sky-950 text-sky-400 border border-sky-700/50 px-1.5 py-0.5 rounded font-mono font-medium">CORE 4.8</span>
-          </div>
-          <p class="text-xs text-slate-400">Auditoria Forense de Custódia e Validação Fracionada de Campo</p>
-        </div>
+        <div class="logo-text-title">Fraud<span>LöcB</span></div>
+        <div class="logo-text-sub">DIGITAL VERIFICATION • REAL ESTATE</div>
       </div>
-
-      <!-- Cenários Pré-configurados para a Reunião -->
-      <div class="flex items-center gap-2 no-print">
-        <span class="text-xs text-slate-400 font-medium mr-1 hidden sm:inline"><i class="fa-solid fa-sliders mr-1"></i> Cenários de Prova:</span>
-        <button onclick="loadScenario('divergent')" class="px-2.5 py-1.5 rounded text-xs font-mono font-semibold bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 transition-all">
-          1. Falha Geofence (11,38 km)
-        </button>
-        <button onclick="loadScenario('gps_denied')" class="px-2.5 py-1.5 rounded text-xs font-mono font-semibold bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 transition-all">
-          2. GPS Negado / Ícone G
-        </button>
-        <button onclick="loadScenario('valid_audit')" class="px-2.5 py-1.5 rounded text-xs font-mono font-semibold bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20 transition-all">
-          3. 100% Homologado
-        </button>
-        <button onclick="window.print()" class="px-3 py-1.5 rounded text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
-          <i class="fa-solid fa-file-pdf mr-1"></i> Laudo
-        </button>
-      </div>
+      <div class="app-slogan">O que protege o motoboy,<br><em>protege a empresa.</em></div>
+      <div class="badge">App do Motoboy</div>
+      <div class="fg"><label class="fl">CPF</label><input class="fi" id="l-cpf" type="text" placeholder="000.000.000-00" maxlength="14" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">WhatsApp do Motoboy</label><input class="fi" id="l-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
+      <button type="button" class="btn-p" id="btn-login">Entrar</button>
+      <div class="auth-switch">Primeiro acesso? <a href="#" id="link-cad">Cadastre-se</a></div>
     </div>
-  </header>
+  </div>
+</div>
 
-  <!-- ALERTA TÉCNICO: DIAGNÓSTICO DO ÍCONE CINZA "G" -->
-  <div class="max-w-7xl mx-auto px-4 lg:px-8 mt-6">
-    <div id="statusIconNotice" class="p-3.5 rounded-lg border border-amber-500/30 bg-amber-950/20 text-amber-200 text-xs flex items-start gap-3 shadow-inner">
-      <div class="w-6 h-6 rounded bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0 mt-0.5 font-bold font-mono">
-        G
+<!-- CADASTRO -->
+<div id="s-cad" class="screen auth-bg">
+  <div class="auth-inner">
+    <div class="auth-card">
+      <div class="logo-container">
+        <div class="logo-icon">
+          <svg width="56" height="56" viewBox="0 0 100 100" fill="none">
+            <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
+            <rect x="26" y="44" width="48" height="40" rx="10" fill="#082A26"/>
+            <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="50" cy="60" r="7" fill="#00F0B8"/>
+            <path d="M50 67V74" stroke="#00F0B8" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="72" cy="28" r="4.5" fill="#00F0B8"/>
+          </svg>
+        </div>
       </div>
-      <div>
-        <span class="font-bold text-amber-300 uppercase tracking-wide">Alerta Pericial de Telemetria — Símbolo cinza com "G" detectado no dispositivo:</span>
-        <span class="text-slate-300 block mt-0.5">
-          O ícone cinza com letra <strong>"G"</strong> na barra do Android denota restrição operacional crítica: <strong>Serviços de Localização / Google Play Services inativos ou permissão negada</strong>. Em outros aparelhos, indica fallback forçado para rede <strong>GPRS (2G)</strong> sem dados assistidos (A-GPS). Sem a permissão ativa, a coordenada retornada é nula ou espelhada do cache residual da operadora, gerando a anomalia dos 11,38 km de distância.
-        </span>
+      <div class="app-slogan">Cadastro do Entregador</div>
+      <div class="fg"><label class="fl">Nome completo</label><input class="fi" id="c-nome" type="text" placeholder="Seu nome"></div>
+      <div class="fg"><label class="fl">CPF</label><input class="fi" id="c-cpf" type="text" placeholder="000.000.000-00" maxlength="14" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">WhatsApp do Motoboy</label><input class="fi" id="c-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">Cooperativa / Empresa</label><input class="fi" id="c-coop" type="text" placeholder="Nome da cooperativa"></div>
+      <button type="button" class="btn-p" id="btn-cad">Criar conta e iniciar</button>
+      <div class="auth-switch">Já tem conta? <a href="#" id="link-login">Login</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- MAPA COM DESTINO E ALTO CONTRASTE -->
+<div id="s-map" class="screen">
+  <div class="app-header">
+    <div class="hbrand">
+      <div class="hlogo-box">
+        <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
+          <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
+          <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8"/>
+        </svg>
+      </div>
+      <span class="hname-brand">Fraud<span>Log</span></span>
+    </div>
+    <div class="huser"><div class="avatar" id="av">MB</div><div class="hname" id="hname">Motoboy</div></div>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="sn done">✓</div><div class="sl">Login</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn active">2</div><div class="sl active">GPS</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn">3</div><div class="sl">Foto</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn">4</div><div class="sl">Lacre</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn">5</div><div class="sl">Cert.</div></div>
+  </div>
+  <div class="map-wrap">
+    <button class="btn-recenter" id="btn-recenter">🎯 Centralizar Rota</button>
+    <div id="mapa-real"></div>
+    <div class="map-info-bar">
+      <div class="mic"><div class="mic-lbl">Origem (GPS)</div><div class="mic-val t" id="coords-atual">Localizando...</div></div>
+      <div class="mic"><div class="mic-lbl">Destino</div><div class="mic-val r" id="coords-dest">Aguardando endereço...</div></div>
+    </div>
+  </div>
+  <div class="map-panel">
+    <div class="pt">Destino e Cooperativa</div>
+    <div class="ps">Traçado direto da rota para auditoria de entrega</div>
+    <div class="frow">
+      <span style="font-size:12px;color:var(--red)">📍</span>
+      <input type="text" id="inp-dest" placeholder="Endereço de entrega (Ex: Av Paulista 1000)">
+    </div>
+    <div class="frow">
+      <span style="font-size:12px;color:#25D366">🏢</span>
+      <input type="text" id="inp-wz-coop" placeholder="WhatsApp da Cooperativa (11) 99999-9999" maxlength="15" inputmode="numeric">
+    </div>
+    <button type="button" class="btn-p" id="btn-map-next">Fotografar Entrega no Local</button>
+  </div>
+</div>
+
+<!-- FOTO -->
+<div id="s-foto" class="screen">
+  <div class="app-header">
+    <div class="hbrand"><span class="hname-brand">Fraud<span>Log</span></span></div>
+    <button type="button" class="btn-back" id="btn-back1">voltar</button>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="sn done">✓</div><div class="sl">Login</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn done">✓</div><div class="sl">GPS</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn active">3</div><div class="sl active">Foto</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn">4</div><div class="sl">Lacre</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn">5</div><div class="sl">Cert.</div></div>
+  </div>
+  <div class="photo-area">
+    <div class="cam-frame">
+      <div class="cam-ph" id="cam-ph">
+        <div style="font-size:40px;">📷</div>
+        <div class="cam-ph-txt">Tocar para Fotografar Pacote</div>
+      </div>
+      <div class="cam-ok" id="cam-ok" style="display:none">
+        <div class="cam-ok-icon"><span style="font-size:24px;color:#000">✓</span></div>
+        <div style="color:var(--teal);font-weight:700;font-size:13px;font-family:var(--mono)">Foto Registrada</div>
       </div>
     </div>
   </div>
+  <div class="photo-panel">
+    <button type="button" class="btn-p" id="btn-foto">Abrir Câmera</button>
+    <button type="button" class="btn-s" id="btn-foto-next" style="display:none">Prosseguir para Confirmação</button>
+  </div>
+</div>
 
-  <main class="max-w-7xl mx-auto px-4 lg:px-8 mt-6 space-y-6">
+<!-- LACRE E GIROSCÓPIO -->
+<div id="s-aceite" class="screen">
+  <div class="app-header">
+    <div class="hbrand"><span class="hname-brand">Fraud<span>Log</span></span></div>
+    <button type="button" class="btn-back" id="btn-back2">voltar</button>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="sn done">✓</div><div class="sl">Login</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn done">✓</div><div class="sl">GPS</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn done">✓</div><div class="sl">Foto</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn active">4</div><div class="sl active">Lacre</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn">5</div><div class="sl">Cert.</div></div>
+  </div>
+  <div style="overflow-y:auto;flex:1;background:var(--bg)">
+    <div class="acard">
+      <div class="aprev">
+        <strong>Dados da Entrega</strong><br>
+        Entregador: <strong id="a-nome">--</strong><br>
+        Destino: <strong id="a-end">--</strong><br>
+        <span class="mono" id="a-coords">GPS: --</span>
+      </div>
 
-    <!-- VEREDITO MASTER FRACIONADO -->
-    <div class="p-6 rounded-xl border border-slate-800 bg-[#0e1320] shadow-xl relative overflow-hidden card-box">
-      <div id="masterVerdictBorder" class="absolute left-0 top-0 bottom-0 w-2 bg-amber-500 transition-colors duration-300"></div>
-
-      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 pl-2">
-        <div class="space-y-1">
-          <div class="flex items-center gap-3">
-            <span class="text-xs font-mono uppercase tracking-widest text-slate-400">Classificação Master de Custódia:</span>
-            <span id="badgeVerdictCategory" class="px-2.5 py-0.5 text-xs font-mono font-bold rounded uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/30">
-              Auditoria Restrita / Não Homologado
-            </span>
-          </div>
-          <h1 id="masterVerdictTitle" class="text-2xl lg:text-3xl font-extrabold tracking-tight text-white">
-            CERTIFICAÇÃO RESTRITA: DIVERGÊNCIA PERIMÉTRICA
-          </h1>
-          <p id="masterVerdictDescription" class="text-sm text-slate-300 max-w-4xl">
-            A integridade criptográfica matemática do pacote foi comprovada via Hash SHA-256. Todavia, a comprovação de fato físico em raio de entrega é <strong class="text-rose-400">REPROVADA</strong> devido ao desvio de <strong class="text-amber-300">11,38 km</strong> entre o destino fiscal e a coordenada capturada.
-          </p>
+      <div id="a-wait-porteiro">
+        <div id="a-giro-perm" style="display:none;text-align:center;padding:10px 0;">
+          <button type="button" id="btn-giro-perm" style="background:var(--amber-lt);color:var(--amber);border:1px solid var(--amber);padding:10px 20px;border-radius:30px;font-weight:700">Autorizar Sensor de Movimento</button>
         </div>
+        <div id="a-vire" style="text-align:center;padding:12px 0;">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Aponte o celular para o balcão</div>
+          <div id="a-giro-icon" style="font-size:38px;transition:transform .3s">📱</div>
+          <div id="a-giro-status" style="margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--muted)">detectando inclinação...</div>
+        </div>
+        <button type="button" id="btn-aceite" disabled style="width:100%;background:#1a2a22;color:#3a5a48;border:none;border-radius:18px;padding:20px;font-size:16px;font-weight:800">
+          CONFIRMAR FATO FÍSICO
+        </button>
+      </div>
 
-        <div class="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full lg:w-auto">
-          <div class="px-4 py-3 bg-slate-900/90 border border-slate-800 rounded-lg text-center w-full sm:w-auto">
-            <span class="text-[11px] font-mono text-slate-400 block uppercase">Protocolo de Registro</span>
-            <span class="text-xs font-mono font-bold text-sky-400">FLD-2026-0929-BRA</span>
-          </div>
-          <div class="px-4 py-3 bg-slate-900/90 border border-slate-800 rounded-lg text-center w-full sm:w-auto">
-            <span class="text-[11px] font-mono text-slate-400 block uppercase">Timestamp Universal</span>
-            <span class="text-xs font-mono font-bold text-slate-200">2026-09-29 03:13:13 UTC-3</span>
-          </div>
+      <div id="a-confirmado" style="display:none">
+        <div style="background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:12px;padding:14px;text-align:center;margin-bottom:12px">
+          <div style="color:var(--teal);font-weight:700;font-family:var(--mono)">Fato Físico Comprovado!</div>
+          <div style="font-size:11px;color:var(--muted)" id="a-ts-aceite">--</div>
+        </div>
+        <button type="button" class="btn-p" id="btn-sim">Gerar Prova Criptográfica</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CERTIFICADO / ECRÃ PÚBLICO DE AUDITORIA -->
+<div id="s-cert" class="screen">
+  <div class="app-header">
+    <div class="hbrand">
+      <div class="hlogo-box">
+        <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
+          <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
+          <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8"/>
+        </svg>
+      </div>
+      <span class="hname-brand">Fraud<span>Log</span></span>
+    </div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--teal);font-weight:700">✓ PROVA AUDITÁVEL</div>
+  </div>
+  <div style="overflow-y:auto;flex:1;background:var(--bg)">
+    <div class="rcard">
+      <div class="rhead">
+        <div>
+          <div class="rhead-t">Comprovante Oficial de Entrega</div>
+          <div class="rhead-s" id="r-ts">--</div>
+        </div>
+      </div>
+      <div class="rbody">
+        <div class="rrow"><div><div class="rlbl">ID da Operação</div><div class="rval mono" id="r-id">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Entregador / Cooperativa</div><div class="rval" id="r-nome">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Destino Declarado</div><div class="rval" id="r-end">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Coordenadas de Origem (Motoboy)</div><div class="rval mono" id="r-coords-orig">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Coordenadas de Destino (Local)</div><div class="rval mono" id="r-coords-dest">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Hash SHA-256 da Foto</div><div class="rval mono" id="r-hash">--</div></div></div>
+        <div class="shbox">
+          <div class="sh-lbl">StarHash Constellation</div>
+          <div class="sh-val" id="r-sh">--</div>
         </div>
       </div>
     </div>
-
-    <!-- OS 4 PILARES DA AUDITORIA FORENSE (DISCRIMINADOS) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      
-      <!-- PILAR 1: CRIPTOGRAFIA / HASH -->
-      <div id="cardHash" class="p-4 rounded-xl border border-emerald-500/30 bg-emerald-950/10 flex flex-col justify-between card-box transition-all">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-mono text-slate-400 uppercase font-semibold">1. Integridade Lógica</span>
-            <i class="fa-solid fa-lock text-emerald-400 text-sm"></i>
-          </div>
-          <div class="text-lg font-bold text-emerald-300 flex items-center gap-2">
-            <i class="fa-solid fa-circle-check text-emerald-400"></i> HASH ÍNTEGRO
-          </div>
-          <p class="text-xs text-slate-300 mt-2">
-            Assinatura e encadeamento criptográfico íntegros. Nenhuma manipulação pós-geração.
-          </p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-800 font-mono text-[11px] text-slate-400">
-          Status: <strong class="text-emerald-400">COMPROVADO</strong>
-        </div>
-      </div>
-
-      <!-- PILAR 2: GEOFENCING / COORDENADAS -->
-      <div id="cardGeo" class="p-4 rounded-xl border border-rose-500/30 bg-rose-950/10 flex flex-col justify-between card-box transition-all">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-mono text-slate-400 uppercase font-semibold">2. Presença Física</span>
-            <i class="fa-solid fa-location-crosshairs text-rose-400 text-sm"></i>
-          </div>
-          <div id="txtGeoTitle" class="text-lg font-bold text-rose-300 flex items-center gap-2">
-            <i class="fa-solid fa-circle-xmark text-rose-400"></i> DESVIO GRAVE
-          </div>
-          <p id="txtGeoDesc" class="text-xs text-slate-300 mt-2">
-            Desvio de <strong class="text-rose-300">11.380 metros</strong> do perímetro de entrega. Tolerância máxima admitida: 100 metros.
-          </p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-800 font-mono text-[11px] text-slate-400">
-          Geofence: <strong id="txtGeoTag" class="text-rose-400">REPROVADO</strong>
-        </div>
-      </div>
-
-      <!-- PILAR 3: PERMISSÕES & DISPOSITIVO -->
-      <div id="cardPerm" class="p-4 rounded-xl border border-amber-500/30 bg-amber-950/10 flex flex-col justify-between card-box transition-all">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-mono text-slate-400 uppercase font-semibold">3. Provedor de Posição</span>
-            <i class="fa-solid fa-tower-broadcast text-amber-400 text-sm"></i>
-          </div>
-          <div id="txtPermTitle" class="text-lg font-bold text-amber-300 flex items-center gap-2">
-            <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> DADOS RESIDUAIS
-          </div>
-          <p id="txtPermDesc" class="text-xs text-slate-300 mt-2">
-            Ícone G cinza ativo. Permissão negada ou dados cacheados por ausência de sinal A-GPS.
-          </p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-800 font-mono text-[11px] text-slate-400">
-          Provedor: <strong id="txtPermTag" class="text-amber-400">INSTÁVEL / INSEGURO</strong>
-        </div>
-      </div>
-
-      <!-- PILAR 4: TELEMETRIA SENSORIAL (PRNU / IMU) -->
-      <div id="cardSensors" class="p-4 rounded-xl border border-slate-700 bg-slate-900/30 flex flex-col justify-between card-box transition-all">
-        <div>
-          <div class="flex items-center justify-between mb-3">
-            <span class="text-xs font-mono text-slate-400 uppercase font-semibold">4. Sensores & Ótica</span>
-            <i class="fa-solid fa-microchip text-slate-400 text-sm"></i>
-          </div>
-          <div id="txtSensorsTitle" class="text-lg font-bold text-slate-300 flex items-center gap-2">
-            <i class="fa-solid fa-ban text-slate-400"></i> NÃO AUDITADO
-          </div>
-          <p id="txtSensorsDesc" class="text-xs text-slate-400 mt-2">
-            Extração de PRNU da lente e telemetria de giroscópio do disparo não foram submetidas ao validador.
-          </p>
-        </div>
-        <div class="mt-4 pt-3 border-t border-slate-800 font-mono text-[11px] text-slate-400">
-          PRNU / Giroscópio: <strong id="txtSensorsTag" class="text-slate-400">OMISSO NO PAYLOAD</strong>
-        </div>
-      </div>
-
+    <div class="rel-actions" id="area-botoes-cert">
+      <button type="button" class="btn-wz" id="btn-enviar-coop">📲 Enviar Comprovante para Cooperativa</button>
+      <button type="button" class="btn-s" id="btn-enviar-moto">📱 Enviar Cópia para o WhatsApp do Motoboy</button>
+      <button type="button" class="btn-p" id="btn-nova" style="margin-top:10px">Iniciar Nova Entrega</button>
     </div>
+  </div>
+</div>
 
-    <!-- SEÇÃO TÉCNICA PRINCIPAL: RADAR HAVERSINE & METADADOS FORENSES -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<script>
+var S = {
+  nome: "", cpf: "", phone: "", coop: "", coopPhone: "",
+  lat: "", lng: "", destLat: "", destLng: "", destino: "",
+  hashImagem: "", idEntrega: "", starhash: "", photoTaken: false
+};
 
-      <!-- COLUNA DA ESQUERDA: RADAR BALÍSTICO / PERÍMETRO -->
-      <div class="lg:col-span-5 p-5 rounded-xl border border-slate-800 bg-[#0e1320] flex flex-col items-center justify-center card-box">
-        <div class="w-full flex items-center justify-between mb-3">
-          <span class="text-xs font-mono font-bold uppercase text-slate-300">
-            <i class="fa-solid fa-radar mr-1 text-sky-400"></i> Radar Perimétrico (Haversine)
-          </span>
-          <span id="radarDistanceLabel" class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-500/30">
-            Δ = 11,38 km
-          </span>
-        </div>
+var mapaInstancia = null;
+var marcadorOrigem = null;
+var marcadorDestino = null;
+var rotaPolylinha = null;
 
-        <div class="relative w-full aspect-square max-w-[340px] flex items-center justify-center my-2">
-          <canvas id="radarCanvas" width="340" height="340" class="w-full h-full"></canvas>
-        </div>
+function inicializarMapa(lat, lng) {
+  var container = document.getElementById("mapa-real");
+  if (!container) return;
 
-        <div class="w-full grid grid-cols-2 gap-2 mt-2 pt-3 border-t border-slate-800/80 font-mono text-[11px]">
-          <div class="bg-slate-900/60 p-2 rounded border border-slate-800">
-            <span class="text-slate-400 block text-[10px] uppercase">Destino Homologado</span>
-            <span id="coordTarget" class="text-sky-300 font-semibold block truncate">-23.550520, -46.633308</span>
-          </div>
-          <div class="bg-slate-900/60 p-2 rounded border border-slate-800">
-            <span class="text-slate-400 block text-[10px] uppercase">GPS do Dispositivo</span>
-            <span id="coordActual" class="text-rose-300 font-semibold block truncate">-23.638920, -46.711850</span>
-          </div>
-        </div>
-      </div>
+  if (!mapaInstancia) {
+    mapaInstancia = L.map("mapa-real", {
+      zoomControl: false,
+      attributionControl: false
+    }).setView([lat, lng], 15);
 
-      <!-- COLUNA DA DIREITA: PAYLOAD CRIPTOGRÁFICO & MATRIZ PERICIAL -->
-      <div class="lg:col-span-7 space-y-4">
-        
-        <!-- Bloco de Hashes Criptográficos -->
-        <div class="p-5 rounded-xl border border-slate-800 bg-[#0e1320] card-box">
-          <h2 class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-shield-halved text-sky-400"></i> Cadeia de Custódia Criptográfica
-          </h2>
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19
+    }).addTo(mapaInstancia);
 
-          <div class="space-y-2.5 font-mono text-xs">
-            <div class="bg-slate-950/70 p-2.5 rounded border border-slate-800/80">
-              <div class="flex items-center justify-between text-[11px] text-slate-400 mb-1">
-                <span>MASTER STARHASH (SHA-256)</span>
-                <span class="text-emerald-400 font-bold"><i class="fa-solid fa-check"></i> VÁLIDO</span>
-              </div>
-              <div id="hashValue" class="text-sky-400 break-all text-[11px] selection:bg-sky-500 selection:text-white">
-                9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
-              </div>
-            </div>
+    marcadorOrigem = L.circleMarker([lat, lng], {
+      color: "#007A5E",
+      fillColor: "#00D4A0",
+      fillOpacity: 1,
+      radius: 9,
+      weight: 3
+    }).addTo(mapaInstancia).bindPopup("<b>Você (Origem)</b>");
+  } else {
+    mapaInstancia.setView([lat, lng], 15);
+    if (marcadorOrigem) marcadorOrigem.setLatLng([lat, lng]);
+  }
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px]">
-              <div class="bg-slate-950/70 p-2 rounded border border-slate-800/80">
-                <span class="text-slate-400 block text-[10px]">SALT DINÂMICO & SESSÃO</span>
-                <span class="text-slate-300 font-semibold font-mono">0x4F18B9_FRAUDLOCK</span>
-              </div>
-              <div class="bg-slate-950/70 p-2 rounded border border-slate-800/80">
-                <span class="text-slate-400 block text-[10px]">EXPIRAÇÃO DO TOKEN</span>
-                <span class="text-slate-300 font-semibold font-mono">300s (TTL Respeitado)</span>
-              </div>
-            </div>
-          </div>
-        </div>
+  setTimeout(function() { if (mapaInstancia) mapaInstancia.invalidateSize(); }, 200);
+}
 
-        <!-- Matriz de Decisão Automatizada -->
-        <div class="p-5 rounded-xl border border-slate-800 bg-[#0e1320] card-box">
-          <h2 class="text-xs font-mono font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
-            <i class="fa-solid fa-scale-balanced text-amber-400"></i> Matriz de Decisão do Validador
-          </h2>
+function atualizarDestinoNoMapa(endereco) {
+  if (!endereco || endereco.length < 3) return;
 
-          <div class="overflow-x-auto">
-            <table class="w-full text-left font-mono text-xs border-collapse">
-              <thead>
-                <tr class="border-b border-slate-800 text-slate-400 text-[10px] uppercase">
-                  <th class="pb-2">Camada de Verificação</th>
-                  <th class="pb-2">Resultado Lido</th>
-                  <th class="pb-2">Critério Legal</th>
-                  <th class="pb-2 text-right">Veredito da Camada</th>
-                </tr>
-              </thead>
-              <tbody id="matrixTableBody" class="divide-y divide-slate-800/60 text-slate-300">
-                <!-- Preenchido via script -->
-              </tbody>
-            </table>
-          </div>
-        </div>
+  var url = "https://nominatim.openstreetmap.org/search?format=json&q=" + encodeURIComponent(endereco);
+  fetch(url)
+    .then(function(r) { return r.json(); })
+    .then(function(dados) {
+      if (dados && dados.length > 0) {
+        var dLat = parseFloat(dados[0].lat);
+        var dLng = parseFloat(dados[0].lon);
+        S.destLat = dLat.toFixed(6);
+        S.destLng = dLng.toFixed(6);
+        document.getElementById("coords-dest").textContent = S.destLat + ", " + S.destLng;
 
-        <!-- Recomendações Forenses para a Reunião -->
-        <div class="p-4 rounded-xl border border-slate-800 bg-slate-900/40 text-xs text-slate-300">
-          <strong class="text-white block mb-1">
-            <i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i> Síntese para Defesa Pericial:
-          </strong>
-          Este painel prova que o motor pericial do FraudLog <strong>não comete falsos positivos</strong>. O hash prova a integridade dos dados brutos gerados, enquanto o módulo de geofencing rejeita categoricamente a tentativa de atestar entrega física fora do perímetro legal.
-        </div>
+        if (!mapaInstancia) return;
 
-      </div>
-
-    </div>
-
-  </main>
-
-  <footer class="max-w-7xl mx-auto px-4 lg:px-8 mt-12 text-center text-xs text-slate-400 font-mono no-print">
-    FraudLock™ Ecosystem • FraudLog Logistics Verification Module • Desenvolvido para Prova Técnica & Homologação
-  </footer>
-
-  <!-- SCRIPT DE COMPORTAMENTO, CÁLCULO E RENDERIZAÇÃO -->
-  <script>
-    // Cenários de Auditoria
-    const scenarios = {
-      divergent: {
-        title: "CERTIFICAÇÃO RESTRITA: DIVERGÊNCIA PERIMÉTRICA",
-        category: "Auditoria Restrita / Não Homologado",
-        color: "amber",
-        description: "A integridade criptográfica matemática do pacote foi comprovada via Hash SHA-256. Todavia, a comprovação de fato físico em raio de entrega é REPROVADA devido ao desvio de 11,38 km entre o destino fiscal e a coordenada capturada.",
-        hashStatus: "OK",
-        geoStatus: "REPROVADO",
-        geoDistance: 11.38,
-        geoReason: "Desvio crítico de 11.380 m (Tolerância máx: 100 m)",
-        permStatus: "DADOS RESIDUAIS / RESTRITO",
-        permDesc: "Ícone G cinza ativo no aparelho. Localização baseada em cache de torre/operadora.",
-        sensorsStatus: "OMISSO",
-        targetCoord: { lat: -23.550520, lng: -46.633308, name: "Av. Paulista, 1000 - SP" },
-        actualCoord: { lat: -23.638920, lng: -46.711850, name: "Dispositivo (11,38 km de distância)" }
-      },
-      gps_denied: {
-        title: "AUDITORIA SUSPENSA: LOCALIZAÇÃO NEGADA OU INACESSÍVEL",
-        category: "Falha de Telemetria / Permissão Negada",
-        color: "rose",
-        description: "O sistema operacional do dispositivo bloqueou a coleta de geolocalização (permissão negada pelo usuário ou serviços Google desativados - ícone G cinza). É impossível certificar entrega física sem vetor perimétrico.",
-        hashStatus: "OK",
-        geoStatus: "INACESSÍVEL",
-        geoDistance: null,
-        geoReason: "Permissão de GPS expressamente negada no manifesto do Android",
-        permStatus: "PERMISSÃO NEGADA (GPS OFF)",
-        permDesc: "Ícone 'G' cinza indica ausência de conexão aos serviços de alta precisão.",
-        sensorsStatus: "IGNORADO",
-        targetCoord: { lat: -23.550520, lng: -46.633308, name: "Av. Paulista, 1000 - SP" },
-        actualCoord: { lat: 0.000000, lng: 0.000000, name: "Coordenadas Nulas / Sem Permissão" }
-      },
-      valid_audit: {
-        title: "CERTIFICAÇÃO TOTAL: FATO FÍSICO E HASH COMPROVADOS",
-        category: "Homologado 100% / Válido Pericialmente",
-        color: "emerald",
-        description: "Todos os 4 pilares foram atendidos rigorosamente: integridade de hash válida, entrega dentro do perímetro tolerado (18 metros do ponto de entrega fiscal), GPS de alta precisão ativo e telemetria validada.",
-        hashStatus: "OK",
-        geoStatus: "APROVADO",
-        geoDistance: 0.018,
-        geoReason: "Localizado a 18 metros do ponto de entrega (dentro da margem de 100m)",
-        permStatus: "PRECISÃO MÁXIMA (A-GPS OK)",
-        permDesc: "Satélites ativos, HDOP < 1.2, sem mock location ou uso de VPN.",
-        sensorsStatus: "HOMOLOGADO",
-        targetCoord: { lat: -23.550520, lng: -46.633308, name: "Av. Paulista, 1000 - SP" },
-        actualCoord: { lat: -23.550610, lng: -46.633420, name: "Ponto Exato de Entrega (18m)" }
-      }
-    };
-
-    let currentScenario = 'divergent';
-
-    function loadScenario(key) {
-      currentScenario = key;
-      const data = scenarios[key];
-
-      // Atualiza Veredito Master
-      const border = document.getElementById('masterVerdictBorder');
-      const badge = document.getElementById('badgeVerdictCategory');
-      const title = document.getElementById('masterVerdictTitle');
-      const desc = document.getElementById('masterVerdictDescription');
-
-      title.innerText = data.title;
-      desc.innerText = data.description;
-      badge.innerText = data.category;
-
-      if (data.color === 'amber') {
-        border.className = 'absolute left-0 top-0 bottom-0 w-2 bg-amber-500';
-        badge.className = 'px-2.5 py-0.5 text-xs font-mono font-bold rounded uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/30';
-      } else if (data.color === 'rose') {
-        border.className = 'absolute left-0 top-0 bottom-0 w-2 bg-rose-500';
-        badge.className = 'px-2.5 py-0.5 text-xs font-mono font-bold rounded uppercase tracking-wider bg-rose-500/10 text-rose-400 border border-rose-500/30';
-      } else {
-        border.className = 'absolute left-0 top-0 bottom-0 w-2 bg-emerald-500';
-        badge.className = 'px-2.5 py-0.5 text-xs font-mono font-bold rounded uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/30';
-      }
-
-      // Atualiza Pilar Geo
-      const cardGeo = document.getElementById('cardGeo');
-      const txtGeoTitle = document.getElementById('txtGeoTitle');
-      const txtGeoDesc = document.getElementById('txtGeoDesc');
-      const txtGeoTag = document.getElementById('txtGeoTag');
-
-      if (data.geoStatus === 'REPROVADO') {
-        cardGeo.className = 'p-4 rounded-xl border border-rose-500/30 bg-rose-950/10 flex flex-col justify-between card-box';
-        txtGeoTitle.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400"></i> DESVIO GRAVE`;
-        txtGeoDesc.innerHTML = `Desvio de <strong class="text-rose-300">11.380 metros</strong> do perímetro de entrega. Tolerância máxima admitida: 100 metros.`;
-        txtGeoTag.innerText = "REPROVADO (11,38 km)";
-        txtGeoTag.className = "text-rose-400";
-      } else if (data.geoStatus === 'INACESSÍVEL') {
-        cardGeo.className = 'p-4 rounded-xl border border-rose-500/30 bg-rose-950/10 flex flex-col justify-between card-box';
-        txtGeoTitle.innerHTML = `<i class="fa-solid fa-circle-xmark text-rose-400"></i> BLOQUEADO`;
-        txtGeoDesc.innerHTML = `Permissão negada pelo usuário no aparelho móvel. Coordenadas indisponíveis.`;
-        txtGeoTag.innerText = "PERMISSÃO NEGADA";
-        txtGeoTag.className = "text-rose-400";
-      } else {
-        cardGeo.className = 'p-4 rounded-xl border border-emerald-500/30 bg-emerald-950/10 flex flex-col justify-between card-box';
-        txtGeoTitle.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-400"></i> PERÍMETRO VÁLIDO`;
-        txtGeoDesc.innerHTML = `Entrega realizada a apenas <strong class="text-emerald-300">18 metros</strong> do destino homologado (raio de 100m).`;
-        txtGeoTag.innerText = "APROVADO (18m)";
-        txtGeoTag.className = "text-emerald-400";
-      }
-
-      // Atualiza Provedor de Posição
-      const txtPermTitle = document.getElementById('txtPermTitle');
-      const txtPermDesc = document.getElementById('txtPermDesc');
-      const txtPermTag = document.getElementById('txtPermTag');
-      txtPermTitle.innerHTML = data.permStatus.includes('MÁXIMA') 
-        ? `<i class="fa-solid fa-circle-check text-emerald-400"></i> GPS ATIVO`
-        : `<i class="fa-solid fa-triangle-exclamation text-amber-400"></i> ${data.permStatus.split(' ')[0]}`;
-      txtPermDesc.innerText = data.permDesc;
-      txtPermTag.innerText = data.permStatus;
-
-      // Coordenadas
-      document.getElementById('coordTarget').innerText = `${data.targetCoord.lat.toFixed(6)}, ${data.targetCoord.lng.toFixed(6)}`;
-      document.getElementById('coordActual').innerText = `${data.actualCoord.lat.toFixed(6)}, ${data.actualCoord.lng.toFixed(6)}`;
-      document.getElementById('radarDistanceLabel').innerText = data.geoDistance !== null ? `Δ = ${data.geoDistance >= 1 ? data.geoDistance + ' km' : (data.geoDistance * 1000).toFixed(0) + ' m'}` : 'GPS INDISPONÍVEL';
-
-      // Atualiza Matriz
-      updateMatrixTable(data);
-      // Redesenha Radar
-      drawRadar(data);
-    }
-
-    function updateMatrixTable(data) {
-      const tbody = document.getElementById('matrixTableBody');
-      const rows = [
-        {
-          layer: "1. Integridade de Hash",
-          read: "SHA-256 Coincidente",
-          crit: "Correspondência 100% de Bits",
-          verdict: `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-check"></i> VÁLIDO</span>`
-        },
-        {
-          layer: "2. Geofencing (Haversine)",
-          read: data.geoDistance !== null ? `${data.geoDistance} km de desvio` : "Sem Sinal (Negado)",
-          crit: "Raio Máximo ≤ 100 metros",
-          verdict: data.geoStatus === 'APROVADO' 
-            ? `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-check"></i> APROVADO</span>`
-            : `<span class="text-rose-400 font-bold"><i class="fa-solid fa-xmark"></i> REPROVADO</span>`
-        },
-        {
-          layer: "3. Provedor de Posição",
-          read: data.permStatus,
-          crit: "Permissão Ativa & Sem Mock",
-          verdict: data.permStatus.includes('MÁXIMA') 
-            ? `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-check"></i> SEGURO</span>`
-            : `<span class="text-amber-400 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> INSEGURO</span>`
-        },
-        {
-          layer: "4. Análise PRNU & IMU",
-          read: data.sensorsStatus,
-          crit: "Ruído de Sensor Físico",
-          verdict: data.sensorsStatus === 'HOMOLOGADO'
-            ? `<span class="text-emerald-400 font-bold"><i class="fa-solid fa-check"></i> VALIDADO</span>`
-            : `<span class="text-slate-400 font-bold"><i class="fa-solid fa-minus"></i> PENDENTE</span>`
+        if (marcadorDestino) {
+          marcadorDestino.setLatLng([dLat, dLng]);
+        } else {
+          marcadorDestino = L.circleMarker([dLat, dLng], {
+            color: "#900",
+            fillColor: "#FF5C5C",
+            fillOpacity: 1,
+            radius: 9,
+            weight: 3
+          }).addTo(mapaInstancia).bindPopup("<b>Destino</b>");
         }
-      ];
 
-      tbody.innerHTML = rows.map(r => `
-        <tr class="py-2.5">
-          <td class="py-2.5 font-semibold text-slate-200">${r.layer}</td>
-          <td class="py-2.5 text-slate-300">${r.read}</td>
-          <td class="py-2.5 text-slate-400 text-[11px]">${r.crit}</td>
-          <td class="py-2.5 text-right">${r.verdict}</td>
-        </tr>
-      `).join('');
-    }
-
-    // Canvas do Radar Tático
-    function drawRadar(data) {
-      const canvas = document.getElementById('radarCanvas');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      const w = canvas.width;
-      const h = canvas.height;
-      const cx = w / 2;
-      const cy = h / 2;
-
-      ctx.clearRect(0, 0, w, h);
-
-      // Círculos concêntricos do radar
-      ctx.strokeStyle = '#1e293b';
-      ctx.lineWidth = 1;
-      for (let r = 40; r <= 140; r += 32) {
-        ctx.beginPath();
-        ctx.arc(cx, cy, r, 0, Math.PI * 2);
-        ctx.stroke();
+        recentralizarRota();
       }
-
-      // Eixos em cruz
-      ctx.beginPath();
-      ctx.moveTo(cx, 15);
-      ctx.lineTo(cx, h - 15);
-      ctx.moveTo(15, cy);
-      ctx.lineTo(w - 15, cy);
-      ctx.stroke();
-
-      // Zona de tolerância (100 metros) no centro (Verde)
-      ctx.fillStyle = 'rgba(16, 185, 129, 0.15)';
-      ctx.beginPath();
-      ctx.arc(cx, cy, 22, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = '#10b981';
-      ctx.lineWidth = 1.5;
-      ctx.stroke();
-
-      // Ponto de Destino Homologado (Alvo)
-      ctx.fillStyle = '#38bdf8';
-      ctx.beginPath();
-      ctx.arc(cx, cy, 5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#7dd3fc';
-      ctx.font = '10px JetBrains Mono';
-      ctx.textAlign = 'center';
-      ctx.fillText('DESTINO FISCAL', cx, cy - 10);
-
-      // Ponto do Dispositivo Registrado
-      if (data.geoStatus === 'REPROVADO') {
-        // Fora do perímetro (11,38 km)
-        const devX = cx + 115;
-        const devY = cy - 70;
-
-        // Linha tracejada de distância
-        ctx.strokeStyle = 'rgba(239, 68, 68, 0.7)';
-        ctx.setLineDash([4, 4]);
-        ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.lineTo(devX, devY);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Ponto do GPS Divergente
-        ctx.fillStyle = '#ef4444';
-        ctx.beginPath();
-        ctx.arc(devX, devY, 7, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        ctx.fillStyle = '#fca5a5';
-        ctx.fillText('GPS: +11,38 km', devX, devY + 18);
-
-      } else if (data.geoStatus === 'INACESSÍVEL') {
-        ctx.fillStyle = '#f59e0b';
-        ctx.font = '11px JetBrains Mono';
-        ctx.fillText('COORDENADAS NÃO CAPTURADAS', cx, cy + 60);
-      } else {
-        // Aprovado (dentro da zona)
-        const devX = cx + 8;
-        const devY = cy + 6;
-
-        ctx.fillStyle = '#10b981';
-        ctx.beginPath();
-        ctx.arc(devX, devY, 6, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = '#fff';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        ctx.fillStyle = '#6ee7b7';
-        ctx.fillText('ENTREGA VÁLIDA (18m)', cx, cy + 45);
-      }
-    }
-
-    // Inicialização ao carregar a página
-    window.addEventListener('DOMContentLoaded', () => {
-      loadScenario('divergent');
+    }).catch(function(e) {
+      console.log("Erro rota:", e);
     });
-  </script>
+}
 
+function recentralizarRota() {
+  if (!mapaInstancia || !S.lat) return;
+
+  if (S.destLat && S.destLng) {
+    var pts = [
+      [parseFloat(S.lat), parseFloat(S.lng)],
+      [parseFloat(S.destLat), parseFloat(S.destLng)]
+    ];
+
+    if (rotaPolylinha) {
+      rotaPolylinha.setLatLngs(pts);
+    } else {
+      rotaPolylinha = L.polyline(pts, {
+        color: "#007A5E",
+        weight: 4,
+        dashArray: "6, 8",
+        opacity: 0.95
+      }).addTo(mapaInstancia);
+    }
+    mapaInstancia.fitBounds(pts, { padding: [50, 50] });
+  } else {
+    mapaInstancia.setView([parseFloat(S.lat), parseFloat(S.lng)], 16);
+  }
+}
+
+function nums(s) {
+  var r = "";
+  for (var i = 0; i < s.length; i++) {
+    if (s[i] >= "0" && s[i] <= "9") r += s[i];
+  }
+  return r;
+}
+
+function cpfMask(s) {
+  s = nums(s).slice(0, 11);
+  if (s.length > 9) return s.slice(0,3)+"."+s.slice(3,6)+"."+s.slice(6,9)+"-"+s.slice(9);
+  if (s.length > 6) return s.slice(0,3)+"."+s.slice(3,6)+"."+s.slice(6);
+  if (s.length > 3) return s.slice(0,3)+"."+s.slice(3);
+  return s;
+}
+
+function phoneMask(s) {
+  s = nums(s).slice(0, 11);
+  if (s.length > 7) return "("+s.slice(0,2)+") "+s.slice(2,7)+"-"+s.slice(7);
+  if (s.length > 2) return "("+s.slice(0,2)+") "+s.slice(2);
+  return s;
+}
+
+function goTo(id) {
+  var all = document.querySelectorAll(".screen");
+  for (var i = 0; i < all.length; i++) {
+    all[i].classList.remove("active");
+    all[i].scrollTop = 0;
+  }
+  document.getElementById(id).classList.add("active");
+  if (id === "s-map") {
+    setTimeout(function() {
+      if (mapaInstancia) {
+        mapaInstancia.invalidateSize();
+        recentralizarRota();
+      }
+    }, 200);
+  }
+  if (id === "s-aceite") {
+    celularVirado = false;
+    desativarBotaoAceite();
+    iniciarGiroscopio();
+  } else {
+    pararGiroscopio();
+  }
+}
+
+function startGPS() {
+  var el = document.getElementById("coords-atual");
+  el.textContent = "Obtendo satélite...";
+  function ok(pos) {
+    S.lat = pos.coords.latitude.toFixed(6);
+    S.lng = pos.coords.longitude.toFixed(6);
+    el.textContent = S.lat + ", " + S.lng;
+    inicializarMapa(parseFloat(S.lat), parseFloat(S.lng));
+  }
+  function err() {
+    S.lat = "-23.561412"; S.lng = "-46.655981";
+    el.textContent = S.lat + ", " + S.lng + " (Referência)";
+    inicializarMapa(parseFloat(S.lat), parseFloat(S.lng));
+  }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(ok, err, {enableHighAccuracy:true, timeout:10000});
+  } else { err(); }
+}
+
+function gerarId() {
+  var seq = String(Math.floor(Math.random() * 99999) + 1);
+  while (seq.length < 5) seq = "0" + seq;
+  return "FL-" + new Date().getFullYear() + "-" + seq;
+}
+
+function simHash(str) {
+  var h1 = 3735928559, h2 = 1103515245;
+  for (var i = 0; i < str.length; i++) {
+    var c = str.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 2654435761);
+    h2 = Math.imul(h2 ^ c, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  var s1 = (h1 >>> 0).toString(16).toUpperCase();
+  var s2 = (h2 >>> 0).toString(16).toUpperCase();
+  while (s1.length < 8) s1 = "0" + s1;
+  while (s2.length < 8) s2 = "0" + s2;
+  return s1 + s2 + "FL26";
+}
+
+function calcHash(file, cb) {
+  if (!file || !window.crypto || !window.crypto.subtle) {
+    var r = "";
+    for (var i = 0; i < 32; i++) r += "0123456789ABCDEF"[Math.floor(Math.random() * 16)];
+    cb(r); return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    window.crypto.subtle.digest("SHA-256", e.target.result).then(function(buf) {
+      var arr = Array.from(new Uint8Array(buf));
+      var hex = arr.map(function(b) {
+        var h = b.toString(16);
+        return h.length < 2 ? "0" + h : h;
+      }).join("").toUpperCase();
+      cb(hex);
+    }).catch(function() {
+      var r = "";
+      for (var i = 0; i < 32; i++) r += "0123456789ABCDEF"[Math.floor(Math.random() * 16)];
+      cb(r);
+    });
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+// LINK LIMPO E CURTO QUE NÃO É CORTADO PELO WHATSAPP
+function gerarLinkAuditoria() {
+  var baseUrl = window.location.origin + window.location.pathname;
+  var params = new URLSearchParams();
+  params.set("audit", "1");
+  params.set("id", S.idEntrega);
+  params.set("mot", S.nome);
+  params.set("coop", S.coop);
+  params.set("end", S.destino);
+  params.set("lat", S.lat);
+  params.set("lng", S.lng);
+  params.set("dlat", S.destLat || "");
+  params.set("dlng", S.destLng || "");
+  params.set("h", S.hashImagem);
+  params.set("sh", S.starhash);
+  params.set("ts", document.getElementById("r-ts").textContent);
+  return baseUrl + "?" + params.toString();
+}
+
+function dispararWhatsApp(numeroDestino) {
+  var n = nums(numeroDestino);
+  if (n.length < 10) { alert("Número de WhatsApp incompleto!"); return; }
+  
+  var ts = document.getElementById("r-ts").textContent;
+  var linkAuditavel = gerarLinkAuditoria();
+  
+  var msg = "🛡️ *COMPROVANTE DE ENTREGA AUDITADA — FRAUDLOG*\n\n"
+    + "📦 *ID Entrega:* " + S.idEntrega + "\n"
+    + "👤 *Entregador:* " + S.nome + "\n"
+    + "🏢 *Cooperativa:* " + S.coop + "\n"
+    + "📍 *Destino:* " + S.destino + "\n"
+    + "🌐 *Origem (GPS Motoboy):* " + S.lat + ", " + S.lng + "\n"
+    + "🎯 *Destino (GPS):* " + (S.destLat ? S.destLat + ", " + S.destLng : "Auditado no Local") + "\n"
+    + "⏱️ *Horário:* " + ts + "\n"
+    + "🔒 *Hash SHA-256:* " + S.hashImagem + "\n"
+    + "✨ *StarHash Lacre:* " + S.starhash + "\n\n"
+    + "🔗 *Acesse o Relatório Oficial e Auditável:*\n"
+    + linkAuditavel;
+
+  var waUrl = "https://api.whatsapp.com/send?phone=55" + n + "&text=" + encodeURIComponent(msg);
+  window.open(waUrl, "_blank");
+}
+
+// DETECTOR AUTOMÁTICO DE AUDITORIA (ABRE DIRETO NA TELA DO COMPROVANTE)
+function checarParametrosAuditoria() {
+  var p = new URLSearchParams(window.location.search);
+  if (p.get("audit") === "1") {
+    document.getElementById("r-id").textContent = p.get("id") || "--";
+    document.getElementById("r-ts").textContent = p.get("ts") || "--";
+    document.getElementById("r-nome").textContent = (p.get("mot") || "--") + " (" + (p.get("coop") || "--") + ")";
+    document.getElementById("r-end").textContent = p.get("end") || "--";
+    document.getElementById("r-coords-orig").textContent = (p.get("lat") || "--") + ", " + (p.get("lng") || "--");
+    document.getElementById("r-coords-dest").textContent = p.get("dlat") ? (p.get("dlat") + ", " + p.get("dlng")) : "Auditado no Local";
+    document.getElementById("r-hash").textContent = p.get("h") || "--";
+    document.getElementById("r-sh").textContent = p.get("sh") || "--";
+    
+    // Oculta os botões operacionais para quem está só auditando
+    var areaBtn = document.getElementById("area-botoes-cert");
+    if (areaBtn) areaBtn.style.display = "none";
+    
+    goTo("s-cert");
+    return true;
+  }
+  return false;
+}
+
+window.onload = function() {
+  // Se for link de auditoria aberto pelo WhatsApp, abre direto o comprovante!
+  if (checarParametrosAuditoria()) return;
+
+  var lCpf = document.getElementById("l-cpf");
+  var lPhone = document.getElementById("l-phone");
+  lCpf.oninput = function() { this.value = cpfMask(this.value); };
+  lPhone.oninput = function() { this.value = phoneMask(this.value); };
+
+  var cCpf = document.getElementById("c-cpf");
+  var cPhone = document.getElementById("c-phone");
+  cCpf.oninput = function() { this.value = cpfMask(this.value); };
+  cPhone.oninput = function() { this.value = phoneMask(this.value); };
+
+  var inpDest = document.getElementById("inp-dest");
+  var inpCoopWz = document.getElementById("inp-wz-coop");
+  inpCoopWz.oninput = function() { this.value = phoneMask(this.value); };
+
+  inpDest.onblur = function() {
+    atualizarDestinoNoMapa(this.value.trim());
+  };
+
+  document.getElementById("btn-recenter").onclick = function() {
+    recentralizarRota();
+  };
+
+  document.getElementById("btn-login").onclick = function() {
+    var cpf = lCpf.value.trim();
+    var phone = lPhone.value.trim();
+    if (nums(cpf).length < 11) { alert("CPF incompleto"); return; }
+    if (nums(phone).length < 10) { alert("WhatsApp do motoboy incompleto"); return; }
+    S.cpf = cpf; S.phone = phone; S.nome = "Wanduir Durant"; S.coop = "Sindicato SP"; S.idEntrega = gerarId();
+    document.getElementById("hname").textContent = "Wanduir";
+    goTo("s-map"); startGPS();
+  };
+
+  document.getElementById("btn-cad").onclick = function() {
+    var nome = document.getElementById("c-nome").value.trim();
+    var cpf = cCpf.value.trim();
+    var phone = cPhone.value.trim();
+    var coop = document.getElementById("c-coop").value.trim();
+    if (!nome || nums(cpf).length < 11 || nums(phone).length < 10) { alert("Preencha todos os campos"); return; }
+    S.nome = nome; S.cpf = cpf; S.phone = phone; S.coop = coop || "Geral"; S.idEntrega = gerarId();
+    document.getElementById("hname").textContent = nome.split(" ")[0];
+    goTo("s-map"); startGPS();
+  };
+
+  document.getElementById("link-cad").onclick = function(e) { e.preventDefault(); goTo("s-cad"); };
+  document.getElementById("link-login").onclick = function(e) { e.preventDefault(); goTo("s-login"); };
+
+  document.getElementById("btn-map-next").onclick = function() {
+    var dest = inpDest.value.trim();
+    var coopWz = inpCoopWz.value.trim();
+    if (!dest) { alert("Informe o endereço de destino"); return; }
+    if (nums(coopWz).length < 10) { alert("Informe o WhatsApp da Cooperativa/Central"); return; }
+    S.destino = dest; S.coopPhone = coopWz;
+    goTo("s-foto");
+  };
+
+  document.getElementById("btn-back1").onclick = function() { goTo("s-map"); };
+  document.getElementById("btn-back2").onclick = function() { goTo("s-foto"); };
+
+  document.getElementById("cam-ph").onclick = function() { takePhoto(); };
+  document.getElementById("btn-foto").onclick = function() { takePhoto(); };
+
+  document.getElementById("btn-foto-next").onclick = function() {
+    if (!S.photoTaken) { alert("Fotografe o pacote"); return; }
+    document.getElementById("a-nome").textContent = S.nome;
+    document.getElementById("a-end").textContent = S.destino;
+    document.getElementById("a-coords").textContent = "GPS: " + S.lat + ", " + S.lng;
+    goTo("s-aceite");
+  };
+
+  document.getElementById("btn-aceite").onclick = function() {
+    pararGiroscopio();
+    var ts = new Date().toLocaleString("pt-BR");
+    S.tsAceite = ts;
+    document.getElementById("a-wait-porteiro").style.display = "none";
+    document.getElementById("a-confirmado").style.display = "block";
+    document.getElementById("a-ts-aceite").textContent = "Validado via Giroscópio em " + ts;
+  };
+
+  document.getElementById("btn-sim").onclick = function() {
+    var ts = S.tsAceite || new Date().toLocaleString("pt-BR");
+    S.starhash = "SH" + simHash(ts + "|" + S.lat + "|" + S.lng + "|" + S.hashImagem + "|" + S.destino);
+
+    document.getElementById("r-ts").textContent = ts;
+    document.getElementById("r-id").textContent = S.idEntrega;
+    document.getElementById("r-nome").textContent = S.nome + " (" + S.coop + ")";
+    document.getElementById("r-end").textContent = S.destino;
+    document.getElementById("r-coords-orig").textContent = S.lat + ", " + S.lng;
+    document.getElementById("r-coords-dest").textContent = S.destLat ? (S.destLat + ", " + S.destLng) : "Auditado no local";
+    document.getElementById("r-hash").textContent = S.hashImagem;
+    document.getElementById("r-sh").textContent = S.starhash;
+    goTo("s-cert");
+  };
+
+  document.getElementById("btn-enviar-coop").onclick = function() {
+    dispararWhatsApp(S.coopPhone);
+  };
+
+  document.getElementById("btn-enviar-moto").onclick = function() {
+    dispararWhatsApp(S.phone);
+  };
+
+  document.getElementById("btn-nova").onclick = function() {
+    S.photoTaken = false; S.hashImagem = ""; S.destLat = ""; S.destLng = "";
+    document.getElementById("cam-ph").style.display = "flex";
+    document.getElementById("cam-ok").style.display = "none";
+    document.getElementById("btn-foto").style.display = "flex";
+    document.getElementById("btn-foto-next").style.display = "none";
+    document.getElementById("a-wait-porteiro").style.display = "block";
+    document.getElementById("a-confirmado").style.display = "none";
+    document.getElementById("inp-dest").value = "";
+    document.getElementById("coords-dest").textContent = "Aguardando endereço...";
+    if (marcadorDestino && mapaInstancia) { mapaInstancia.removeLayer(marcadorDestino); marcadorDestino = null; }
+    if (rotaPolylinha && mapaInstancia) { mapaInstancia.removeLayer(rotaPolylinha); rotaPolylinha = null; }
+    S.idEntrega = gerarId();
+    goTo("s-map"); startGPS();
+  };
+};
+
+var giroAtivo = false;
+var celularVirado = false;
+
+function ativarBotaoAceite() {
+  var btn = document.getElementById("btn-aceite");
+  if (!btn) return;
+  btn.disabled = false;
+  btn.style.background = "linear-gradient(135deg,#1a6e4a,#00D4A0)";
+  btn.style.color = "#000";
+  btn.style.cursor = "pointer";
+  document.getElementById("a-giro-icon").style.transform = "rotate(90deg)";
+  document.getElementById("a-giro-status").textContent = "✓ Posição física validada!";
+  document.getElementById("a-giro-status").style.color = "var(--teal)";
+}
+
+function desativarBotaoAceite() {
+  var btn = document.getElementById("btn-aceite");
+  if (!btn) return;
+  btn.disabled = true;
+  btn.style.background = "#1a2a22";
+  btn.style.color = "#3a5a48";
+  btn.style.cursor = "not-allowed";
+  document.getElementById("a-giro-icon").style.transform = "rotate(0deg)";
+  document.getElementById("a-giro-status").textContent = "aguardando inclinação...";
+  document.getElementById("a-giro-status").style.color = "var(--muted)";
+}
+
+function handleOrientacao(e) {
+  var g = e.gamma, b = e.beta;
+  if (g === null || b === null) return;
+  var virado = Math.abs(g) > 35 || Math.abs(b) > 35;
+  if (virado && !celularVirado) {
+    celularVirado = true;
+    ativarBotaoAceite();
+  } else if (!virado && celularVirado) {
+    celularVirado = false;
+    if (document.getElementById("a-wait-porteiro").style.display !== "none") {
+      desativarBotaoAceite();
+    }
+  }
+}
+
+function iniciarGiroscopio() {
+  if (giroAtivo) return;
+  if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
+    document.getElementById("a-giro-perm").style.display = "block";
+    document.getElementById("btn-giro-perm").onclick = function() {
+      DeviceOrientationEvent.requestPermission().then(function(s) {
+        if (s === "granted") {
+          document.getElementById("a-giro-perm").style.display = "none";
+          window.addEventListener("deviceorientation", handleOrientacao);
+          giroAtivo = true;
+        } else {
+          ativarBotaoAceite();
+        }
+      }).catch(function() { ativarBotaoAceite(); });
+    };
+  } else if (window.DeviceOrientationEvent) {
+    window.addEventListener("deviceorientation", handleOrientacao);
+    giroAtivo = true;
+  } else {
+    ativarBotaoAceite();
+  }
+}
+
+function pararGiroscopio() {
+  window.removeEventListener("deviceorientation", handleOrientacao);
+  giroAtivo = false;
+}
+
+function takePhoto() {
+  var input = document.createElement("input");
+  input.type = "file"; input.accept = "image/*"; input.capture = "environment";
+  input.onchange = function(e) {
+    if (e.target.files && e.target.files[0]) {
+      var file = e.target.files[0];
+      document.getElementById("cam-ph").style.display = "none";
+      document.getElementById("cam-ok").style.display = "flex";
+      S.photoTaken = true;
+      calcHash(file, function(h) { S.hashImagem = h; });
+      document.getElementById("btn-foto").style.display = "none";
+      document.getElementById("btn-foto-next").style.display = "flex";
+    }
+  };
+  input.click();
+}
+</script>
 </body>
 </html>
