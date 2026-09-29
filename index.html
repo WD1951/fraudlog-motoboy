@@ -9,13 +9,13 @@
 <!-- Leaflet Aberto e Sem Chaves de API -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<!-- Gerador Nativo de QR Code Dinâmico -->
+<!-- Gerador de QR Code Dinâmico -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
   --bg:#0A0E14;--bg2:#0F1520;--bg3:#141C28;--surface:#131B27;
-  --teal:#00D4A0;--teal2:#00F0B8;--teal-dk:#007A5E;
-  --teal-lt:rgba(0,212,160,.12);--teal-md:rgba(0,212,160,.25);
+  --teal:#28D9C8;--teal2:#38EFDE;--teal-dk:#107A70;
+  --teal-lt:rgba(40,217,200,.12);--teal-md:rgba(40,217,200,.25);
   --ink:#F0F4F8;--ink2:#CBD5E1;--body:#B8C5D6;--muted:#8FA3B8;
   --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.14);
   --red:#FF5C5C;--amber:#FFB347;--amber-lt:rgba(255,179,71,.12);
@@ -26,67 +26,71 @@
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;overflow:hidden;height:100vh}
 .screen{display:none;position:fixed;top:0;left:0;right:0;bottom:0;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .screen.active{display:flex}
-.auth-bg{background:var(--bg);align-items:center;justify-content:flex-start;padding:20px}
-.auth-inner{position:relative;z-index:1;width:100%;max-width:420px;margin:auto}
-.auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:24px 20px;box-shadow:var(--shadow2)}
+.auth-bg{background:var(--bg);align-items:center;justify-content:flex-start;padding:16px}
+.auth-inner{position:relative;z-index:1;width:100%;max-width:390px;margin:auto}
+.auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:20px 18px;box-shadow:var(--shadow2)}
 
-.logo-container{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:14px}
-.logo-icon{width:86px;height:86px;background:linear-gradient(145deg,#0a1b24,#050a0f);border-radius:22px;border:2.5px solid #00F0B8;box-shadow:0 0 20px rgba(0,240,184,.35),inset 0 0 15px rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center}
-.logo-text-title{font-family:var(--sans);font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-top:10px}
-.logo-text-title span{color:#00F0B8}
-.logo-text-sub{font-size:8px;font-weight:700;color:#00F0B8;letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+/* LOGOMARCA COMPACTA E FIEL À IMAGEM 3D */
+.logo-container{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:10px}
+.logo-badge-3d{width:62px;height:62px;position:relative;display:flex;align-items:center;justify-content:center;filter:drop-shadow(0 4px 10px rgba(40,217,200,0.35))}
+.logo-typography{display:flex;flex-direction:column;align-items:center;margin-top:6px}
+.logo-mob-tag{font-family:var(--sans);font-size:8px;font-weight:800;color:var(--teal);letter-spacing:1px;align-self:flex-end;margin-right:8px;margin-bottom:-4px}
+.logo-title-row{font-family:var(--sans);font-size:20px;font-weight:800;color:#FFFFFF;letter-spacing:-0.4px;text-shadow:0 2px 4px rgba(0,0,0,0.8)}
+.logo-sub-bullets{display:flex;align-items:center;gap:5px;margin-top:2px}
+.logo-sub-bullets span{font-size:7px;font-weight:800;letter-spacing:1.4px;color:var(--teal);text-transform:uppercase}
+.logo-dot{width:4px;height:4px;background:var(--teal);border-radius:50%}
 
-.app-slogan{text-align:center;font-size:13px;font-weight:700;color:var(--ink2);line-height:1.4;margin-bottom:16px}
+.app-slogan{text-align:center;font-size:12px;font-weight:700;color:var(--ink2);line-height:1.35;margin-bottom:12px}
 .app-slogan em{color:var(--teal);font-style:normal}
-.badge{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:50px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
-.fg{margin-bottom:12px}
-.fl{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
-.fi{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;font-family:var(--mono);font-size:14px;color:var(--ink);outline:none}
+.badge{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:50px;padding:4px 12px;font-size:10px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:14px}
+.fg{margin-bottom:10px}
+.fl{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:3px}
+.fi{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:11px 13px;font-family:var(--mono);font-size:14px;color:var(--ink);outline:none}
 .fi:focus{border-color:var(--teal)}
-.btn-p{width:100%;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:#000;border:none;border-radius:50px;padding:14px;font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
-.btn-s{width:100%;background:var(--teal-lt);color:var(--teal);border:1.5px solid var(--teal-md);border-radius:50px;padding:12px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
-.btn-pdf{width:100%;background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;border:none;border-radius:50px;padding:13px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}
-.btn-wz{width:100%;background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:50px;padding:15px;font-family:var(--sans);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:6px}
-.btn-back{background:none;border:none;color:var(--teal);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans)}
-.auth-switch{text-align:center;margin-top:14px;font-size:13px;color:var(--muted)}
+.btn-p{width:100%;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:#000;border:none;border-radius:50px;padding:13px;font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px}
+.btn-s{width:100%;background:var(--teal-lt);color:var(--teal);border:1.5px solid var(--teal-md);border-radius:50px;padding:11px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:6px}
+.btn-pdf{width:100%;background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;border:none;border-radius:50px;padding:12px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}
+.btn-wz{width:100%;background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:50px;padding:14px;font-family:var(--sans);font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:5px}
+.btn-back{background:none;border:none;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans)}
+.auth-switch{text-align:center;margin-top:12px;font-size:12px;color:var(--muted)}
 .auth-switch a{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:none}
-.app-header{background:rgba(15,21,32,.97);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.hbrand{display:flex;align-items:center;gap:10px}
-.hlogo-box{width:32px;height:32px;background:#0d1a24;border:1.5px solid #00F0B8;border-radius:8px;display:flex;align-items:center;justify-content:center}
-.hname-brand{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-1px}
+.app-header{background:rgba(15,21,32,.97);border-bottom:1px solid var(--border);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hbrand{display:flex;align-items:center;gap:8px}
+.hlogo-box{width:28px;height:28px;background:#09121a;border:1.5px solid var(--teal);border-radius:8px;display:flex;align-items:center;justify-content:center}
+.hname-brand{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink);letter-spacing:-1px}
 .hname-brand span{color:var(--teal)}
 .huser{display:flex;align-items:center;gap:7px}
-.avatar{width:28px;height:28px;background:var(--teal-lt);border:1.5px solid var(--teal-md);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--teal)}
+.avatar{width:26px;height:26px;background:var(--teal-lt);border:1.5px solid var(--teal-md);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--teal)}
 .hname{font-size:11px;font-weight:600;color:var(--ink2)}
-.steps{background:var(--bg2);padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;flex-shrink:0}
+.steps{background:var(--bg2);padding:7px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;flex-shrink:0}
 .step{display:flex;align-items:center;gap:4px;flex:1}
-.sn{width:20px;height:20px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--muted);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--mono);flex-shrink:0}
+.sn{width:18px;height:18px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--muted);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--mono);flex-shrink:0}
 .sn.active{background:var(--teal);border-color:var(--teal);color:#000}
 .sn.done{background:var(--teal-lt);border-color:var(--teal-md);color:var(--teal)}
-.sl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase}
+.sl{font-size:8px;font-weight:700;color:var(--muted);text-transform:uppercase}
 .sl.active{color:var(--teal)}
-.ssep{width:8px;height:1px;background:var(--border);margin:0 2px}
+.ssep{width:6px;height:1px;background:var(--border);margin:0 1px}
 
-.map-wrap{position:relative;flex:1;min-height:280px;width:100%;background:#e5e3df}
-#mapa-real{width:100%;height:100%;min-height:280px}
-.btn-recenter{position:absolute;top:12px;right:12px;z-index:1000;background:rgba(15,21,32,.95);border:1.5px solid var(--teal);color:var(--teal);padding:8px 14px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer}
-.map-info-bar{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(10,14,20,.95);border:1px solid var(--border2);border-radius:var(--r);padding:8px 12px;display:flex;gap:10px;z-index:1000}
+.map-wrap{position:relative;flex:1;min-height:260px;width:100%;background:#e5e3df}
+#mapa-real{width:100%;height:100%;min-height:260px}
+.btn-recenter{position:absolute;top:10px;right:10px;z-index:1000;background:rgba(15,21,32,.95);border:1.5px solid var(--teal);color:var(--teal);padding:6px 12px;border-radius:18px;font-family:var(--mono);font-size:10px;font-weight:700;cursor:pointer}
+.map-info-bar{position:absolute;bottom:8px;left:8px;right:8px;background:rgba(10,14,20,.95);border:1px solid var(--border2);border-radius:var(--r);padding:7px 10px;display:flex;gap:8px;z-index:1000}
 .mic{flex:1}
-.mic-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
-.mic-val{font-family:var(--mono);font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mic-lbl{font-size:8px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:1px}
+.mic-val{font-family:var(--mono);font-size:10px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mic-val.t{color:var(--teal)}
 .mic-val.r{color:var(--red)}
 
-.map-panel{background:var(--bg2);border-top:1px solid var(--border);padding:14px;flex-shrink:0}
-.pt{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
-.ps{font-size:11px;color:var(--muted);margin-bottom:10px}
-.frow{display:flex;align-items:center;gap:9px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 12px;margin-bottom:8px}
+.map-panel{background:var(--bg2);border-top:1px solid var(--border);padding:12px;flex-shrink:0}
+.pt{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--ink);margin-bottom:2px}
+.ps{font-size:10px;color:var(--muted);margin-bottom:8px}
+.frow{display:flex;align-items:center;gap:8px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:8px 10px;margin-bottom:7px}
 .frow:focus-within{border-color:var(--teal)}
-.frow input{flex:1;border:none;background:none;font-family:var(--mono);font-size:13px;color:var(--ink);outline:none}
+.frow input{flex:1;border:none;background:none;font-family:var(--mono);font-size:12px;color:var(--ink);outline:none}
 .frow input::placeholder{color:var(--muted)}
 
-.photo-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
-.pulse-wrapper{position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center}
+.photo-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;background:var(--bg)}
+.pulse-wrapper{position:relative;width:130px;height:130px;display:flex;align-items:center;justify-content:center}
 .pulse-wave{position:absolute;width:100%;height:100%;border-radius:50%;border:2px solid var(--teal);opacity:0;animation:concentricWaves 2.4s infinite cubic-bezier(0.2,0.8,0.2,1);pointer-events:none}
 .pulse-wave:nth-child(2){animation-delay:0.8s}
 .pulse-wave:nth-child(3){animation-delay:1.6s}
@@ -97,39 +101,38 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   100%{transform:scale(1.7);opacity:0}
 }
 
-.cam-btn-circle{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,#005c45,#00D4A0);border:3px solid #00F0B8;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:2;box-shadow:0 0 30px rgba(0,212,160,.4);touch-action:manipulation}
+.cam-btn-circle{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,#0e4d45,#28D9C8);border:2.5px solid #38EFDE;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;z-index:2;box-shadow:0 0 24px rgba(40,217,200,.4);touch-action:manipulation}
 .cam-btn-circle:active{transform:scale(0.95)}
-.cam-btn-circle svg{width:38px;height:38px;fill:#000}
+.cam-btn-circle svg{width:32px;height:32px;fill:#000}
 
-.raw-flow-badge{margin-top:22px;background:rgba(0,212,160,.08);border:1px solid rgba(0,212,160,.2);border-radius:12px;padding:8px 14px;text-align:center}
-.rfb-t{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--teal2);letter-spacing:0.5px}
-.rfb-s{font-size:10px;color:var(--muted);margin-top:2px}
+.raw-flow-badge{margin-top:16px;background:rgba(40,217,200,.08);border:1px solid rgba(40,217,200,.2);border-radius:10px;padding:6px 12px;text-align:center}
+.rfb-t{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--teal2);letter-spacing:0.5px}
+.rfb-s{font-size:9px;color:var(--muted);margin-top:1px}
 
-.photo-panel{background:var(--bg2);border-top:1px solid var(--border);padding:14px;flex-shrink:0}
-.acard{margin:14px;background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:16px}
-.aprev{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:13px;color:var(--body);line-height:1.7}
+.photo-panel{background:var(--bg2);border-top:1px solid var(--border);padding:12px;flex-shrink:0}
+.acard{margin:12px;background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:14px}
+.aprev{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:10px;margin-bottom:10px;font-size:12px;color:var(--body);line-height:1.6}
 .aprev strong{color:var(--ink)}
-.aprev .mono{font-family:var(--mono);font-size:11px;color:var(--teal)}
-.rcard{margin:14px;background:var(--surface);border:1px solid var(--border2);border-radius:18px;overflow:hidden}
-.rhead{background:linear-gradient(135deg,#004d3a,#007A5E);padding:14px 18px;display:flex;align-items:center;gap:10px}
-.rhead-t{font-family:var(--mono);font-size:14px;font-weight:700;color:#fff}
-.rhead-s{font-size:11px;color:rgba(255,255,255,.7)}
-.rbody{padding:14px 16px}
-.rrow{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.aprev .mono{font-family:var(--mono);font-size:10px;color:var(--teal)}
+.rcard{margin:12px;background:var(--surface);border:1px solid var(--border2);border-radius:16px;overflow:hidden}
+.rhead{background:linear-gradient(135deg,#093a34,#107A70);padding:12px 16px;display:flex;align-items:center;gap:8px}
+.rhead-t{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff}
+.rhead-s{font-size:10px;color:rgba(255,255,255,.7)}
+.rbody{padding:12px 14px}
+.rrow{display:flex;gap:6px;padding:6px 0;border-bottom:1px solid var(--border);align-items:flex-start}
 .rrow:last-child{border-bottom:none}
-.rlbl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:2px}
-.rval{font-size:12px;font-weight:600;color:var(--ink);word-break:break-all}
-.rval.mono{font-family:var(--mono);font-size:10px;color:var(--teal)}
-.shbox{background:var(--bg);border:1px solid rgba(0,212,160,.3);border-radius:var(--r);padding:12px;margin:12px 0;text-align:center}
-.sh-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
-.sh-val{font-family:var(--mono);font-size:10px;color:var(--teal2);word-break:break-all;line-height:1.5}
+.rlbl{font-size:8px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:1px}
+.rval{font-size:11px;font-weight:600;color:var(--ink);word-break:break-all}
+.rval.mono{font-family:var(--mono);font-size:9px;color:var(--teal)}
+.shbox{background:var(--bg);border:1px solid rgba(40,217,200,.3);border-radius:var(--r);padding:10px;margin:10px 0;text-align:center}
+.sh-lbl{font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:3px}
+.sh-val{font-family:var(--mono);font-size:9px;color:var(--teal2);word-break:break-all;line-height:1.4}
 
-/* CAIXA DO QR CODE DINÂMICO */
-.qr-container{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;padding:16px;border-radius:var(--r);margin:14px 0}
+.qr-container{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;padding:12px;border-radius:var(--r);margin:10px 0}
 #qrcode-canvas{display:flex;justify-content:center}
-.qr-caption{font-family:var(--mono);font-size:10px;font-weight:700;color:#000;margin-top:8px;letter-spacing:0.5px}
+.qr-caption{font-family:var(--mono);font-size:9px;font-weight:700;color:#000;margin-top:6px;letter-spacing:0.4px}
 
-.rel-actions{padding:0 14px 18px;display:flex;flex-direction:column;gap:8px}
+.rel-actions{padding:0 12px 16px;display:flex;flex-direction:column;gap:6px}
 
 @media print {
   body { background: #fff !important; color: #000 !important; overflow: visible !important; height: auto !important }
@@ -142,7 +145,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   .rval { color: #000 !important }
   .rval.mono { color: #000 !important; font-weight: bold !important }
   .shbox { border: 2px dashed #000 !important; background: #f9f9f9 !important; -webkit-print-color-adjust: exact }
-  .sh-val { color: #000 !important; font-size: 11px !important }
+  .sh-val { color: #000 !important; font-size: 10px !important }
   .qr-container { border: 1px solid #ccc !important }
 }
 </style>
@@ -154,19 +157,28 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   <div class="auth-inner">
     <div class="auth-card">
       <div class="logo-container">
-        <div class="logo-icon">
-          <!-- Logotipo 3D Integrado -->
-          <svg width="56" height="56" viewBox="0 0 100 100" fill="none">
-            <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
-            <rect x="26" y="44" width="48" height="40" rx="10" fill="#082A26"/>
-            <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8" stroke-linecap="round"/>
-            <circle cx="50" cy="60" r="7" fill="#00F0B8"/>
-            <path d="M50 67V74" stroke="#00F0B8" stroke-width="5" stroke-linecap="round"/>
-            <circle cx="72" cy="28" r="4.5" fill="#00F0B8"/>
+        <!-- Ícone do Cadeado Fiel à Imagem: Moldura Ciano, Fundo Escuro, Arco Cromado, Ponto Lateral -->
+        <div class="logo-badge-3d">
+          <svg width="60" height="60" viewBox="0 0 100 100" fill="none">
+            <rect x="10" y="10" width="80" height="80" rx="22" stroke="#28D9C8" stroke-width="6" fill="#0C1520"/>
+            <path d="M34 44V29C34 19 41 12 50 12C59 12 66 19 66 29V44" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+            <path d="M34 44V29C34 19 41 12 50 12C59 12 66 19 66 29V44" stroke="#A6C2BE" stroke-width="4" stroke-linecap="round"/>
+            <rect x="24" y="38" width="52" height="46" rx="14" fill="#28D9C8" stroke="#38EFDE" stroke-width="2"/>
+            <circle cx="50" cy="58" r="8" fill="#081A1E" stroke="#124E48" stroke-width="2"/>
+            <path d="M50 64V73" stroke="#081A1E" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="73" cy="30" r="4" fill="#28D9C8"/>
           </svg>
         </div>
-        <div class="logo-text-title">Fraud<span>LöcB</span></div>
-        <div class="logo-text-sub">DIGITAL VERIFICATION • REAL ESTATE</div>
+        <div class="logo-typography">
+          <div class="logo-mob-tag">MOB</div>
+          <div class="logo-title-row">FraudLöcB</div>
+          <div class="logo-sub-bullets">
+            <div class="logo-dot"></div>
+            <span>DIGITAL VERIFICATION</span>
+            <div class="logo-dot"></div>
+            <span>REAL ESTATE</span>
+          </div>
+        </div>
       </div>
       <div class="app-slogan">O que protege o motoboy,<br><em>protege a empresa.</em></div>
       <div class="badge">App do Motoboy</div>
@@ -183,15 +195,19 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   <div class="auth-inner">
     <div class="auth-card">
       <div class="logo-container">
-        <div class="logo-icon">
-          <svg width="56" height="56" viewBox="0 0 100 100" fill="none">
-            <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
-            <rect x="26" y="44" width="48" height="40" rx="10" fill="#082A26"/>
-            <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8" stroke-linecap="round"/>
-            <circle cx="50" cy="60" r="7" fill="#00F0B8"/>
-            <path d="M50 67V74" stroke="#00F0B8" stroke-width="5" stroke-linecap="round"/>
-            <circle cx="72" cy="28" r="4.5" fill="#00F0B8"/>
+        <div class="logo-badge-3d">
+          <svg width="60" height="60" viewBox="0 0 100 100" fill="none">
+            <rect x="10" y="10" width="80" height="80" rx="22" stroke="#28D9C8" stroke-width="6" fill="#0C1520"/>
+            <path d="M34 44V29C34 19 41 12 50 12C59 12 66 19 66 29V44" stroke="#FFFFFF" stroke-width="8" stroke-linecap="round"/>
+            <rect x="24" y="38" width="52" height="46" rx="14" fill="#28D9C8"/>
+            <circle cx="50" cy="58" r="8" fill="#081A1E"/>
+            <path d="M50 64V73" stroke="#081A1E" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="73" cy="30" r="4" fill="#28D9C8"/>
           </svg>
+        </div>
+        <div class="logo-typography">
+          <div class="logo-mob-tag">MOB</div>
+          <div class="logo-title-row">FraudLöcB</div>
         </div>
       </div>
       <div class="app-slogan">Cadastro do Entregador</div>
@@ -210,9 +226,10 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   <div class="app-header">
     <div class="hbrand">
       <div class="hlogo-box">
-        <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
-          <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
-          <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8"/>
+        <svg width="18" height="18" viewBox="0 0 100 100" fill="none">
+          <rect x="15" y="15" width="70" height="70" rx="18" stroke="#28D9C8" stroke-width="8" fill="#0C1520"/>
+          <rect x="30" y="44" width="40" height="34" rx="10" fill="#28D9C8"/>
+          <path d="M38 44V32C38 24 43 18 50 18C57 18 62 24 62 32V44" stroke="#FFF" stroke-width="8"/>
         </svg>
       </div>
       <span class="hname-brand">Fraud<span>Log</span></span>
@@ -339,9 +356,10 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   <div class="app-header">
     <div class="hbrand">
       <div class="hlogo-box">
-        <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
-          <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
-          <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8"/>
+        <svg width="18" height="18" viewBox="0 0 100 100" fill="none">
+          <rect x="15" y="15" width="70" height="70" rx="18" stroke="#28D9C8" stroke-width="8" fill="#0C1520"/>
+          <rect x="30" y="44" width="40" height="34" rx="10" fill="#28D9C8"/>
+          <path d="M38 44V32C38 24 43 18 50 18C57 18 62 24 62 32V44" stroke="#FFF" stroke-width="8"/>
         </svg>
       </div>
       <span class="hname-brand">Fraud<span>Log</span></span>
@@ -378,7 +396,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     </div>
     <div class="rel-actions" id="area-botoes-cert">
       <button type="button" class="btn-wz" id="btn-enviar-coop">🏢 Cópia para a Cooperativa (WhatsApp)</button>
-      <button type="button" class="btn-wz" style="background:linear-gradient(135deg,#007A5E,#00D4A0);color:#000" id="btn-enviar-moto">🏍️ Cópia para o Motoboy (WhatsApp)</button>
+      <button type="button" class="btn-wz" style="background:linear-gradient(135deg,#107A70,#28D9C8);color:#000" id="btn-enviar-moto">🏍️ Cópia para o Motoboy (WhatsApp)</button>
       <button type="button" class="btn-pdf" id="btn-pdf">📄 Imprimir / Salvar em PDF</button>
       <button type="button" class="btn-p" id="btn-nova" style="margin-top:6px">Iniciar Nova Entrega</button>
     </div>
@@ -412,8 +430,8 @@ function inicializarMapa(lat, lng) {
     }).addTo(mapaInstancia);
 
     marcadorOrigem = L.circleMarker([lat, lng], {
-      color: "#007A5E",
-      fillColor: "#00D4A0",
+      color: "#107A70",
+      fillColor: "#28D9C8",
       fillOpacity: 1,
       radius: 9,
       weight: 3
@@ -474,7 +492,7 @@ function recentralizarRota() {
       rotaPolylinha.setLatLngs(pts);
     } else {
       rotaPolylinha = L.polyline(pts, {
-        color: "#007A5E",
+        color: "#28D9C8",
         weight: 4,
         dashArray: "6, 8",
         opacity: 0.95
@@ -622,8 +640,8 @@ function gerarQRCodeDinamico(url) {
   container.innerHTML = "";
   new QRCode(container, {
     text: url,
-    width: 130,
-    height: 130,
+    width: 120,
+    height: 120,
     colorDark: "#000000",
     colorLight: "#ffffff",
     correctLevel: QRCode.CorrectLevel.M
@@ -834,7 +852,7 @@ function ativarBotaoAceite() {
   var btn = document.getElementById("btn-aceite");
   if (!btn) return;
   btn.disabled = false;
-  btn.style.background = "linear-gradient(135deg,#1a6e4a,#00D4A0)";
+  btn.style.background = "linear-gradient(135deg,#107A70,#28D9C8)";
   btn.style.color = "#000";
   btn.style.cursor = "pointer";
   document.getElementById("a-giro-icon").style.transform = "rotate(90deg)";
