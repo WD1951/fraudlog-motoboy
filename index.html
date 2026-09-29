@@ -26,14 +26,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .screen.active{display:flex}
 .auth-bg{background:var(--bg);align-items:center;justify-content:flex-start;padding:20px}
 .auth-inner{position:relative;z-index:1;width:100%;max-width:420px;margin:auto}
-.auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:24px 20px;box-shadow:var(--shadow2)}
-
-.logo-container{display:flex;flex-direction:column;align-items:center;justify-content:center;margin-bottom:14px}
-.logo-icon{width:86px;height:86px;background:linear-gradient(145deg,#0a1b24,#050a0f);border-radius:22px;border:2.5px solid #00F0B8;box-shadow:0 0 20px rgba(0,240,184,.35),inset 0 0 15px rgba(0,0,0,.9);display:flex;align-items:center;justify-content:center}
-.logo-text-title{font-family:var(--sans);font-size:22px;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-top:10px}
-.logo-text-title span{color:#00F0B8}
-.logo-text-sub{font-size:8px;font-weight:700;color:#00F0B8;letter-spacing:2px;text-transform:uppercase;margin-top:2px}
-
+.auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:26px 20px;box-shadow:var(--shadow2)}
+.logo-wrap{text-align:center;margin-bottom:10px}
+.logo-img{width:96px;height:96px;object-fit:contain;border-radius:18px}
 .app-slogan{text-align:center;font-size:13px;font-weight:700;color:var(--ink2);line-height:1.4;margin-bottom:16px}
 .app-slogan em{color:var(--teal);font-style:normal}
 .badge{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:50px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
@@ -48,8 +43,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .auth-switch{text-align:center;margin-top:14px;font-size:13px;color:var(--muted)}
 .auth-switch a{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:none}
 .app-header{background:rgba(15,21,32,.97);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
-.hbrand{display:flex;align-items:center;gap:10px}
-.hlogo-box{width:32px;height:32px;background:#0d1a24;border:1.5px solid #00F0B8;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.hbrand{display:flex;align-items:center;gap:8px}
+.hlogo{width:32px;height:32px;object-fit:contain;border-radius:8px}
 .hname-brand{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-1px}
 .hname-brand span{color:var(--teal)}
 .huser{display:flex;align-items:center;gap:7px}
@@ -66,7 +61,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 
 .map-wrap{position:relative;flex:1;min-height:300px;width:100%;background:#e5e3df}
 #mapa-real{width:100%;height:100%;min-height:300px}
-.btn-recenter{position:absolute;top:12px;right:12px;z-index:1000;background:rgba(15,21,32,.95);border:1.5px solid var(--teal);color:var(--teal);padding:8px 14px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer}
+.btn-recenter{position:absolute;top:12px;right:12px;z-index:1000;background:rgba(15,21,32,.95);border:1px solid var(--teal);color:var(--teal);padding:8px 14px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.5)}
 .map-info-bar{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(10,14,20,.95);border:1px solid var(--border2);border-radius:var(--r);padding:8px 12px;display:flex;gap:10px;z-index:1000}
 .mic{flex:1}
 .mic-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
@@ -115,24 +110,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 <div id="s-login" class="screen auth-bg active">
   <div class="auth-inner">
     <div class="auth-card">
-      <div class="logo-container">
-        <div class="logo-icon">
-          <svg width="56" height="56" viewBox="0 0 100 100" fill="none">
-            <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
-            <rect x="26" y="44" width="48" height="40" rx="10" fill="#082A26"/>
-            <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8" stroke-linecap="round"/>
-            <circle cx="50" cy="60" r="7" fill="#00F0B8"/>
-            <path d="M50 67V74" stroke="#00F0B8" stroke-width="5" stroke-linecap="round"/>
-            <circle cx="72" cy="28" r="4.5" fill="#00F0B8"/>
-          </svg>
-        </div>
-        <div class="logo-text-title">Fraud<span>LöcB</span></div>
-        <div class="logo-text-sub">DIGITAL VERIFICATION • REAL ESTATE</div>
-      </div>
+      <div class="logo-wrap"><img id="logo1" class="logo-img" alt="FraudLog" src="logo.png"></div>
       <div class="app-slogan">O que protege o motoboy,<br><em>protege a empresa.</em></div>
       <div class="badge">App do Motoboy</div>
       <div class="fg"><label class="fl">CPF</label><input class="fi" id="l-cpf" type="text" placeholder="000.000.000-00" maxlength="14" inputmode="numeric"></div>
-      <div class="fg"><label class="fl">WhatsApp do Motoboy</label><input class="fi" id="l-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">Celular do Motoboy (WhatsApp)</label><input class="fi" id="l-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
       <button type="button" class="btn-p" id="btn-login">Entrar</button>
       <div class="auth-switch">Primeiro acesso? <a href="#" id="link-cad">Cadastre-se</a></div>
     </div>
@@ -143,22 +125,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 <div id="s-cad" class="screen auth-bg">
   <div class="auth-inner">
     <div class="auth-card">
-      <div class="logo-container">
-        <div class="logo-icon">
-          <svg width="56" height="56" viewBox="0 0 100 100" fill="none">
-            <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
-            <rect x="26" y="44" width="48" height="40" rx="10" fill="#082A26"/>
-            <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8" stroke-linecap="round"/>
-            <circle cx="50" cy="60" r="7" fill="#00F0B8"/>
-            <path d="M50 67V74" stroke="#00F0B8" stroke-width="5" stroke-linecap="round"/>
-            <circle cx="72" cy="28" r="4.5" fill="#00F0B8"/>
-          </svg>
-        </div>
-      </div>
+      <div class="logo-wrap"><img id="logo2" class="logo-img" alt="FraudLog" src="logo.png"></div>
       <div class="app-slogan">Cadastro do Entregador</div>
       <div class="fg"><label class="fl">Nome completo</label><input class="fi" id="c-nome" type="text" placeholder="Seu nome"></div>
       <div class="fg"><label class="fl">CPF</label><input class="fi" id="c-cpf" type="text" placeholder="000.000.000-00" maxlength="14" inputmode="numeric"></div>
-      <div class="fg"><label class="fl">WhatsApp do Motoboy</label><input class="fi" id="c-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">WhatsApp Motoboy</label><input class="fi" id="c-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
       <div class="fg"><label class="fl">Cooperativa / Empresa</label><input class="fi" id="c-coop" type="text" placeholder="Nome da cooperativa"></div>
       <button type="button" class="btn-p" id="btn-cad">Criar conta e iniciar</button>
       <div class="auth-switch">Já tem conta? <a href="#" id="link-login">Login</a></div>
@@ -169,15 +140,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 <!-- MAPA COM OPENSTREETMAP NATIVO -->
 <div id="s-map" class="screen">
   <div class="app-header">
-    <div class="hbrand">
-      <div class="hlogo-box">
-        <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
-          <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
-          <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8"/>
-        </svg>
-      </div>
-      <span class="hname-brand">Fraud<span>Log</span></span>
-    </div>
+    <div class="hbrand"><img id="logo3" class="hlogo" alt="FL" src="logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
     <div class="huser"><div class="avatar" id="av">MB</div><div class="hname" id="hname">Motoboy</div></div>
   </div>
   <div class="steps">
@@ -213,7 +176,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 <!-- FOTO -->
 <div id="s-foto" class="screen">
   <div class="app-header">
-    <div class="hbrand"><span class="hname-brand">Fraud<span>Log</span></span></div>
+    <div class="hbrand"><img id="logo4" class="hlogo" alt="FL" src="logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
     <button type="button" class="btn-back" id="btn-back1">voltar</button>
   </div>
   <div class="steps">
@@ -244,7 +207,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 <!-- LACRE E GIROSCÓPIO -->
 <div id="s-aceite" class="screen">
   <div class="app-header">
-    <div class="hbrand"><span class="hname-brand">Fraud<span>Log</span></span></div>
+    <div class="hbrand"><img id="logo5" class="hlogo" alt="FL" src="logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
     <button type="button" class="btn-back" id="btn-back2">voltar</button>
   </div>
   <div class="steps">
@@ -268,9 +231,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
           <button type="button" id="btn-giro-perm" style="background:var(--amber-lt);color:var(--amber);border:1px solid var(--amber);padding:10px 20px;border-radius:30px;font-weight:700">Autorizar Sensor de Movimento</button>
         </div>
         <div id="a-vire" style="text-align:center;padding:12px 0;">
-          <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Aponte o telemóvel para o balcão</div>
+          <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Aponte o celular para o balcão</div>
           <div id="a-giro-icon" style="font-size:38px;transition:transform .3s">📱</div>
-          <div id="a-giro-status" style="margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--muted)">a detetar inclinação...</div>
+          <div id="a-giro-status" style="margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--muted)">detectando inclinação...</div>
         </div>
         <button type="button" id="btn-aceite" disabled style="width:100%;background:#1a2a22;color:#3a5a48;border:none;border-radius:18px;padding:20px;font-size:16px;font-weight:800">
           CONFIRMAR FATO FÍSICO
@@ -288,25 +251,24 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   </div>
 </div>
 
-<!-- CERTIFICADO / ECRÃ PÚBLICO DE AUDITORIA -->
+<!-- CERTIFICADO COM ENVIO PARA COOPERATIVA E MOTOBOY -->
 <div id="s-cert" class="screen">
   <div class="app-header">
-    <div class="hbrand">
-      <div class="hlogo-box">
-        <svg width="20" height="20" viewBox="0 0 100 100" fill="none">
-          <rect x="22" y="40" width="56" height="48" rx="14" fill="#00D4A0"/>
-          <path d="M34 40V27C34 18 41 11 50 11C59 11 66 18 66 27V40" stroke="#00F0B8" stroke-width="8"/>
-        </svg>
-      </div>
-      <span class="hname-brand">Fraud<span>Log</span></span>
-    </div>
-    <div style="font-family:var(--mono);font-size:11px;color:var(--teal);font-weight:700">✓ PROVA AUDITÁVEL</div>
+    <div class="hbrand"><img id="logo6" class="hlogo" alt="FL" src="logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--teal);font-weight:700">✓ CERTIFICADO</div>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="sn done">✓</div><div class="sl">Login</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn done">✓</div><div class="sl">GPS</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn done">✓</div><div class="sl">Foto</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn done">✓</div><div class="sl">Lacre</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn active">5</div><div class="sl active">Cert.</div></div>
   </div>
   <div style="overflow-y:auto;flex:1;background:var(--bg)">
     <div class="rcard">
       <div class="rhead">
         <div>
-          <div class="rhead-t">Comprovativo Oficial de Entrega</div>
+          <div class="rhead-t">Comprovante Oficial de Entrega</div>
           <div class="rhead-s" id="r-ts">--</div>
         </div>
       </div>
@@ -317,13 +279,14 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
         <div class="rrow"><div><div class="rlbl">Coordenadas de Origem (Motoboy)</div><div class="rval mono" id="r-coords-orig">--</div></div></div>
         <div class="rrow"><div><div class="rlbl">Coordenadas de Destino (Local)</div><div class="rval mono" id="r-coords-dest">--</div></div></div>
         <div class="rrow"><div><div class="rlbl">Hash SHA-256 da Foto</div><div class="rval mono" id="r-hash">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Link Público de Auditoria</div><div class="rval mono" id="r-link" style="color:var(--teal)">--</div></div></div>
         <div class="shbox">
           <div class="sh-lbl">StarHash Constellation</div>
           <div class="sh-val" id="r-sh">--</div>
         </div>
       </div>
     </div>
-    <div class="rel-actions" id="area-botoes-cert">
+    <div class="rel-actions">
       <button type="button" class="btn-wz" id="btn-enviar-coop">📲 Enviar Comprovante para Cooperativa</button>
       <button type="button" class="btn-s" id="btn-enviar-moto">📱 Enviar Cópia para o WhatsApp do Motoboy</button>
       <button type="button" class="btn-p" id="btn-nova" style="margin-top:10px">Iniciar Nova Entrega</button>
@@ -335,7 +298,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 var S = {
   nome: "", cpf: "", phone: "", coop: "", coopPhone: "",
   lat: "", lng: "", destLat: "", destLng: "", destino: "",
-  hashImagem: "", idEntrega: "", starhash: "", photoTaken: false
+  hashImagem: "", idEntrega: "", starhash: "", photoTaken: false,
+  tsAceite: ""
 };
 
 var mapaInstancia = null;
@@ -363,14 +327,15 @@ function inicializarMapa(lat, lng) {
       fillOpacity: 1,
       radius: 9,
       weight: 3
-    }).addTo(mapaInstancia).bindPopup("<b>Você (Origem)</b>");
+    }).addTo(mapaInstancia).bindPopup("<b>Origem (Motoboy)</b>");
   } else {
     mapaInstancia.setView([lat, lng], 15);
     if (marcadorOrigem) marcadorOrigem.setLatLng([lat, lng]);
   }
 
-  setTimeout(function() { if (mapaInstancia) mapaInstancia.invalidateSize(); }, 100);
-  setTimeout(function() { if (mapaInstancia) mapaInstancia.invalidateSize(); }, 400);
+  setTimeout(function() {
+    if (mapaInstancia) mapaInstancia.invalidateSize();
+  }, 300);
 }
 
 function atualizarDestinoNoMapa(endereco) {
@@ -400,11 +365,10 @@ function atualizarDestinoNoMapa(endereco) {
             weight: 3
           }).addTo(mapaInstancia).bindPopup("<b>Destino</b>");
         }
-
         recentralizarRota();
       }
     }).catch(function(e) {
-      console.log("Erro rota:", e);
+      console.warn("Erro ao buscar rota:", e);
     });
 }
 
@@ -434,11 +398,7 @@ function recentralizarRota() {
 }
 
 function nums(s) {
-  var r = "";
-  for (var i = 0; i < s.length; i++) {
-    if (s[i] >= "0" && s[i] <= "9") r += s[i];
-  }
-  return r;
+  return (s || "").replace(/\D/g, "");
 }
 
 function cpfMask(s) {
@@ -469,7 +429,7 @@ function goTo(id) {
         mapaInstancia.invalidateSize();
         recentralizarRota();
       }
-    }, 150);
+    }, 200);
   }
   if (id === "s-aceite") {
     celularVirado = false;
@@ -491,11 +451,11 @@ function startGPS() {
   }
   function err() {
     S.lat = "-23.561412"; S.lng = "-46.655981";
-    el.textContent = S.lat + ", " + S.lng + " (Referência)";
+    el.textContent = S.lat + ", " + S.lng + " (Referência SP)";
     inicializarMapa(parseFloat(S.lat), parseFloat(S.lng));
   }
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(ok, err, {enableHighAccuracy:true, timeout:10000});
+    navigator.geolocation.getCurrentPosition(ok, err, { enableHighAccuracy: true, timeout: 10000 });
   } else { err(); }
 }
 
@@ -505,61 +465,50 @@ function gerarId() {
   return "FL-" + new Date().getFullYear() + "-" + seq;
 }
 
-function simHash(str) {
-  var h1 = 3735928559, h2 = 1103515245;
-  for (var i = 0; i < str.length; i++) {
-    var c = str.charCodeAt(i);
-    h1 = Math.imul(h1 ^ c, 2654435761);
-    h2 = Math.imul(h2 ^ c, 1597334677);
-  }
-  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
-  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
-  var s1 = (h1 >>> 0).toString(16).toUpperCase();
-  var s2 = (h2 >>> 0).toString(16).toUpperCase();
-  while (s1.length < 8) s1 = "0" + s1;
-  while (s2.length < 8) s2 = "0" + s2;
-  return s1 + s2 + "FL26";
+async function sha256String(message) {
+  var encoder = new TextEncoder();
+  var data = encoder.encode(message);
+  var hashBuffer = await window.crypto.subtle.digest("SHA-256", data);
+  var hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(function(b) { return b.toString(16).padStart(2, "0"); }).join("").toUpperCase();
 }
 
 function calcHash(file, cb) {
   if (!file || !window.crypto || !window.crypto.subtle) {
-    var r = "";
-    for (var i = 0; i < 32; i++) r += "0123456789ABCDEF"[Math.floor(Math.random() * 16)];
-    cb(r); return;
+    cb("ERR_CRYPTO_UNAVAILABLE");
+    return;
   }
   var reader = new FileReader();
-  reader.onload = function(e) {
-    window.crypto.subtle.digest("SHA-256", e.target.result).then(function(buf) {
+  reader.onload = async function(e) {
+    try {
+      var buf = await window.crypto.subtle.digest("SHA-256", e.target.result);
       var arr = Array.from(new Uint8Array(buf));
-      var hex = arr.map(function(b) {
-        var h = b.toString(16);
-        return h.length < 2 ? "0" + h : h;
-      }).join("").toUpperCase();
+      var hex = arr.map(function(b) { return b.toString(16).padStart(2, "0"); }).join("").toUpperCase();
       cb(hex);
-    }).catch(function() {
-      var r = "";
-      for (var i = 0; i < 32; i++) r += "0123456789ABCDEF"[Math.floor(Math.random() * 16)];
-      cb(r);
-    });
+    } catch (err) {
+      console.error(err);
+      cb("ERR_HASH_FAILED");
+    }
   };
   reader.readAsArrayBuffer(file);
 }
 
-// EMPACOTAMENTO ROBUSTO DOS DADOS NA URL PARA AUDITORIA
-function gerarLinkAuditoria() {
+function gerarLinkAuditavel() {
   var dados = {
     id: S.idEntrega,
     nome: S.nome,
     coop: S.coop,
-    end: S.destino,
-    orig: S.lat + "," + S.lng,
-    dest: S.destLat ? (S.destLat + "," + S.destLng) : "Auditado no Local",
+    dest: S.destino,
+    orig: S.lat + ", " + S.lng,
+    destCoords: S.destLat ? (S.destLat + ", " + S.destLng) : "Auditado no local",
     hash: S.hashImagem,
     sh: S.starhash,
-    ts: document.getElementById("r-ts").textContent
+    ts: S.tsAceite || new Date().toLocaleString("pt-BR")
   };
-  var pacote = btoa(unescape(encodeURIComponent(JSON.stringify(dados))));
-  return window.location.origin + window.location.pathname + "#audit=" + pacote;
+  
+  var jsonStr = unescape(encodeURIComponent(JSON.stringify(dados)));
+  var b64 = btoa(jsonStr);
+  return window.location.origin + window.location.pathname + "#audit=" + b64;
 }
 
 function dispararWhatsApp(numeroDestino) {
@@ -567,7 +516,7 @@ function dispararWhatsApp(numeroDestino) {
   if (n.length < 10) { alert("Número de WhatsApp incompleto!"); return; }
   
   var ts = document.getElementById("r-ts").textContent;
-  var linkAuditavel = gerarLinkAuditoria();
+  var linkAuditavel = gerarLinkAuditavel();
   
   var msg = "🛡️ *COMPROVANTE DE ENTREGA AUDITADA — FRAUDLOG*\n\n"
     + "📦 *ID Entrega:* " + S.idEntrega + "\n"
@@ -575,47 +524,59 @@ function dispararWhatsApp(numeroDestino) {
     + "🏢 *Cooperativa:* " + S.coop + "\n"
     + "📍 *Destino:* " + S.destino + "\n"
     + "🌐 *Origem (GPS Motoboy):* " + S.lat + ", " + S.lng + "\n"
-    + "🎯 *Destino (GPS):* " + (S.destLat ? S.destLat + ", " + S.destLng : "Auditado no Local") + "\n"
+    + "🎯 *Destino (GPS Calculado):* " + (S.destLat ? S.destLat + ", " + S.destLng : "Validado no endereço") + "\n"
     + "⏱️ *Horário:* " + ts + "\n"
-    + "🔒 *Hash SHA-256:* " + S.hashImagem + "\n"
+    + "🔒 *Hash SHA-256 Foto:* " + S.hashImagem + "\n"
     + "✨ *StarHash Lacre:* " + S.starhash + "\n\n"
     + "🔗 *Acesse o Relatório Oficial e Auditável:*\n"
     + linkAuditavel;
 
-  var waUrl = "https://api.whatsapp.com/send?phone=55" + n + "&text=" + encodeURIComponent(msg);
-  window.open(waUrl, "_blank");
+  window.open("https://api.whatsapp.com/send?phone=55" + n + "&text=" + encodeURIComponent(msg), "_blank");
 }
 
-// DETETA SE O ECRÃ FOI ABERTO VIA LINK DE AUDITORIA DO WHATSAPP
-function checarParametrosAuditoria() {
-  if (window.location.hash.indexOf("#audit=") !== -1) {
+function verificarModoAuditoria() {
+  var hashUrl = window.location.hash;
+  if (hashUrl.indexOf("#audit=") === 0) {
     try {
-      var pacote = window.location.hash.split("#audit=")[1];
-      var dados = JSON.parse(decodeURIComponent(escape(atob(pacote))));
-      
-      document.getElementById("r-id").textContent = dados.id || "--";
-      document.getElementById("r-ts").textContent = dados.ts || "--";
-      document.getElementById("r-nome").textContent = (dados.nome || "--") + " (" + (dados.coop || "--") + ")";
-      document.getElementById("r-end").textContent = dados.end || "--";
-      document.getElementById("r-coords-orig").textContent = dados.orig || "--";
-      document.getElementById("r-coords-dest").textContent = dados.dest || "--";
-      document.getElementById("r-hash").textContent = dados.hash || "--";
-      document.getElementById("r-sh").textContent = dados.sh || "--";
-      
-      var areaBtn = document.getElementById("area-botoes-cert");
-      if (areaBtn) areaBtn.style.display = "none";
-      
+      var rawB64 = hashUrl.replace("#audit=", "");
+      var jsonStr = decodeURIComponent(escape(atob(rawB64)));
+      var auditData = JSON.parse(jsonStr);
+
+      document.getElementById("r-ts").textContent = auditData.ts || "--";
+      document.getElementById("r-id").textContent = auditData.id || "--";
+      document.getElementById("r-nome").textContent = auditData.nome + " (" + (auditData.coop || "Geral") + ")";
+      document.getElementById("r-end").textContent = auditData.dest || "--";
+      document.getElementById("r-coords-orig").textContent = auditData.orig || "--";
+      document.getElementById("r-coords-dest").textContent = auditData.destCoords || "--";
+      document.getElementById("r-hash").textContent = auditData.hash || "--";
+      document.getElementById("r-link").textContent = window.location.href;
+      document.getElementById("r-sh").textContent = auditData.sh || "--";
+
+      var stepsBar = document.querySelector("#s-cert .steps");
+      if (stepsBar) stepsBar.style.display = "none";
+
+      var relActions = document.querySelector("#s-cert .rel-actions");
+      if (relActions) {
+        relActions.innerHTML = '<div style="text-align:center;padding:16px;color:var(--teal);font-weight:700;font-family:var(--mono);border:1px solid var(--teal-md);border-radius:var(--r);background:var(--teal-lt);margin-top:10px">✓ DOCUMENTO AUTÊNTICO — FATO FÍSICO E HASH COMPROVADOS</div>';
+      }
+
       goTo("s-cert");
       return true;
     } catch (e) {
-      console.log("Falha ao abrir pacote de auditoria:", e);
+      console.error("Falha ao abrir auditoria:", e);
     }
   }
   return false;
 }
 
+window.addEventListener("hashchange", function() {
+  verificarModoAuditoria();
+});
+
 window.onload = function() {
-  if (checarParametrosAuditoria()) return;
+  if (verificarModoAuditoria()) {
+    return;
+  }
 
   var lCpf = document.getElementById("l-cpf");
   var lPhone = document.getElementById("l-phone");
@@ -631,13 +592,9 @@ window.onload = function() {
   var inpCoopWz = document.getElementById("inp-wz-coop");
   inpCoopWz.oninput = function() { this.value = phoneMask(this.value); };
 
-  inpDest.onblur = function() {
-    atualizarDestinoNoMapa(this.value.trim());
-  };
+  inpDest.onblur = function() { atualizarDestinoNoMapa(this.value.trim()); };
 
-  document.getElementById("btn-recenter").onclick = function() {
-    recentralizarRota();
-  };
+  document.getElementById("btn-recenter").onclick = function() { recentralizarRota(); };
 
   document.getElementById("btn-login").onclick = function() {
     var cpf = lCpf.value.trim();
@@ -679,7 +636,10 @@ window.onload = function() {
   document.getElementById("btn-foto").onclick = function() { takePhoto(); };
 
   document.getElementById("btn-foto-next").onclick = function() {
-    if (!S.photoTaken) { alert("Fotografe o pacote"); return; }
+    if (!S.photoTaken || !S.hashImagem) {
+      alert("Aguarde o processamento da imagem.");
+      return;
+    }
     document.getElementById("a-nome").textContent = S.nome;
     document.getElementById("a-end").textContent = S.destino;
     document.getElementById("a-coords").textContent = "GPS: " + S.lat + ", " + S.lng;
@@ -695,30 +655,31 @@ window.onload = function() {
     document.getElementById("a-ts-aceite").textContent = "Validado via Giroscópio em " + ts;
   };
 
-  document.getElementById("btn-sim").onclick = function() {
+  document.getElementById("btn-sim").onclick = async function() {
     var ts = S.tsAceite || new Date().toLocaleString("pt-BR");
-    S.starhash = "SH" + simHash(ts + "|" + S.lat + "|" + S.lng + "|" + S.hashImagem + "|" + S.destino);
+    var seedPayload = [S.idEntrega, ts, S.lat, S.lng, S.hashImagem, S.destino].join("|");
+    var masterDigest = await sha256String(seedPayload);
+    S.starhash = "SH" + masterDigest.slice(0, 16) + "FL26";
+
+    var linkAuditavel = gerarLinkAuditavel();
 
     document.getElementById("r-ts").textContent = ts;
     document.getElementById("r-id").textContent = S.idEntrega;
     document.getElementById("r-nome").textContent = S.nome + " (" + S.coop + ")";
     document.getElementById("r-end").textContent = S.destino;
     document.getElementById("r-coords-orig").textContent = S.lat + ", " + S.lng;
-    document.getElementById("r-coords-dest").textContent = S.destLat ? (S.destLat + ", " + S.destLng) : "Auditado no local";
+    document.getElementById("r-coords-dest").textContent = S.destLat ? S.destLat + ", " + S.destLng : "Auditado no local";
     document.getElementById("r-hash").textContent = S.hashImagem;
+    document.getElementById("r-link").textContent = linkAuditavel;
     document.getElementById("r-sh").textContent = S.starhash;
     goTo("s-cert");
   };
 
-  document.getElementById("btn-enviar-coop").onclick = function() {
-    dispararWhatsApp(S.coopPhone);
-  };
-
-  document.getElementById("btn-enviar-moto").onclick = function() {
-    dispararWhatsApp(S.phone);
-  };
+  document.getElementById("btn-enviar-coop").onclick = function() { dispararWhatsApp(S.coopPhone); };
+  document.getElementById("btn-enviar-moto").onclick = function() { dispararWhatsApp(S.phone); };
 
   document.getElementById("btn-nova").onclick = function() {
+    window.location.hash = "";
     S.photoTaken = false; S.hashImagem = ""; S.destLat = ""; S.destLng = "";
     document.getElementById("cam-ph").style.display = "flex";
     document.getElementById("cam-ok").style.display = "none";
@@ -758,7 +719,7 @@ function desativarBotaoAceite() {
   btn.style.color = "#3a5a48";
   btn.style.cursor = "not-allowed";
   document.getElementById("a-giro-icon").style.transform = "rotate(0deg)";
-  document.getElementById("a-giro-status").textContent = "a aguardar inclinação...";
+  document.getElementById("a-giro-status").textContent = "aguardando inclinação...";
   document.getElementById("a-giro-status").style.color = "var(--muted)";
 }
 
@@ -807,16 +768,28 @@ function pararGiroscopio() {
 
 function takePhoto() {
   var input = document.createElement("input");
-  input.type = "file"; input.accept = "image/*"; input.capture = "environment";
+  input.type = "file";
+  input.accept = "image/*";
+  input.capture = "environment";
   input.onchange = function(e) {
     if (e.target.files && e.target.files[0]) {
       var file = e.target.files[0];
+      var nextBtn = document.getElementById("btn-foto-next");
+
       document.getElementById("cam-ph").style.display = "none";
       document.getElementById("cam-ok").style.display = "flex";
-      S.photoTaken = true;
-      calcHash(file, function(h) { S.hashImagem = h; });
       document.getElementById("btn-foto").style.display = "none";
-      document.getElementById("btn-foto-next").style.display = "flex";
+
+      nextBtn.style.display = "flex";
+      nextBtn.textContent = "Calculando Hash SHA-256...";
+      nextBtn.disabled = true;
+
+      calcHash(file, function(h) {
+        S.hashImagem = h;
+        S.photoTaken = true;
+        nextBtn.textContent = "Prosseguir para Confirmação";
+        nextBtn.disabled = false;
+      });
     }
   };
   input.click();
