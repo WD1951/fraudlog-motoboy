@@ -9,6 +9,8 @@
 <!-- Leaflet Aberto e Sem Chaves de API -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- Gerador Nativo de QR Code Dinâmico -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
   --bg:#0A0E14;--bg2:#0F1520;--bg3:#141C28;--surface:#131B27;
@@ -83,7 +85,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .frow input{flex:1;border:none;background:none;font-family:var(--mono);font-size:13px;color:var(--ink);outline:none}
 .frow input::placeholder{color:var(--muted)}
 
-/* ÁREA DE FOTO COM ONDAS CONCÊNTRICAS */
 .photo-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
 .pulse-wrapper{position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center}
 .pulse-wave{position:absolute;width:100%;height:100%;border-radius:50%;border:2px solid var(--teal);opacity:0;animation:concentricWaves 2.4s infinite cubic-bezier(0.2,0.8,0.2,1);pointer-events:none}
@@ -122,9 +123,14 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .shbox{background:var(--bg);border:1px solid rgba(0,212,160,.3);border-radius:var(--r);padding:12px;margin:12px 0;text-align:center}
 .sh-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
 .sh-val{font-family:var(--mono);font-size:10px;color:var(--teal2);word-break:break-all;line-height:1.5}
+
+/* CAIXA DO QR CODE DINÂMICO */
+.qr-container{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff;padding:16px;border-radius:var(--r);margin:14px 0}
+#qrcode-canvas{display:flex;justify-content:center}
+.qr-caption{font-family:var(--mono);font-size:10px;font-weight:700;color:#000;margin-top:8px;letter-spacing:0.5px}
+
 .rel-actions{padding:0 14px 18px;display:flex;flex-direction:column;gap:8px}
 
-/* FORMATAÇÃO DIRETA PARA IMPRESSÃO EM PDF */
 @media print {
   body { background: #fff !important; color: #000 !important; overflow: visible !important; height: auto !important }
   .screen { position: static !important; display: block !important; overflow: visible !important }
@@ -137,6 +143,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   .rval.mono { color: #000 !important; font-weight: bold !important }
   .shbox { border: 2px dashed #000 !important; background: #f9f9f9 !important; -webkit-print-color-adjust: exact }
   .sh-val { color: #000 !important; font-size: 11px !important }
+  .qr-container { border: 1px solid #ccc !important }
 }
 </style>
 </head>
@@ -327,7 +334,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   </div>
 </div>
 
-<!-- CERTIFICADO / PROVA AUDITÁVEL (COM BOTÃO IMPRIMIR/PDF E CÓPIAS) -->
+<!-- CERTIFICADO / PROVA AUDITÁVEL (COM QR CODE DINÂMICO) -->
 <div id="s-cert" class="screen">
   <div class="app-header">
     <div class="hbrand">
@@ -360,6 +367,12 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
         <div class="shbox">
           <div class="sh-lbl">StarHash Constellation — Lacre Digital</div>
           <div class="sh-val" id="r-sh">--</div>
+        </div>
+
+        <!-- Renderizador do QR Code Dinâmico -->
+        <div class="qr-container">
+          <div id="qrcode-canvas"></div>
+          <div class="qr-caption">Aponte a câmara para validar autenticidade</div>
         </div>
       </div>
     </div>
@@ -604,6 +617,19 @@ function gerarLinkAuditoria() {
   return baseUrl + "?" + params.toString();
 }
 
+function gerarQRCodeDinamico(url) {
+  var container = document.getElementById("qrcode-canvas");
+  container.innerHTML = "";
+  new QRCode(container, {
+    text: url,
+    width: 130,
+    height: 130,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+}
+
 function dispararWhatsApp(numeroDestino, tipoDestinatario) {
   var n = nums(numeroDestino);
   if (n.length < 10) { alert("Número de WhatsApp incompleto para " + tipoDestinatario + "!"); return; }
@@ -633,17 +659,28 @@ function dispararWhatsApp(numeroDestino, tipoDestinatario) {
 function checarParametrosAuditoria() {
   var p = new URLSearchParams(window.location.search);
   if (p.get("audit") === "1") {
-    document.getElementById("r-id").textContent = p.get("id") || "--";
-    document.getElementById("r-ts").textContent = p.get("ts") || "--";
-    document.getElementById("r-nome").textContent = (p.get("mot") || "--") + " (" + (p.get("coop") || "--") + ")";
-    document.getElementById("r-end").textContent = p.get("end") || "--";
-    document.getElementById("r-coords-orig").textContent = (p.get("lat") || "--") + ", " + (p.get("lng") || "--");
-    document.getElementById("r-coords-dest").textContent = p.get("dlat") ? (p.get("dlat") + ", " + p.get("dlng")) : "Auditado no Local";
-    document.getElementById("r-prnu").textContent = p.get("prnu") || "PRNU-SENSOR-VERIFIED";
-    document.getElementById("r-hash").textContent = p.get("h") || "--";
-    document.getElementById("r-sh").textContent = p.get("sh") || "--";
-    
-    // Oculta botões operacionais para quem está só auditando
+    var id = p.get("id") || "--";
+    var ts = p.get("ts") || "--";
+    var mot = (p.get("mot") || "--") + " (" + (p.get("coop") || "--") + ")";
+    var end = p.get("end") || "--";
+    var orig = (p.get("lat") || "--") + ", " + (p.get("lng") || "--");
+    var dest = p.get("dlat") ? (p.get("dlat") + ", " + p.get("dlng")) : "Auditado no Local";
+    var prnu = p.get("prnu") || "PRNU-SENSOR-VERIFIED";
+    var h = p.get("h") || "--";
+    var sh = p.get("sh") || "--";
+
+    document.getElementById("r-id").textContent = id;
+    document.getElementById("r-ts").textContent = ts;
+    document.getElementById("r-nome").textContent = mot;
+    document.getElementById("r-end").textContent = end;
+    document.getElementById("r-coords-orig").textContent = orig;
+    document.getElementById("r-coords-dest").textContent = dest;
+    document.getElementById("r-prnu").textContent = prnu;
+    document.getElementById("r-hash").textContent = h;
+    document.getElementById("r-sh").textContent = sh;
+
+    gerarQRCodeDinamico(window.location.href);
+
     var areaBtn = document.getElementById("area-botoes-cert");
     if (areaBtn) {
       document.getElementById("btn-enviar-coop").style.display = "none";
@@ -720,7 +757,6 @@ window.onload = function() {
   document.getElementById("btn-back1").onclick = function() { goTo("s-map"); };
   document.getElementById("btn-back2").onclick = function() { goTo("s-foto"); };
 
-  // DISPARADOR DA CÂMERA AO TOCAR NO CÍRCULO COM ONDAS
   document.getElementById("btn-trigger-cam").onclick = function() { takePhoto(); };
 
   document.getElementById("btn-foto-next").onclick = function() {
@@ -753,20 +789,22 @@ window.onload = function() {
     document.getElementById("r-prnu").textContent = S.prnu;
     document.getElementById("r-hash").textContent = S.hashImagem;
     document.getElementById("r-sh").textContent = S.starhash;
+
+    // Gerar QR Code Dinâmico com a URL de auditoria
+    var linkAuditavel = gerarLinkAuditoria();
+    gerarQRCodeDinamico(linkAuditavel);
+
     goTo("s-cert");
   };
 
-  // Cópia para a Cooperativa
   document.getElementById("btn-enviar-coop").onclick = function() {
     dispararWhatsApp(S.coopPhone, "Cooperativa");
   };
 
-  // Cópia para o Motoboy
   document.getElementById("btn-enviar-moto").onclick = function() {
     dispararWhatsApp(S.phone, "Motoboy");
   };
 
-  // Botão Imprimir / Salvar em PDF
   document.getElementById("btn-pdf").onclick = function() {
     window.print();
   };
@@ -781,6 +819,7 @@ window.onload = function() {
     document.getElementById("a-confirmado").style.display = "none";
     document.getElementById("inp-dest").value = "";
     document.getElementById("coords-dest").textContent = "Aguardando endereço...";
+    document.getElementById("qrcode-canvas").innerHTML = "";
     if (marcadorDestino && mapaInstancia) { mapaInstancia.removeLayer(marcadorDestino); marcadorDestino = null; }
     if (rotaPolylinha && mapaInstancia) { mapaInstancia.removeLayer(rotaPolylinha); rotaPolylinha = null; }
     S.idEntrega = gerarId();
@@ -858,7 +897,6 @@ function pararGiroscopio() {
   giroAtivo = false;
 }
 
-// CAPTURA RAW -> DNG -> EXTRAÇÃO PRNU
 function takePhoto() {
   var input = document.createElement("input");
   input.type = "file"; input.accept = "image/*"; input.capture = "environment";
@@ -866,7 +904,6 @@ function takePhoto() {
     if (e.target.files && e.target.files[0]) {
       var file = e.target.files[0];
       
-      // Simulação forense da extração de ruído PRNU do sensor
       S.prnu = "PRNU-" + simHash(file.name + file.size + file.lastModified).slice(0, 16);
       
       calcHash(file, function(h) {
