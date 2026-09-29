@@ -6,7 +6,7 @@
 <title>FraudLog — App do Motoboy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
-<!-- Leaflet CSS e JS -->
+<!-- Leaflet Engine -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -18,160 +18,127 @@
   --border:rgba(255,255,255,.08);--border2:rgba(255,255,255,.14);
   --red:#FF5C5C;--amber:#FFB347;--amber-lt:rgba(255,179,71,.12);
   --mono:"Space Mono",monospace;--sans:"Sora",sans-serif;
-  --r:14px;--shadow:0 4px 24px rgba(0,0,0,.5);--shadow2:0 8px 48px rgba(0,0,0,.7)
+  --r:14px;--shadow2:0 8px 48px rgba(0,0,0,.7);
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;overflow:hidden;height:100vh}
 .screen{display:none;position:fixed;top:0;left:0;right:0;bottom:0;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .screen.active{display:flex}
-.grid-bg{position:absolute;inset:0;background-image:linear-gradient(rgba(0,212,160,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,160,.04) 1px,transparent 1px);background-size:44px 44px;pointer-events:none;z-index:0}
-.glow-bg{position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(0,212,160,.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:0}
 .auth-bg{background:var(--bg);align-items:center;justify-content:flex-start;padding:20px}
 .auth-inner{position:relative;z-index:1;width:100%;max-width:420px;margin:auto}
-.auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:28px 24px;box-shadow:var(--shadow2)}
+.auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:26px 20px;box-shadow:var(--shadow2)}
 .logo-wrap{text-align:center;margin-bottom:10px}
-.logo-img{width:90px;height:90px;object-fit:contain;border-radius:16px}
-.app-slogan{text-align:center;font-size:14px;font-weight:700;color:var(--ink2);line-height:1.4;margin-bottom:18px}
+.logo-img{width:84px;height:84px;object-fit:contain;border-radius:16px}
+.app-slogan{text-align:center;font-size:13px;font-weight:700;color:var(--ink2);line-height:1.4;margin-bottom:16px}
 .app-slogan em{color:var(--teal);font-style:normal}
-.badge{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:50px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px}
-.bdot{width:6px;height:6px;background:var(--teal);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-.fg{margin-bottom:13px}
-.fl{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
-.fi{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;font-family:var(--mono);font-size:15px;color:var(--ink);outline:none;-webkit-appearance:none;transition:border-color .2s}
+.badge{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:50px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--teal);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+.fg{margin-bottom:12px}
+.fl{display:block;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.fi{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;font-family:var(--mono);font-size:14px;color:var(--ink);outline:none}
 .fi:focus{border-color:var(--teal)}
-.fi::placeholder{color:var(--muted)}
-.btn-p{width:100%;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:#000;border:none;border-radius:50px;padding:14px;font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px;-webkit-appearance:none;touch-action:manipulation}
-.btn-s{width:100%;background:var(--teal-lt);color:var(--teal);border:1.5px solid var(--teal-md);border-radius:50px;padding:12px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;-webkit-appearance:none;touch-action:manipulation}
-.btn-wz{width:100%;background:linear-gradient(135deg,#1a9e4a,#25D366);color:#fff;border:none;border-radius:50px;padding:14px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;-webkit-appearance:none;touch-action:manipulation}
-.btn-back{background:none;border:none;color:var(--teal);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans);touch-action:manipulation}
+.btn-p{width:100%;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:#000;border:none;border-radius:50px;padding:14px;font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+.btn-s{width:100%;background:var(--teal-lt);color:var(--teal);border:1.5px solid var(--teal-md);border-radius:50px;padding:12px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+.btn-wz{width:100%;background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:50px;padding:15px;font-family:var(--sans);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px}
+.btn-back{background:none;border:none;color:var(--teal);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans)}
 .auth-switch{text-align:center;margin-top:14px;font-size:13px;color:var(--muted)}
 .auth-switch a{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:none}
-.auth-footer{text-align:center;font-size:11px;color:var(--muted);margin-top:12px}
-.app-header{background:rgba(15,21,32,.97);border-bottom:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.app-header{background:rgba(15,21,32,.97);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .hbrand{display:flex;align-items:center;gap:8px}
 .hlogo{width:28px;height:28px;object-fit:contain;border-radius:7px}
 .hname-brand{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--ink);letter-spacing:-1px}
 .hname-brand span{color:var(--teal)}
 .huser{display:flex;align-items:center;gap:7px}
 .avatar{width:28px;height:28px;background:var(--teal-lt);border:1.5px solid var(--teal-md);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;font-weight:700;color:var(--teal)}
-.hname{font-size:11px;font-weight:600;color:var(--ink2);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.status-ok{display:flex;align-items:center;gap:5px;background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:50px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--teal)}
+.hname{font-size:11px;font-weight:600;color:var(--ink2)}
 .steps{background:var(--bg2);padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;flex-shrink:0}
 .step{display:flex;align-items:center;gap:4px;flex:1}
 .sn{width:20px;height:20px;border-radius:50%;background:var(--bg3);border:1px solid var(--border);color:var(--muted);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:var(--mono);flex-shrink:0}
 .sn.active{background:var(--teal);border-color:var(--teal);color:#000}
 .sn.done{background:var(--teal-lt);border-color:var(--teal-md);color:var(--teal)}
-.sl{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.sl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase}
 .sl.active{color:var(--teal)}
-.ssep{width:10px;height:1px;background:var(--border);margin:0 2px;flex-shrink:0}
-.map-wrap{flex:1;position:relative;background:#05070a;min-height:240px;width:100%}
-#mapa-real{width:100%;height:100%;min-height:240px;z-index:1}
-.map-info-bar{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(10,14,20,.94);border:1px solid var(--border2);border-radius:var(--r);padding:9px 13px;display:flex;gap:14px;z-index:1000}
+.ssep{width:8px;height:1px;background:var(--border);margin:0 2px}
+
+/* MAPA LIMPO E AMPLO */
+.map-wrap{position:relative;flex:1;min-height:300px;width:100%;background:#090d12}
+#mapa-real{width:100%;height:100%;min-height:300px}
+.btn-recenter{position:absolute;top:12px;right:12px;z-index:1000;background:rgba(15,21,32,.9);border:1px solid var(--teal);color:var(--teal);padding:8px 14px;border-radius:20px;font-family:var(--mono);font-size:11px;font-weight:700;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.5)}
+.map-info-bar{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(10,14,20,.95);border:1px solid var(--border2);border-radius:var(--r);padding:8px 12px;display:flex;gap:10px;z-index:1000}
 .mic{flex:1}
 .mic-lbl{font-size:9px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
-.mic-val{font-family:var(--mono);font-size:11px;font-weight:700}
+.mic-val{font-family:var(--mono);font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mic-val.t{color:var(--teal)}
 .mic-val.r{color:var(--red)}
+
 .map-panel{background:var(--bg2);border-top:1px solid var(--border);padding:14px;flex-shrink:0}
 .pt{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink);margin-bottom:2px}
-.ps{font-size:11px;color:var(--muted);margin-bottom:11px}
-.frow{display:flex;align-items:center;gap:9px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:10px 12px;margin-bottom:10px}
+.ps{font-size:11px;color:var(--muted);margin-bottom:10px}
+.frow{display:flex;align-items:center;gap:9px;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:9px 12px;margin-bottom:8px}
 .frow:focus-within{border-color:var(--teal)}
-.frow input{flex:1;border:none;background:none;font-family:var(--mono);font-size:13px;color:var(--ink);outline:none;-webkit-appearance:none}
+.frow input{flex:1;border:none;background:none;font-family:var(--mono);font-size:13px;color:var(--ink);outline:none}
 .frow input::placeholder{color:var(--muted)}
+
 .photo-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
-.cam-frame{width:100%;max-width:320px;aspect-ratio:4/3;border-radius:18px;overflow:hidden;position:relative;box-shadow:var(--shadow2);border:1.5px solid var(--border2)}
-.cam-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:linear-gradient(135deg,#0a1520,#050a0f);cursor:pointer}
-.cam-ph svg{opacity:.25}
-.cam-ph-txt{font-size:12px;color:rgba(0,212,160,.4);font-family:var(--mono)}
-.cam-corners{position:absolute;inset:12px;pointer-events:none}
-.cam-corners::before,.cam-corners::after,.cam-corners span::before,.cam-corners span::after{content:"";position:absolute;width:18px;height:18px;border-color:var(--teal);border-style:solid;opacity:.7}
-.cam-corners::before{top:0;left:0;border-width:2px 0 0 2px}
-.cam-corners::after{top:0;right:0;border-width:2px 2px 0 0}
-.cam-corners span::before{bottom:0;left:0;border-width:0 0 2px 2px}
-.cam-corners span::after{bottom:0;right:0;border-width:0 2px 2px 0}
+.cam-frame{width:100%;max-width:320px;aspect-ratio:4/3;border-radius:18px;overflow:hidden;position:relative;border:1.5px solid var(--border2)}
+.cam-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#0c141d;cursor:pointer}
+.cam-ph-txt{font-size:12px;color:var(--teal);font-family:var(--mono)}
 .cam-ok{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,212,160,.15);border-radius:16px;flex-direction:column;gap:8px}
-.cam-ok-icon{width:52px;height:52px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center}
-.cam-ok-txt{color:var(--teal);font-size:13px;font-weight:700;font-family:var(--mono)}
-.prnu-badge{display:flex;align-items:center;gap:7px;background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:50px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--teal);text-transform:uppercase;margin-top:12px}
+.cam-ok-icon{width:50px;height:50px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center}
 .photo-panel{background:var(--bg2);border-top:1px solid var(--border);padding:14px;flex-shrink:0}
-.acard{margin:14px;background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:18px}
-.ahdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
-.aico{width:40px;height:40px;background:var(--amber-lt);border:1.5px solid rgba(255,179,71,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.atitle{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--ink)}
-.asub{font-size:11px;color:var(--muted)}
-.aprev{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:13px;margin-bottom:13px;font-size:13px;color:var(--body);line-height:1.8}
-.aprev strong{color:var(--ink);font-weight:700}
+.acard{margin:14px;background:var(--surface);border:1px solid var(--border2);border-radius:18px;padding:16px}
+.aprev{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px;margin-bottom:12px;font-size:13px;color:var(--body);line-height:1.7}
+.aprev strong{color:var(--ink)}
 .aprev .mono{font-family:var(--mono);font-size:11px;color:var(--teal)}
 .rcard{margin:14px;background:var(--surface);border:1px solid var(--border2);border-radius:18px;overflow:hidden}
-.rhead{background:linear-gradient(135deg,#004d3a,#007A5E);padding:16px 20px;display:flex;align-items:center;gap:11px}
-.rhead-ico{width:36px;height:36px;background:rgba(0,212,160,.15);border:1px solid rgba(0,212,160,.3);border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rhead{background:linear-gradient(135deg,#004d3a,#007A5E);padding:14px 18px;display:flex;align-items:center;gap:10px}
 .rhead-t{font-family:var(--mono);font-size:14px;font-weight:700;color:#fff}
-.rhead-s{font-size:11px;color:rgba(255,255,255,.6);margin-top:1px}
-.rbody{padding:14px 18px}
-.rrow{display:flex;gap:9px;padding:8px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.rhead-s{font-size:11px;color:rgba(255,255,255,.7)}
+.rbody{padding:14px 16px}
+.rrow{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);align-items:flex-start}
 .rrow:last-child{border-bottom:none}
-.rico{width:26px;height:26px;background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
 .rlbl{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:2px}
-.rval{font-size:13px;font-weight:600;color:var(--ink);word-break:break-all}
+.rval{font-size:12px;font-weight:600;color:var(--ink);word-break:break-all}
 .rval.mono{font-family:var(--mono);font-size:10px;color:var(--teal)}
-.shbox{background:var(--bg);border:1px solid rgba(0,212,160,.2);border-radius:var(--r);padding:13px;margin:12px 0;text-align:center}
-.sh-lbl{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:5px}
-.sh-val{font-family:var(--mono);font-size:11px;color:var(--teal2);word-break:break-all;line-height:1.6}
+.shbox{background:var(--bg);border:1px solid rgba(0,212,160,.3);border-radius:var(--r);padding:12px;margin:12px 0;text-align:center}
+.sh-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:4px}
+.sh-val{font-family:var(--mono);font-size:10px;color:var(--teal2);word-break:break-all;line-height:1.5}
 .rel-actions{padding:0 14px 14px;display:flex;flex-direction:column;gap:8px}
-.done-header{background:var(--bg2);border-bottom:1px solid var(--border);padding:20px;text-align:center;flex-shrink:0}
-.done-logo{width:80px;height:80px;object-fit:contain;border-radius:14px;margin-bottom:8px}
-.done-slogan{font-size:13px;font-weight:700;color:var(--ink2);line-height:1.4}
-.done-slogan em{color:var(--teal);font-style:normal}
-.done-banner{display:flex;align-items:center;gap:10px;background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:12px;padding:12px 16px;margin:14px 14px 0}
-.done-nova{width:100%;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:#000;border:none;border-radius:50px;padding:13px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation}
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
 <div id="s-login" class="screen auth-bg active">
-  <div class="grid-bg"></div><div class="glow-bg"></div>
   <div class="auth-inner">
     <div class="auth-card">
       <div class="logo-wrap"><img id="logo1" class="logo-img" alt="FraudLog" src="static/logo.png"></div>
       <div class="app-slogan">O que protege o motoboy,<br><em>protege a empresa.</em></div>
-      <div class="badge"><span class="bdot"></span>App do Motoboy</div>
+      <div class="badge">App do Motoboy</div>
       <div class="fg"><label class="fl">CPF</label><input class="fi" id="l-cpf" type="text" placeholder="000.000.000-00" maxlength="14" inputmode="numeric"></div>
-      <div class="fg"><label class="fl">Celular</label><input class="fi" id="l-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
-      <button type="button" class="btn-p" id="btn-login">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10,17 15,12 10,7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-        Entrar
-      </button>
-      <div class="auth-switch">Primeiro acesso? <a href="#" id="link-cad">Cadastre-se aqui</a></div>
+      <div class="fg"><label class="fl">Celular do Motoboy (WhatsApp)</label><input class="fi" id="l-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
+      <button type="button" class="btn-p" id="btn-login">Entrar</button>
+      <div class="auth-switch">Primeiro acesso? <a href="#" id="link-cad">Cadastre-se</a></div>
     </div>
-    <div class="auth-footer">FraudLog 2026 · fraudlog.com.br</div>
   </div>
 </div>
 
 <!-- CADASTRO -->
 <div id="s-cad" class="screen auth-bg">
-  <div class="grid-bg"></div><div class="glow-bg"></div>
   <div class="auth-inner">
     <div class="auth-card">
       <div class="logo-wrap"><img id="logo2" class="logo-img" alt="FraudLog" src="static/logo.png"></div>
-      <div class="app-slogan">O que protege o motoboy,<br><em>protege a empresa.</em></div>
-      <div class="fg"><label class="fl">Nome completo</label><input class="fi" id="c-nome" type="text" placeholder="Seu nome completo"></div>
+      <div class="app-slogan">Cadastro do Entregador</div>
+      <div class="fg"><label class="fl">Nome completo</label><input class="fi" id="c-nome" type="text" placeholder="Seu nome"></div>
       <div class="fg"><label class="fl">CPF</label><input class="fi" id="c-cpf" type="text" placeholder="000.000.000-00" maxlength="14" inputmode="numeric"></div>
-      <div class="fg"><label class="fl">Celular</label><input class="fi" id="c-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
-      <div class="fg"><label class="fl">Cooperativa</label><input class="fi" id="c-coop" type="text" placeholder="Nome da cooperativa"></div>
-      <button type="button" class="btn-p" id="btn-cad">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Criar conta e entrar
-      </button>
-      <div class="auth-switch">Já tem conta? <a href="#" id="link-login">Fazer login</a></div>
+      <div class="fg"><label class="fl">WhatsApp Motoboy</label><input class="fi" id="c-phone" type="text" placeholder="(11) 99999-9999" maxlength="15" inputmode="numeric"></div>
+      <div class="fg"><label class="fl">Cooperativa / Empresa</label><input class="fi" id="c-coop" type="text" placeholder="Nome da cooperativa"></div>
+      <button type="button" class="btn-p" id="btn-cad">Criar conta e iniciar</button>
+      <div class="auth-switch">Já tem conta? <a href="#" id="link-login">Login</a></div>
     </div>
-    <div class="auth-footer">FraudLog 2026 · fraudlog.com.br</div>
   </div>
 </div>
 
-<!-- MAPA COM DESTINO E ALTO CONTRASTE -->
+<!-- MAPA COM CONTROLE VISUAL E FIXAÇÃO DE ROTA -->
 <div id="s-map" class="screen">
   <div class="app-header">
     <div class="hbrand"><img id="logo3" class="hlogo" alt="FL" src="static/logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
@@ -181,31 +148,29 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     <div class="step"><div class="sn done">✓</div><div class="sl">Login</div></div><div class="ssep"></div>
     <div class="step"><div class="sn active">2</div><div class="sl active">GPS</div></div><div class="ssep"></div>
     <div class="step"><div class="sn">3</div><div class="sl">Foto</div></div><div class="ssep"></div>
-    <div class="step"><div class="sn">4</div><div class="sl">Aceite</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn">4</div><div class="sl">Lacre</div></div><div class="ssep"></div>
     <div class="step"><div class="sn">5</div><div class="sl">Cert.</div></div>
   </div>
   <div class="map-wrap">
+    <button class="btn-recenter" id="btn-recenter">🎯 Centralizar Rota</button>
     <div id="mapa-real"></div>
     <div class="map-info-bar">
-      <div class="mic"><div class="mic-lbl">Você</div><div class="mic-val t" id="coords-atual">Aguardando GPS...</div></div>
-      <div class="mic"><div class="mic-lbl">Destino</div><div class="mic-val r" id="coords-dest">--</div></div>
+      <div class="mic"><div class="mic-lbl">Origem (GPS)</div><div class="mic-val t" id="coords-atual">Localizando...</div></div>
+      <div class="mic"><div class="mic-lbl">Destino</div><div class="mic-val r" id="coords-dest">Aguardando endereço...</div></div>
     </div>
   </div>
   <div class="map-panel">
-    <div class="pt">Destino da Entrega</div>
-    <div class="ps">Digite o endereço para traçar a rota direta no mapa</div>
+    <div class="pt">Destino e Cooperativa</div>
+    <div class="ps">Traçado direto da rota para auditoria de entrega</div>
     <div class="frow">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <input type="text" id="inp-dest" placeholder="Ex: Av Paulista 1000, Sao Paulo">
+      <span style="font-size:12px;color:var(--red)">📍</span>
+      <input type="text" id="inp-dest" placeholder="Endereço de entrega (Ex: Av Paulista 1000)">
     </div>
     <div class="frow">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.06-1.35A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 14.07c-.2.57-1.17 1.1-1.62 1.16-.44.07-.99.1-1.6-.1-.37-.12-.85-.28-1.46-.55-2.57-1.11-4.25-3.7-4.38-3.87-.13-.17-1.07-1.42-1.07-2.71 0-1.29.68-1.93.92-2.19.24-.26.52-.33.7-.33h.5c.16.01.38-.06.6.46.22.52.75 1.83.82 1.97.07.13.11.29.02.47-.09.17-.13.28-.26.43-.13.15-.27.34-.39.46-.13.12-.26.26-.11.5.15.25.65 1.07 1.4 1.74.96.85 1.77 1.11 2.02 1.23.25.12.4.1.54-.06.15-.17.62-.72.78-.97.16-.25.33-.21.55-.13.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.57-.14 1.14z"/></svg>
-      <input type="text" id="inp-wz" placeholder="(11) 99999-9999 WhatsApp da Cooperativa/Cliente" maxlength="15" inputmode="numeric">
+      <span style="font-size:12px;color:#25D366">🏢</span>
+      <input type="text" id="inp-wz-coop" placeholder="WhatsApp da Cooperativa (11) 99999-9999" maxlength="15" inputmode="numeric">
     </div>
-    <button type="button" class="btn-p" id="btn-map-next">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      Continuar — Fotografar no Local
-    </button>
+    <button type="button" class="btn-p" id="btn-map-next">Fotografar Entrega no Local</button>
   </div>
 </div>
 
@@ -219,36 +184,28 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     <div class="step"><div class="sn done">✓</div><div class="sl">Login</div></div><div class="ssep"></div>
     <div class="step"><div class="sn done">✓</div><div class="sl">GPS</div></div><div class="ssep"></div>
     <div class="step"><div class="sn active">3</div><div class="sl active">Foto</div></div><div class="ssep"></div>
-    <div class="step"><div class="sn">4</div><div class="sl">Aceite</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn">4</div><div class="sl">Lacre</div></div><div class="ssep"></div>
     <div class="step"><div class="sn">5</div><div class="sl">Cert.</div></div>
   </div>
   <div class="photo-area">
     <div class="cam-frame">
       <div class="cam-ph" id="cam-ph">
-        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#00D4A0" stroke-width="1.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <div class="cam-ph-txt">Fotografar pacote no balcão</div>
+        <div style="font-size:40px;">📷</div>
+        <div class="cam-ph-txt">Tocar para Fotografar Pacote</div>
       </div>
-      <div class="cam-corners"><span></span></div>
       <div class="cam-ok" id="cam-ok" style="display:none">
-        <div class="cam-ok-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg></div>
-        <div class="cam-ok-txt">Foto Registrada</div>
+        <div class="cam-ok-icon"><span style="font-size:24px;color:#000">✓</span></div>
+        <div style="color:var(--teal);font-weight:700;font-size:13px;font-family:var(--mono)">Foto Registrada</div>
       </div>
-    </div>
-    <div class="prnu-badge">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      PRNU Fingerprint Ativo
     </div>
   </div>
   <div class="photo-panel">
-    <button type="button" class="btn-p" id="btn-foto">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      Fotografar Pacote
-    </button>
-    <button type="button" class="btn-s" id="btn-foto-next" style="display:none">Avançar para Certificação</button>
+    <button type="button" class="btn-p" id="btn-foto">Abrir Câmera</button>
+    <button type="button" class="btn-s" id="btn-foto-next" style="display:none">Prosseguir para Confirmação</button>
   </div>
 </div>
 
-<!-- ACEITE E TELEMETRIA -->
+<!-- LACRE E GIROSCÓPIO -->
 <div id="s-aceite" class="screen">
   <div class="app-header">
     <div class="hbrand"><img id="logo5" class="hlogo" alt="FL" src="static/logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
@@ -258,52 +215,36 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     <div class="step"><div class="sn done">✓</div><div class="sl">Login</div></div><div class="ssep"></div>
     <div class="step"><div class="sn done">✓</div><div class="sl">GPS</div></div><div class="ssep"></div>
     <div class="step"><div class="sn done">✓</div><div class="sl">Foto</div></div><div class="ssep"></div>
-    <div class="step"><div class="sn active">4</div><div class="sl active">Aceite</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn active">4</div><div class="sl active">Lacre</div></div><div class="ssep"></div>
     <div class="step"><div class="sn">5</div><div class="sl">Cert.</div></div>
   </div>
   <div style="overflow-y:auto;flex:1;background:var(--bg)">
     <div class="acard">
-      <div class="ahdr">
-        <div class="aico" style="background:var(--teal-lt);border-color:var(--teal-md)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-        <div><div class="atitle">Confirmação Física no Balcão</div><div class="asub">Validação por giroscópio e espaço-tempo</div></div>
-      </div>
-
       <div class="aprev">
-        <strong>Dados da Entrega</strong><br><br>
+        <strong>Dados da Entrega</strong><br>
         Entregador: <strong id="a-nome">--</strong><br>
-        Cooperativa: <strong id="a-coop">--</strong><br>
         Destino: <strong id="a-end">--</strong><br>
-        Horário: <strong id="a-hora">--</strong><br>
         <span class="mono" id="a-coords">GPS: --</span>
       </div>
 
       <div id="a-wait-porteiro">
-        <div id="a-giro-perm" style="display:none;text-align:center;padding:10px 0 14px;">
-          <div style="font-size:12px;color:var(--amber);font-weight:700;margin-bottom:10px;">📱 Autorize o sensor de movimento</div>
-          <button type="button" id="btn-giro-perm" style="background:var(--amber-lt);border:1.5px solid rgba(255,179,71,.4);color:var(--amber);border-radius:50px;padding:10px 24px;font-family:var(--sans);font-size:13px;font-weight:700;cursor:pointer;">Autorizar giroscópio</button>
+        <div id="a-giro-perm" style="display:none;text-align:center;padding:10px 0;">
+          <button type="button" id="btn-giro-perm" style="background:var(--amber-lt);color:var(--amber);border:1px solid var(--amber);padding:10px 20px;border-radius:30px;font-weight:700">Autorizar Sensor de Movimento</button>
         </div>
-
-        <div id="a-vire" style="text-align:center;padding:10px 0 14px;">
-          <div style="font-size:13px;color:var(--muted);font-weight:600;margin-bottom:12px;">Incline o aparelho em direção ao pacote</div>
-          <div id="a-giro-icon" style="font-size:42px;transition:transform .3s;">📱</div>
-          <div id="a-giro-status" style="margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--muted);">aguardando inclinação do aparelho...</div>
+        <div id="a-vire" style="text-align:center;padding:12px 0;">
+          <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Aponte o celular para o balcão</div>
+          <div id="a-giro-icon" style="font-size:38px;transition:transform .3s">📱</div>
+          <div id="a-giro-status" style="margin-top:6px;font-family:var(--mono);font-size:11px;color:var(--muted)">detectando inclinação...</div>
         </div>
-
-        <button type="button" id="btn-aceite" disabled style="width:100%;background:#1a2a22;color:#3a5a48;border:2px solid #1e3828;border-radius:18px;padding:22px 14px;font-family:var(--sans);font-size:18px;font-weight:800;cursor:not-allowed;display:flex;align-items:center;justify-content:center;gap:12px;touch-action:manipulation;transition:all .4s;">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg>
-          CONFIRMAR ENTREGA
+        <button type="button" id="btn-aceite" disabled style="width:100%;background:#1a2a22;color:#3a5a48;border:none;border-radius:18px;padding:20px;font-size:16px;font-weight:800">
+          CONFIRMAR FATO FÍSICO
         </button>
       </div>
 
       <div id="a-confirmado" style="display:none">
-        <div style="background:var(--teal-lt);border:1.5px solid var(--teal-md);border-radius:14px;padding:16px;display:flex;align-items:center;gap:12px;margin-bottom:14px;">
-          <div style="width:44px;height:44px;background:var(--teal);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg>
-          </div>
-          <div>
-            <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--teal);">Telemetria Validada!</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;" id="a-ts-aceite">--</div>
-          </div>
+        <div style="background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:12px;padding:14px;text-align:center;margin-bottom:12px">
+          <div style="color:var(--teal);font-weight:700;font-family:var(--mono)">Fato Físico Comprovado!</div>
+          <div style="font-size:11px;color:var(--muted)" id="a-ts-aceite">--</div>
         </div>
         <button type="button" class="btn-p" id="btn-sim">Gerar Prova Criptográfica</button>
       </div>
@@ -311,87 +252,62 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   </div>
 </div>
 
-<!-- CERTIFICADO -->
+<!-- CERTIFICADO COM ENVIO PARA COOPERATIVA E MOTOBOY -->
 <div id="s-cert" class="screen">
   <div class="app-header">
     <div class="hbrand"><img id="logo6" class="hlogo" alt="FL" src="static/logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
-    <div class="status-ok"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg>Certificado</div>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--teal);font-weight:700">✓ CERTIFICADO</div>
   </div>
   <div class="steps">
     <div class="step"><div class="sn done">✓</div><div class="sl">Login</div></div><div class="ssep"></div>
     <div class="step"><div class="sn done">✓</div><div class="sl">GPS</div></div><div class="ssep"></div>
     <div class="step"><div class="sn done">✓</div><div class="sl">Foto</div></div><div class="ssep"></div>
-    <div class="step"><div class="sn done">✓</div><div class="sl">Aceite</div></div><div class="ssep"></div>
+    <div class="step"><div class="sn done">✓</div><div class="sl">Lacre</div></div><div class="ssep"></div>
     <div class="step"><div class="sn active">5</div><div class="sl active">Cert.</div></div>
   </div>
   <div style="overflow-y:auto;flex:1;background:var(--bg)">
     <div class="rcard">
-      <div class="rhead"><div class="rhead-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4A0" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg></div><div><div class="rhead-t">Entrega Certificada</div><div class="rhead-s" id="r-ts">--</div></div></div>
+      <div class="rhead">
+        <div>
+          <div class="rhead-t">Comprovante Oficial de Entrega</div>
+          <div class="rhead-s" id="r-ts">--</div>
+        </div>
+      </div>
       <div class="rbody">
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><div><div class="rlbl">ID da Entrega</div><div class="rval mono" id="r-id">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div class="rlbl">Entregador</div><div class="rval" id="r-nome">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div><div><div class="rlbl">Cooperativa</div><div class="rval" id="r-coop">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><div><div class="rlbl">Destino</div><div class="rval" id="r-end">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="rlbl">GPS Registrado</div><div class="rval mono" id="r-coords">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div><div class="rlbl">Sensor PRNU</div><div class="rval mono" id="r-prnu">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div><div><div class="rlbl">Hash da Foto</div><div class="rval mono" id="r-hash">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><polyline points="9,12 11,14 15,10"/><circle cx="12" cy="12" r="10"/></svg></div><div><div class="rlbl">Link Auditável</div><div class="rval mono" id="r-link" style="color:var(--teal)">--</div></div></div>
-        <div class="shbox"><div class="sh-lbl">StarHash — FraudLock Constellation</div><div class="sh-val" id="r-sh">--</div></div>
+        <div class="rrow"><div><div class="rlbl">ID da Operação</div><div class="rval mono" id="r-id">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Entregador / Cooperativa</div><div class="rval" id="r-nome">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Destino Declarado</div><div class="rval" id="r-end">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Coordenadas de Origem (Motoboy)</div><div class="rval mono" id="r-coords-orig">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Coordenadas de Destino (Local)</div><div class="rval mono" id="r-coords-dest">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Hash SHA-256 da Foto</div><div class="rval mono" id="r-hash">--</div></div></div>
+        <div class="rrow"><div><div class="rlbl">Link Público de Auditoria</div><div class="rval mono" id="r-link" style="color:var(--teal)">--</div></div></div>
+        <div class="shbox">
+          <div class="sh-lbl">StarHash Constellation</div>
+          <div class="sh-val" id="r-sh">--</div>
+        </div>
       </div>
     </div>
     <div class="rel-actions">
-      <button type="button" class="btn-wz" id="btn-enviar">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.06-1.35A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 14.07c-.2.57-1.17 1.1-1.62 1.16-.44.07-.99.1-1.6-.1-.37-.12-.85-.28-1.46-.55-2.57-1.11-4.25-3.7-4.38-3.87-.13-.17-1.07-1.42-1.07-2.71 0-1.29.68-1.93.92-2.19.24-.26.52-.33.7-.33h.5c.16.01.38-.06.6.46.22.52.75 1.83.82 1.97.07.13.11.29.02.47-.09.17-.13.28-.26.43-.13.15-.27.34-.39.46-.13.12-.26.26-.11.5.15.25.65 1.07 1.4 1.74.96.85 1.77 1.11 2.02 1.23.25.12.4.1.54-.06.15-.17.62-.72.78-.97.16-.25.33-.21.55-.13.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.57-.14 1.14z"/></svg>
-        Enviar Relatório Oficial para Cooperativa
-      </button>
-      <button type="button" class="btn-s" id="btn-done">Ver Comprovante Consolidado</button>
-    </div>
-  </div>
-</div>
-
-<!-- FINAL -->
-<div id="s-done" class="screen">
-  <div class="done-header">
-    <img id="logo7" class="done-logo" alt="FraudLog" src="static/logo.png">
-    <div class="done-slogan">O que protege o motoboy,<br><em>protege a empresa.</em></div>
-  </div>
-  <div style="overflow-y:auto;flex:1;background:var(--bg)">
-    <div class="done-banner">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
-      <div><div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--teal)">Entrega Registrada no Sistema!</div><div style="font-size:11px;color:var(--muted)">Lacre criptográfico auditável gerado</div></div>
-    </div>
-    <div class="rcard">
-      <div class="rhead"><div class="rhead-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4A0" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg></div><div><div class="rhead-t">Comprovante de Custódia</div><div class="rhead-s" id="d-ts">--</div></div></div>
-      <div class="rbody">
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><div><div class="rlbl">ID Entrega</div><div class="rval mono" id="d-id">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div class="rlbl">Entregador</div><div class="rval" id="d-nome">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div><div><div class="rlbl">Cooperativa</div><div class="rval" id="d-coop">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><div><div class="rlbl">Destino</div><div class="rval" id="d-end">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="rlbl">GPS</div><div class="rval mono" id="d-coords">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div><div><div class="rlbl">Hash Imagem</div><div class="rval mono" id="d-hash">--</div></div></div>
-        <div class="shbox"><div class="sh-lbl">StarHash — FraudLock Constellation</div><div class="sh-val" id="d-sh">--</div></div>
-      </div>
-    </div>
-    <div style="padding:0 14px 24px">
-      <button type="button" class="done-nova" id="btn-nova">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-        Nova entrega
-      </button>
+      <button type="button" class="btn-wz" id="btn-enviar-coop">📲 Enviar Comprovante para Cooperativa</button>
+      <button type="button" class="btn-s" id="btn-enviar-moto">📱 Enviar Cópia para o WhatsApp do Motoboy</button>
+      <button type="button" class="btn-p" id="btn-nova" style="margin-top:10px">Iniciar Nova Entrega</button>
     </div>
   </div>
 </div>
 
 <script>
-var S = {nome:"",cpf:"",phone:"",coop:"",lat:"",lng:"",
-  destLat:"",destLng:"",destino:"",wzPorteiro:"",prnu:"",hashImagem:"",
-  idEntrega:"",starhash:"",photoTaken:false};
+var S = {
+  nome: "", cpf: "", phone: "", coop: "", coopPhone: "",
+  lat: "", lng: "", destLat: "", destLng: "", destino: "",
+  prnu: "", hashImagem: "", idEntrega: "", starhash: "", photoTaken: false
+};
 
 var mapaInstancia = null;
-var marcadorAtual = null;
-var marcadorDest = null;
-var linhaRota = null;
-var debounceGeocode = null;
+var marcadorOrigem = null;
+var marcadorDestino = null;
+var rotaPolylinha = null;
 
+// INICIALIZADOR DO MAPA LIMPO COM ALTO CONTRASTE
 function inicializarMapa(lat, lng) {
   var container = document.getElementById("mapa-real");
   if (!container) return;
@@ -402,80 +318,88 @@ function inicializarMapa(lat, lng) {
       attributionControl: false
     }).setView([lat, lng], 15);
 
-    // Mosaico Dark Matter de alto contraste
+    // Mosaico Limpo CartoDB Dark (sem cores berrantes, ruas em alto contraste)
     L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
       maxZoom: 19,
       subdomains: "abcd"
     }).addTo(mapaInstancia);
 
-    marcadorAtual = L.circleMarker([lat, lng], {
+    marcadorOrigem = L.circleMarker([lat, lng], {
       color: "#00D4A0",
       fillColor: "#00D4A0",
       fillOpacity: 1,
-      weight: 2,
-      radius: 9
-    }).addTo(mapaInstancia).bindPopup("<b>Você (Motoboy)</b>");
+      radius: 9,
+      weight: 2
+    }).addTo(mapaInstancia).bindPopup("<b>Você (Origem)</b>");
   } else {
     mapaInstancia.setView([lat, lng], 15);
-    if (marcadorAtual) marcadorAtual.setLatLng([lat, lng]);
+    if (marcadorOrigem) marcadorOrigem.setLatLng([lat, lng]);
   }
 
   setTimeout(function() {
     if (mapaInstancia) mapaInstancia.invalidateSize();
-  }, 250);
+  }, 300);
 }
 
-function buscarCoordenadasDestino(endereco) {
-  if (!endereco || endereco.length < 4) return;
-  
-  // Geocodificação aberta via Nominatim OpenStreetMap
+// BUSCA E TRAÇADO DO DESTINO
+function atualizarDestinoNoMapa(endereco) {
+  if (!endereco || endereco.length < 3) return;
+
   var url = "https://nominatim.openstreetmap.org/search?format=json&q=" + encodeURIComponent(endereco);
-  
   fetch(url)
-    .then(function(res) { return res.json(); })
+    .then(function(r) { return r.json(); })
     .then(function(dados) {
       if (dados && dados.length > 0) {
         var dLat = parseFloat(dados[0].lat);
         var dLng = parseFloat(dados[0].lon);
-        S.destLat = dLat;
-        S.destLng = dLng;
-        document.getElementById("coords-dest").textContent = dLat.toFixed(4) + ", " + dLng.toFixed(4);
+        S.destLat = dLat.toFixed(6);
+        S.destLng = dLng.toFixed(6);
+        document.getElementById("coords-dest").textContent = S.destLat + ", " + S.destLng;
 
         if (!mapaInstancia) return;
 
-        // Marcador vermelho com ícone visível no escuro
-        if (marcadorDest) {
-          marcadorDest.setLatLng([dLat, dLng]);
+        if (marcadorDestino) {
+          marcadorDestino.setLatLng([dLat, dLng]);
         } else {
-          marcadorDest = L.circleMarker([dLat, dLng], {
+          marcadorDestino = L.circleMarker([dLat, dLng], {
             color: "#FF5C5C",
             fillColor: "#FF5C5C",
             fillOpacity: 1,
-            weight: 2,
-            radius: 9
+            radius: 9,
+            weight: 2
           }).addTo(mapaInstancia).bindPopup("<b>Destino</b>");
         }
 
-        // Traçar rota visual direta (linha tracejada verde fluorescente)
-        if (S.lat && S.lng) {
-          var pontos = [[parseFloat(S.lat), parseFloat(S.lng)], [dLat, dLng]];
-          if (linhaRota) {
-            linhaRota.setLatLngs(pontos);
-          } else {
-            linhaRota = L.polyline(pontos, {
-              color: "#00D4A0",
-              weight: 3,
-              dashArray: "6, 8",
-              opacity: 0.9
-            }).addTo(mapaInstancia);
-          }
-          mapaInstancia.fitBounds(pontos, { padding: [40, 40] });
-        }
+        recentralizarRota();
       }
-    })
-    .catch(function(err) {
-      console.log("Erro na busca de rota:", err);
+    }).catch(function(e) {
+      console.log("Erro rota:", e);
     });
+}
+
+function recentralizarRota() {
+  if (!mapaInstancia || !S.lat) return;
+
+  if (S.destLat && S.destLng) {
+    var pts = [
+      [parseFloat(S.lat), parseFloat(S.lng)],
+      [parseFloat(S.destLat), parseFloat(S.destLng)]
+    ];
+
+    if (rotaPolylinha) {
+      rotaPolylinha.setLatLngs(pts);
+    } else {
+      rotaPolylinha = L.polyline(pts, {
+        color: "#00D4A0",
+        weight: 3,
+        dashArray: "6, 8",
+        opacity: 0.95
+      }).addTo(mapaInstancia);
+    }
+    mapaInstancia.fitBounds(pts, { padding: [50, 50] });
+  } else {
+    mapaInstancia.setView([parseFloat(S.lat), parseFloat(S.lng)], 16);
+  }
 }
 
 function nums(s) {
@@ -508,13 +432,14 @@ function goTo(id) {
     all[i].scrollTop = 0;
   }
   document.getElementById(id).classList.add("active");
-  
   if (id === "s-map") {
     setTimeout(function() {
-      if (mapaInstancia) mapaInstancia.invalidateSize();
+      if (mapaInstancia) {
+        mapaInstancia.invalidateSize();
+        recentralizarRota();
+      }
     }, 200);
   }
-
   if (id === "s-aceite") {
     celularVirado = false;
     desativarBotaoAceite();
@@ -522,6 +447,25 @@ function goTo(id) {
   } else {
     pararGiroscopio();
   }
+}
+
+function startGPS() {
+  var el = document.getElementById("coords-atual");
+  el.textContent = "Obtendo satélite...";
+  function ok(pos) {
+    S.lat = pos.coords.latitude.toFixed(6);
+    S.lng = pos.coords.longitude.toFixed(6);
+    el.textContent = S.lat + ", " + S.lng;
+    inicializarMapa(parseFloat(S.lat), parseFloat(S.lng));
+  }
+  function err() {
+    S.lat = "-23.561412"; S.lng = "-46.655981";
+    el.textContent = S.lat + ", " + S.lng + " (Referência)";
+    inicializarMapa(parseFloat(S.lat), parseFloat(S.lng));
+  }
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(ok, err, {enableHighAccuracy:true, timeout:10000});
+  } else { err(); }
 }
 
 function gerarId() {
@@ -543,7 +487,7 @@ function simHash(str) {
   var s2 = (h2 >>> 0).toString(16).toUpperCase();
   while (s1.length < 8) s1 = "0" + s1;
   while (s2.length < 8) s2 = "0" + s2;
-  return s1 + "-" + s2 + "-CONSTELLATION";
+  return s1 + s2 + "FL26";
 }
 
 function calcHash(file, cb) {
@@ -559,7 +503,7 @@ function calcHash(file, cb) {
       var hex = arr.map(function(b) {
         var h = b.toString(16);
         return h.length < 2 ? "0" + h : h;
-      }).join("").slice(0, 32).toUpperCase();
+      }).join("").toUpperCase();
       cb(hex);
     }).catch(function() {
       var r = "";
@@ -570,116 +514,73 @@ function calcHash(file, cb) {
   reader.readAsArrayBuffer(file);
 }
 
-function startGPS() {
-  var el = document.getElementById("coords-atual");
-  el.textContent = "Obtendo satélite...";
-  function ok(pos) {
-    S.lat = pos.coords.latitude.toFixed(6);
-    S.lng = pos.coords.longitude.toFixed(6);
-    el.textContent = S.lat + ", " + S.lng;
-    inicializarMapa(parseFloat(S.lat), parseFloat(S.lng));
-  }
-  function err() {
-    S.lat = "-23.561412"; S.lng = "-46.655981";
-    el.textContent = S.lat + ", " + S.lng + " (Av Paulista)";
-    inicializarMapa(parseFloat(S.lat), parseFloat(S.lng));
-  }
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(ok, err, {enableHighAccuracy:true, timeout:10000});
-  } else { err(); }
-}
+// MENSAGEM OFICIAL DE AUDITORIA PARA DISPARO WHATSAPP
+function dispararWhatsApp(numeroDestino) {
+  var n = nums(numeroDestino);
+  if (n.length < 10) { alert("Número de WhatsApp incompleto!"); return; }
+  
+  var ts = document.getElementById("r-ts").textContent;
+  var linkAuditavel = "https://wd1951.github.io/fraudlog-motoboy/?id=" + S.idEntrega + "&sh=" + S.starhash;
+  
+  var msg = "🛡️ *COMPROVANTE DE ENTREGA AUDITADA — FRAUDLOG*\n\n"
+    + "📦 *ID Entrega:* " + S.idEntrega + "\n"
+    + "👤 *Entregador:* " + S.nome + "\n"
+    + "🏢 *Cooperativa:* " + S.coop + "\n"
+    + "📍 *Destino:* " + S.destino + "\n"
+    + "🌐 *Origem (GPS Motoboy):* " + S.lat + ", " + S.lng + "\n"
+    + "🎯 *Destino (GPS Calculado):* " + (S.destLat ? S.destLat + ", " + S.destLng : "Validado no endereço") + "\n"
+    + "⏱️ *Horário UTC/BR:* " + ts + "\n"
+    + "🔒 *Hash SHA-256 Foto:* " + S.hashImagem + "\n"
+    + "✨ *StarHash Lacre:* " + S.starhash + "\n\n"
+    + "🔗 *Verificar Autenticidade no Sistema:*\n"
+    + linkAuditavel;
 
-function atualizarHeader() {
-  var partes = S.nome.split(" ");
-  var ini = "";
-  for (var i = 0; i < partes.length && ini.length < 2; i++) {
-    if (partes[i].length > 0) ini += partes[i][0].toUpperCase();
-  }
-  document.getElementById("av").textContent = ini || "MB";
-  document.getElementById("hname").textContent = partes[0] || "Motoboy";
-}
-
-function preencherDone() {
-  var ts = new Date().toLocaleString("pt-BR");
-  document.getElementById("d-ts").textContent = ts;
-  document.getElementById("d-id").textContent = S.idEntrega || "--";
-  document.getElementById("d-nome").textContent = S.nome || "--";
-  document.getElementById("d-coop").textContent = S.coop || "--";
-  document.getElementById("d-end").textContent = S.destino || "--";
-  document.getElementById("d-coords").textContent = (S.lat && S.lng) ? S.lat + ", " + S.lng : "--";
-  document.getElementById("d-hash").textContent = S.hashImagem || "--";
-  document.getElementById("d-sh").textContent = S.starhash || "--";
+  var waUrl = "https://api.whatsapp.com/send?phone=55" + n + "&text=" + encodeURIComponent(msg);
+  window.open(waUrl, "_blank");
 }
 
 window.onload = function() {
   var lCpf = document.getElementById("l-cpf");
   var lPhone = document.getElementById("l-phone");
-  lCpf.oninput = function() {
-    var d = nums(this.value);
-    this.value = cpfMask(d);
-    if (d.length >= 11) { setTimeout(function() { lPhone.focus(); }, 50); }
-  };
-  lPhone.oninput = function() {
-    var d = nums(this.value);
-    this.value = phoneMask(d);
-  };
+  lCpf.oninput = function() { this.value = cpfMask(this.value); };
+  lPhone.oninput = function() { this.value = phoneMask(this.value); };
 
-  var cNome = document.getElementById("c-nome");
   var cCpf = document.getElementById("c-cpf");
   var cPhone = document.getElementById("c-phone");
-  var cCoop = document.getElementById("c-coop");
-  cCpf.oninput = function() {
-    var d = nums(this.value);
-    this.value = cpfMask(d);
-    if (d.length >= 11) { setTimeout(function() { cPhone.focus(); }, 50); }
-  };
-  cPhone.oninput = function() {
-    var d = nums(this.value);
-    this.value = phoneMask(d);
-    if (d.length >= 11) { setTimeout(function() { cCoop.focus(); }, 50); }
-  };
+  cCpf.oninput = function() { this.value = cpfMask(this.value); };
+  cPhone.oninput = function() { this.value = phoneMask(this.value); };
 
   var inpDest = document.getElementById("inp-dest");
-  var inpWz = document.getElementById("inp-wz");
-  
-  inpDest.oninput = function() {
-    var d = this.value.trim();
-    clearTimeout(debounceGeocode);
-    debounceGeocode = setTimeout(function() {
-      buscarCoordenadasDestino(d);
-    }, 600);
+  var inpCoopWz = document.getElementById("inp-wz-coop");
+  inpCoopWz.oninput = function() { this.value = phoneMask(this.value); };
+
+  inpDest.onblur = function() {
+    atualizarDestinoNoMapa(this.value.trim());
   };
 
-  inpWz.oninput = function() {
-    var d = nums(this.value);
-    this.value = phoneMask(d);
+  document.getElementById("btn-recenter").onclick = function() {
+    recentralizarRota();
   };
 
   document.getElementById("btn-login").onclick = function() {
     var cpf = lCpf.value.trim();
     var phone = lPhone.value.trim();
-    if (nums(cpf).length < 11) { alert("CPF inválido."); lCpf.focus(); return; }
-    if (nums(phone).length < 10) { alert("Celular inválido."); lPhone.focus(); return; }
-    var salvo = null;
-    try { salvo = localStorage.getItem("fl_" + nums(cpf)); } catch(e) {}
-    if (!salvo) { alert("CPF não cadastrado. Criando acesso padrão de teste."); salvo = JSON.stringify({nome:"Wanduir Durant", coop:"Sindicato SP"}); }
-    var d = JSON.parse(salvo);
-    S.nome = d.nome; S.cpf = cpf; S.phone = phone; S.coop = d.coop; S.idEntrega = gerarId();
-    atualizarHeader(); goTo("s-map"); startGPS();
+    if (nums(cpf).length < 11) { alert("CPF incompleto"); return; }
+    if (nums(phone).length < 10) { alert("WhatsApp do motoboy incompleto"); return; }
+    S.cpf = cpf; S.phone = phone; S.nome = "Wanduir Durant"; S.coop = "Sindicato SP"; S.idEntrega = gerarId();
+    document.getElementById("hname").textContent = "Wanduir";
+    goTo("s-map"); startGPS();
   };
 
   document.getElementById("btn-cad").onclick = function() {
-    var nome = cNome.value.trim();
+    var nome = document.getElementById("c-nome").value.trim();
     var cpf = cCpf.value.trim();
     var phone = cPhone.value.trim();
-    var coop = cCoop.value.trim();
-    if (!nome) { alert("Informe seu nome."); cNome.focus(); return; }
-    if (nums(cpf).length < 11) { alert("CPF inválido."); cCpf.focus(); return; }
-    if (nums(phone).length < 10) { alert("Celular inválido."); cPhone.focus(); return; }
-    if (!coop) { alert("Informe a cooperativa."); cCoop.focus(); return; }
-    try { localStorage.setItem("fl_" + nums(cpf), JSON.stringify({nome:nome, coop:coop})); } catch(e) {}
-    S.nome = nome; S.cpf = cpf; S.phone = phone; S.coop = coop; S.idEntrega = gerarId();
-    atualizarHeader(); goTo("s-map"); startGPS();
+    var coop = document.getElementById("c-coop").value.trim();
+    if (!nome || nums(cpf).length < 11 || nums(phone).length < 10) { alert("Preencha todos os campos"); return; }
+    S.nome = nome; S.cpf = cpf; S.phone = phone; S.coop = coop || "Geral"; S.idEntrega = gerarId();
+    document.getElementById("hname").textContent = nome.split(" ")[0];
+    goTo("s-map"); startGPS();
   };
 
   document.getElementById("link-cad").onclick = function(e) { e.preventDefault(); goTo("s-cad"); };
@@ -687,10 +588,11 @@ window.onload = function() {
 
   document.getElementById("btn-map-next").onclick = function() {
     var dest = inpDest.value.trim();
-    var wz = inpWz.value.trim();
-    if (!dest) { alert("Informe o endereço de entrega."); inpDest.focus(); return; }
-    if (nums(wz).length < 10) { alert("Informe o WhatsApp para envio da prova."); inpWz.focus(); return; }
-    S.destino = dest; S.wzPorteiro = wz; goTo("s-foto");
+    var coopWz = inpCoopWz.value.trim();
+    if (!dest) { alert("Informe o endereço de destino"); return; }
+    if (nums(coopWz).length < 10) { alert("Informe o WhatsApp da Cooperativa/Central"); return; }
+    S.destino = dest; S.coopPhone = coopWz;
+    goTo("s-foto");
   };
 
   document.getElementById("btn-back1").onclick = function() { goTo("s-map"); };
@@ -700,12 +602,9 @@ window.onload = function() {
   document.getElementById("btn-foto").onclick = function() { takePhoto(); };
 
   document.getElementById("btn-foto-next").onclick = function() {
-    if (!S.photoTaken) { alert("Tire a foto do pacote primeiro."); return; }
-    var hora = new Date().toLocaleTimeString("pt-BR", {hour:"2-digit", minute:"2-digit"});
+    if (!S.photoTaken) { alert("Fotografe o pacote"); return; }
     document.getElementById("a-nome").textContent = S.nome;
-    document.getElementById("a-coop").textContent = S.coop;
     document.getElementById("a-end").textContent = S.destino;
-    document.getElementById("a-hora").textContent = hora;
     document.getElementById("a-coords").textContent = "GPS: " + S.lat + ", " + S.lng;
     goTo("s-aceite");
   };
@@ -716,69 +615,48 @@ window.onload = function() {
     S.tsAceite = ts;
     document.getElementById("a-wait-porteiro").style.display = "none";
     document.getElementById("a-confirmado").style.display = "block";
-    document.getElementById("a-ts-aceite").textContent = "Validado no balcão em " + ts;
+    document.getElementById("a-ts-aceite").textContent = "Validado via Giroscópio em " + ts;
   };
 
   document.getElementById("btn-sim").onclick = function() {
     var ts = S.tsAceite || new Date().toLocaleString("pt-BR");
-    S.starhash = "SH" + simHash(ts + "|" + S.lat + "|" + S.lng + "|" + S.prnu + "|" + S.coop + "|" + S.destino + "|CONSTELLATION");
-    
-    // Gerar link auditável público
-    var linkAuditavel = "https://wd1951.github.io/fraudlog-motoboy/?id=" + S.idEntrega + "&sh=" + S.starhash.slice(0, 16);
-    
+    S.starhash = "SH" + simHash(ts + "|" + S.lat + "|" + S.lng + "|" + S.hashImagem + "|" + S.destino);
+    var linkAuditavel = "https://wd1951.github.io/fraudlog-motoboy/?id=" + S.idEntrega;
+
     document.getElementById("r-ts").textContent = ts;
     document.getElementById("r-id").textContent = S.idEntrega;
-    document.getElementById("r-nome").textContent = S.nome;
-    document.getElementById("r-coop").textContent = S.coop;
+    document.getElementById("r-nome").textContent = S.nome + " (" + S.coop + ")";
     document.getElementById("r-end").textContent = S.destino;
-    document.getElementById("r-coords").textContent = S.lat + ", " + S.lng;
-    document.getElementById("r-prnu").textContent = S.prnu;
-    document.getElementById("r-hash").textContent = S.hashImagem || "SHA256_VERIFICADO";
+    document.getElementById("r-coords-orig").textContent = S.lat + ", " + S.lng;
+    document.getElementById("r-coords-dest").textContent = S.destLat ? S.destLat + ", " + S.destLng : "Auditado no local";
+    document.getElementById("r-hash").textContent = S.hashImagem;
     document.getElementById("r-link").textContent = linkAuditavel;
     document.getElementById("r-sh").textContent = S.starhash;
     goTo("s-cert");
   };
 
-  document.getElementById("btn-enviar").onclick = function() {
-    var ts = new Date().toLocaleString("pt-BR");
-    var linkAuditavel = "https://wd1951.github.io/fraudlog-motoboy/?id=" + S.idEntrega + "&sh=" + S.starhash.slice(0, 16);
-    
-    var msg = "🛡️ *COMPROVANTE DE ENTREGA CERTIFICADA (FRAUDLOG)*\n\n"
-      + "📦 *ID:* " + S.idEntrega + "\n"
-      + "🏍️ *Entregador:* " + S.nome + "\n"
-      + "🏢 *Cooperativa:* " + S.coop + "\n"
-      + "📍 *Destino:* " + S.destino + "\n"
-      + "🌐 *GPS:* " + S.lat + ", " + S.lng + "\n"
-      + "⏱️ *Horário:* " + ts + "\n"
-      + "🔒 *Hash Imagem:* " + S.hashImagem + "\n"
-      + "✨ *StarHash:* " + S.starhash + "\n\n"
-      + "🔗 *Acesse o Relatório Oficial e Auditável:*\n"
-      + linkAuditavel;
-
-    // Dispara via WhatsApp para o número cadastrado da cooperativa/porteiro
-    var destNumber = nums(S.wzPorteiro) || nums(S.phone);
-    var waUrl = "https://api.whatsapp.com/send?phone=55" + destNumber + "&text=" + encodeURIComponent(msg);
-    window.open(waUrl, "_blank");
-    
-    setTimeout(function() { preencherDone(); goTo("s-done"); }, 800);
+  // Botões de envio direto
+  document.getElementById("btn-enviar-coop").onclick = function() {
+    dispararWhatsApp(S.coopPhone);
   };
 
-  document.getElementById("btn-done").onclick = function() { preencherDone(); goTo("s-done"); };
+  document.getElementById("btn-enviar-moto").onclick = function() {
+    dispararWhatsApp(S.phone);
+  };
 
   document.getElementById("btn-nova").onclick = function() {
-    S.photoTaken = false; S.prnu = ""; S.starhash = "";
-    S.wzPorteiro = ""; S.destino = ""; S.hashImagem = ""; S.tsAceite = "";
+    S.photoTaken = false; S.hashImagem = ""; S.destLat = ""; S.destLng = "";
     document.getElementById("cam-ph").style.display = "flex";
     document.getElementById("cam-ok").style.display = "none";
     document.getElementById("btn-foto").style.display = "flex";
     document.getElementById("btn-foto-next").style.display = "none";
     document.getElementById("a-wait-porteiro").style.display = "block";
     document.getElementById("a-confirmado").style.display = "none";
-    document.getElementById("inp-wz").value = "";
     document.getElementById("inp-dest").value = "";
-    document.getElementById("coords-dest").textContent = "--";
-    if (marcadorDest && mapaInstancia) { mapaInstancia.removeLayer(marcadorDest); marcadorDest = null; }
-    if (linhaRota && mapaInstancia) { mapaInstancia.removeLayer(linhaRota); linhaRota = null; }
+    document.getElementById("coords-dest").textContent = "Aguardando endereço...";
+    if (marcadorDestino && mapaInstancia) { mapaInstancia.removeLayer(marcadorDestino); marcadorDestino = null; }
+    if (rotaPolylinha && mapaInstancia) { mapaInstancia.removeLayer(rotaPolylinha); rotaPolylinha = null; }
+    S.idEntrega = gerarId();
     goTo("s-map"); startGPS();
   };
 };
@@ -792,11 +670,9 @@ function ativarBotaoAceite() {
   btn.disabled = false;
   btn.style.background = "linear-gradient(135deg,#1a6e4a,#00D4A0)";
   btn.style.color = "#000";
-  btn.style.border = "none";
   btn.style.cursor = "pointer";
-  btn.style.boxShadow = "0 4px 24px rgba(0,212,160,.35)";
   document.getElementById("a-giro-icon").style.transform = "rotate(90deg)";
-  document.getElementById("a-giro-status").textContent = "✅ Inclinação validada no balcão";
+  document.getElementById("a-giro-status").textContent = "✓ Posição física validada!";
   document.getElementById("a-giro-status").style.color = "var(--teal)";
 }
 
@@ -806,20 +682,16 @@ function desativarBotaoAceite() {
   btn.disabled = true;
   btn.style.background = "#1a2a22";
   btn.style.color = "#3a5a48";
-  btn.style.border = "2px solid #1e3828";
   btn.style.cursor = "not-allowed";
-  btn.style.boxShadow = "none";
   document.getElementById("a-giro-icon").style.transform = "rotate(0deg)";
   document.getElementById("a-giro-status").textContent = "aguardando inclinação...";
   document.getElementById("a-giro-status").style.color = "var(--muted)";
 }
 
 function handleOrientacao(e) {
-  var gamma = e.gamma;
-  var beta  = e.beta;
-  if (gamma === null || beta === null) return;
-  var virado = Math.abs(gamma) > 40 || Math.abs(beta) > 40;
-
+  var g = e.gamma, b = e.beta;
+  if (g === null || b === null) return;
+  var virado = Math.abs(g) > 35 || Math.abs(b) > 35;
   if (virado && !celularVirado) {
     celularVirado = true;
     ativarBotaoAceite();
@@ -836,17 +708,15 @@ function iniciarGiroscopio() {
   if (typeof DeviceOrientationEvent !== "undefined" && typeof DeviceOrientationEvent.requestPermission === "function") {
     document.getElementById("a-giro-perm").style.display = "block";
     document.getElementById("btn-giro-perm").onclick = function() {
-      DeviceOrientationEvent.requestPermission().then(function(state) {
-        if (state === "granted") {
+      DeviceOrientationEvent.requestPermission().then(function(s) {
+        if (s === "granted") {
           document.getElementById("a-giro-perm").style.display = "none";
           window.addEventListener("deviceorientation", handleOrientacao);
           giroAtivo = true;
         } else {
           ativarBotaoAceite();
         }
-      }).catch(function() {
-        ativarBotaoAceite();
-      });
+      }).catch(function() { ativarBotaoAceite(); });
     };
   } else if (window.DeviceOrientationEvent) {
     window.addEventListener("deviceorientation", handleOrientacao);
@@ -859,7 +729,6 @@ function iniciarGiroscopio() {
 function pararGiroscopio() {
   window.removeEventListener("deviceorientation", handleOrientacao);
   giroAtivo = false;
-  celularVirado = false;
 }
 
 function takePhoto() {
@@ -871,8 +740,6 @@ function takePhoto() {
       document.getElementById("cam-ph").style.display = "none";
       document.getElementById("cam-ok").style.display = "flex";
       S.photoTaken = true;
-      S.prnu = "PRNU-";
-      for (var i = 0; i < 16; i++) S.prnu += "0123456789ABCDEF"[Math.floor(Math.random() * 16)];
       calcHash(file, function(h) { S.hashImagem = h; });
       document.getElementById("btn-foto").style.display = "none";
       document.getElementById("btn-foto-next").style.display = "flex";
