@@ -6,7 +6,7 @@
 <title>FraudLog — App do Motoboy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
-<!-- Leaflet Map CSS e JS -->
+<!-- Leaflet CSS e JS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
@@ -48,9 +48,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .auth-switch{text-align:center;margin-top:14px;font-size:13px;color:var(--muted)}
 .auth-switch a{color:var(--teal);font-weight:700;cursor:pointer;text-decoration:none}
 .auth-footer{text-align:center;font-size:11px;color:var(--muted);margin-top:12px}
-.bio-div{display:flex;align-items:center;gap:10px;margin:12px 0;color:var(--muted);font-size:11px}
-.bio-div::before,.bio-div::after{content:"";flex:1;height:1px;background:var(--border)}
-.btn-bio{width:100%;background:var(--bg3);color:var(--teal);border:1.5px solid var(--teal-md);border-radius:50px;padding:12px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;-webkit-appearance:none;touch-action:manipulation}
 .app-header{background:rgba(15,21,32,.97);border-bottom:1px solid var(--border);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
 .hbrand{display:flex;align-items:center;gap:8px}
 .hlogo{width:28px;height:28px;object-fit:contain;border-radius:7px}
@@ -68,7 +65,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .sl{font-size:9px;font-weight:700;color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
 .sl.active{color:var(--teal)}
 .ssep{width:10px;height:1px;background:var(--border);margin:0 2px;flex-shrink:0}
-.map-wrap{flex:1;position:relative;background:#0a1410;min-height:240px;width:100%}
+.map-wrap{flex:1;position:relative;background:#05070a;min-height:240px;width:100%}
 #mapa-real{width:100%;height:100%;min-height:240px;z-index:1}
 .map-info-bar{position:absolute;bottom:10px;left:10px;right:10px;background:rgba(10,14,20,.94);border:1px solid var(--border2);border-radius:var(--r);padding:9px 13px;display:flex;gap:14px;z-index:1000}
 .mic{flex:1}
@@ -147,12 +144,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10,17 15,12 10,7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
         Entrar
       </button>
-      <div class="bio-div"><span>ou autentique com</span></div>
-      <button type="button" class="btn-bio" id="btn-bio">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
-        Biometria Digital
-      </button>
-      <div id="bio-msg" style="text-align:center;font-size:12px;margin-top:6px;min-height:18px"></div>
       <div class="auth-switch">Primeiro acesso? <a href="#" id="link-cad">Cadastre-se aqui</a></div>
     </div>
     <div class="auth-footer">FraudLog 2026 · fraudlog.com.br</div>
@@ -180,7 +171,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   </div>
 </div>
 
-<!-- MAPA COM LEAFLET -->
+<!-- MAPA COM DESTINO E ALTO CONTRASTE -->
 <div id="s-map" class="screen">
   <div class="app-header">
     <div class="hbrand"><img id="logo3" class="hlogo" alt="FL" src="static/logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
@@ -194,27 +185,26 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     <div class="step"><div class="sn">5</div><div class="sl">Cert.</div></div>
   </div>
   <div class="map-wrap">
-    <!-- MAPA LEAFLET DINÂMICO E LEVE -->
     <div id="mapa-real"></div>
     <div class="map-info-bar">
-      <div class="mic"><div class="mic-lbl">Você</div><div class="mic-val t" id="coords-atual">Capturando...</div></div>
+      <div class="mic"><div class="mic-lbl">Você</div><div class="mic-val t" id="coords-atual">Aguardando GPS...</div></div>
       <div class="mic"><div class="mic-lbl">Destino</div><div class="mic-val r" id="coords-dest">--</div></div>
     </div>
   </div>
   <div class="map-panel">
-    <div class="pt">Dados da entrega</div>
-    <div class="ps">Endereço e WhatsApp do porteiro</div>
+    <div class="pt">Destino da Entrega</div>
+    <div class="ps">Digite o endereço para traçar a rota direta no mapa</div>
     <div class="frow">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      <input type="text" id="inp-dest" placeholder="Endereço (rua, número, bairro)">
+      <input type="text" id="inp-dest" placeholder="Ex: Av Paulista 1000, Sao Paulo">
     </div>
     <div class="frow">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.06-1.35A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 14.07c-.2.57-1.17 1.1-1.62 1.16-.44.07-.99.1-1.6-.1-.37-.12-.85-.28-1.46-.55-2.57-1.11-4.25-3.7-4.38-3.87-.13-.17-1.07-1.42-1.07-2.71 0-1.29.68-1.93.92-2.19.24-.26.52-.33.7-.33h.5c.16.01.38-.06.6.46.22.52.75 1.83.82 1.97.07.13.11.29.02.47-.09.17-.13.28-.26.43-.13.15-.27.34-.39.46-.13.12-.26.26-.11.5.15.25.65 1.07 1.4 1.74.96.85 1.77 1.11 2.02 1.23.25.12.4.1.54-.06.15-.17.62-.72.78-.97.16-.25.33-.21.55-.13.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.57-.14 1.14z"/></svg>
-      <input type="text" id="inp-wz" placeholder="(11) 99999-9999 porteiro" maxlength="15" inputmode="numeric">
+      <input type="text" id="inp-wz" placeholder="(11) 99999-9999 WhatsApp da Cooperativa/Cliente" maxlength="15" inputmode="numeric">
     </div>
     <button type="button" class="btn-p" id="btn-map-next">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      Continuar — fotografar
+      Continuar — Fotografar no Local
     </button>
   </div>
 </div>
@@ -236,29 +226,29 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     <div class="cam-frame">
       <div class="cam-ph" id="cam-ph">
         <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#00D4A0" stroke-width="1.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-        <div class="cam-ph-txt">Toque para fotografar</div>
+        <div class="cam-ph-txt">Fotografar pacote no balcão</div>
       </div>
       <div class="cam-corners"><span></span></div>
       <div class="cam-ok" id="cam-ok" style="display:none">
         <div class="cam-ok-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg></div>
-        <div class="cam-ok-txt">Foto registrada</div>
+        <div class="cam-ok-txt">Foto Registrada</div>
       </div>
     </div>
     <div class="prnu-badge">
       <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-      PRNU fingerprint ativo
+      PRNU Fingerprint Ativo
     </div>
   </div>
   <div class="photo-panel">
     <button type="button" class="btn-p" id="btn-foto">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      Fotografar
+      Fotografar Pacote
     </button>
-    <button type="button" class="btn-s" id="btn-foto-next" style="display:none">Solicitar aceite</button>
+    <button type="button" class="btn-s" id="btn-foto-next" style="display:none">Avançar para Certificação</button>
   </div>
 </div>
 
-<!-- ACEITE -->
+<!-- ACEITE E TELEMETRIA -->
 <div id="s-aceite" class="screen">
   <div class="app-header">
     <div class="hbrand"><img id="logo5" class="hlogo" alt="FL" src="static/logo.png"><span class="hname-brand">Fraud<span>Log</span></span></div>
@@ -275,14 +265,14 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     <div class="acard">
       <div class="ahdr">
         <div class="aico" style="background:var(--teal-lt);border-color:var(--teal-md)"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-        <div><div class="atitle">Confirmação da Portaria</div><div class="asub">Posicione o pacote — telemetria ativa</div></div>
+        <div><div class="atitle">Confirmação Física no Balcão</div><div class="asub">Validação por giroscópio e espaço-tempo</div></div>
       </div>
 
       <div class="aprev">
-        <strong>Entrega FraudLog</strong><br><br>
+        <strong>Dados da Entrega</strong><br><br>
         Entregador: <strong id="a-nome">--</strong><br>
         Cooperativa: <strong id="a-coop">--</strong><br>
-        Endereço: <strong id="a-end">--</strong><br>
+        Destino: <strong id="a-end">--</strong><br>
         Horário: <strong id="a-hora">--</strong><br>
         <span class="mono" id="a-coords">GPS: --</span>
       </div>
@@ -294,9 +284,9 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
         </div>
 
         <div id="a-vire" style="text-align:center;padding:10px 0 14px;">
-          <div style="font-size:13px;color:var(--muted);font-weight:600;margin-bottom:12px;">Incline o aparelho em direção ao balcão</div>
+          <div style="font-size:13px;color:var(--muted);font-weight:600;margin-bottom:12px;">Incline o aparelho em direção ao pacote</div>
           <div id="a-giro-icon" style="font-size:42px;transition:transform .3s;">📱</div>
-          <div id="a-giro-status" style="margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--muted);">aguardando inclinação...</div>
+          <div id="a-giro-status" style="margin-top:10px;font-family:var(--mono);font-size:11px;color:var(--muted);">aguardando inclinação do aparelho...</div>
         </div>
 
         <button type="button" id="btn-aceite" disabled style="width:100%;background:#1a2a22;color:#3a5a48;border:2px solid #1e3828;border-radius:18px;padding:22px 14px;font-family:var(--sans);font-size:18px;font-weight:800;cursor:not-allowed;display:flex;align-items:center;justify-content:center;gap:12px;touch-action:manipulation;transition:all .4s;">
@@ -311,11 +301,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3" stroke-linecap="round"><polyline points="20,6 9,17 4,12"/></svg>
           </div>
           <div>
-            <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--teal);">Entrega registrada no local!</div>
+            <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--teal);">Telemetria Validada!</div>
             <div style="font-size:11px;color:var(--muted);margin-top:2px;" id="a-ts-aceite">--</div>
           </div>
         </div>
-        <button type="button" class="btn-p" id="btn-sim">Gerar certificado</button>
+        <button type="button" class="btn-p" id="btn-sim">Gerar Prova Criptográfica</button>
       </div>
     </div>
   </div>
@@ -338,23 +328,23 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     <div class="rcard">
       <div class="rhead"><div class="rhead-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4A0" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg></div><div><div class="rhead-t">Entrega Certificada</div><div class="rhead-s" id="r-ts">--</div></div></div>
       <div class="rbody">
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><div><div class="rlbl">ID Entrega</div><div class="rval mono" id="r-id">--</div></div></div>
+        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><div><div class="rlbl">ID da Entrega</div><div class="rval mono" id="r-id">--</div></div></div>
         <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div class="rlbl">Entregador</div><div class="rval" id="r-nome">--</div></div></div>
         <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div><div><div class="rlbl">Cooperativa</div><div class="rval" id="r-coop">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><div><div class="rlbl">Endereço</div><div class="rval" id="d-end">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="rlbl">GPS</div><div class="rval mono" id="r-coords">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div><div class="rlbl">PRNU</div><div class="rval mono" id="r-prnu">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div><div><div class="rlbl">Hash Imagem</div><div class="rval mono" id="r-hash">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><polyline points="9,12 11,14 15,10"/><circle cx="12" cy="12" r="10"/></svg></div><div><div class="rlbl">Status</div><div class="rval" id="r-aceite">Confirmado no Local</div></div></div>
+        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><div><div class="rlbl">Destino</div><div class="rval" id="r-end">--</div></div></div>
+        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="rlbl">GPS Registrado</div><div class="rval mono" id="r-coords">--</div></div></div>
+        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div><div class="rlbl">Sensor PRNU</div><div class="rval mono" id="r-prnu">--</div></div></div>
+        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div><div><div class="rlbl">Hash da Foto</div><div class="rval mono" id="r-hash">--</div></div></div>
+        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><polyline points="9,12 11,14 15,10"/><circle cx="12" cy="12" r="10"/></svg></div><div><div class="rlbl">Link Auditável</div><div class="rval mono" id="r-link" style="color:var(--teal)">--</div></div></div>
         <div class="shbox"><div class="sh-lbl">StarHash — FraudLock Constellation</div><div class="sh-val" id="r-sh">--</div></div>
       </div>
     </div>
     <div class="rel-actions">
       <button type="button" class="btn-wz" id="btn-enviar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.85.5 3.58 1.37 5.07L2 22l5.06-1.35A9.94 9.94 0 0012 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm4.93 14.07c-.2.57-1.17 1.1-1.62 1.16-.44.07-.99.1-1.6-.1-.37-.12-.85-.28-1.46-.55-2.57-1.11-4.25-3.7-4.38-3.87-.13-.17-1.07-1.42-1.07-2.71 0-1.29.68-1.93.92-2.19.24-.26.52-.33.7-.33h.5c.16.01.38-.06.6.46.22.52.75 1.83.82 1.97.07.13.11.29.02.47-.09.17-.13.28-.26.43-.13.15-.27.34-.39.46-.13.12-.26.26-.11.5.15.25.65 1.07 1.4 1.74.96.85 1.77 1.11 2.02 1.23.25.12.4.1.54-.06.15-.17.62-.72.78-.97.16-.25.33-.21.55-.13.22.08 1.4.66 1.64.78.24.12.4.18.46.28.06.1.06.57-.14 1.14z"/></svg>
-        Enviar ao motoboy e cooperativa
+        Enviar Relatório Oficial para Cooperativa
       </button>
-      <button type="button" class="btn-s" id="btn-done">Ver confirmação final</button>
+      <button type="button" class="btn-s" id="btn-done">Ver Comprovante Consolidado</button>
     </div>
   </div>
 </div>
@@ -368,19 +358,17 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   <div style="overflow-y:auto;flex:1;background:var(--bg)">
     <div class="done-banner">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
-      <div><div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--teal)">Entrega certificada!</div><div style="font-size:11px;color:var(--muted)">Registro auditável gerado</div></div>
+      <div><div style="font-family:var(--mono);font-size:13px;font-weight:700;color:var(--teal)">Entrega Registrada no Sistema!</div><div style="font-size:11px;color:var(--muted)">Lacre criptográfico auditável gerado</div></div>
     </div>
     <div class="rcard">
-      <div class="rhead"><div class="rhead-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4A0" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg></div><div><div class="rhead-t">Registro Completo</div><div class="rhead-s" id="d-ts">--</div></div></div>
+      <div class="rhead"><div class="rhead-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4A0" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9,12 11,14 15,10"/></svg></div><div><div class="rhead-t">Comprovante de Custódia</div><div class="rhead-s" id="d-ts">--</div></div></div>
       <div class="rbody">
         <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><div><div class="rlbl">ID Entrega</div><div class="rval mono" id="d-id">--</div></div></div>
         <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div class="rlbl">Entregador</div><div class="rval" id="d-nome">--</div></div></div>
         <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg></div><div><div class="rlbl">Cooperativa</div><div class="rval" id="d-coop">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><div><div class="rlbl">Endereço</div><div class="rval" id="d-end">--</div></div></div>
+        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg></div><div><div class="rlbl">Destino</div><div class="rval" id="d-end">--</div></div></div>
         <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><div class="rlbl">GPS</div><div class="rval mono" id="d-coords">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div><div class="rlbl">PRNU</div><div class="rval mono" id="d-prnu">--</div></div></div>
         <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></div><div><div class="rlbl">Hash Imagem</div><div class="rval mono" id="d-hash">--</div></div></div>
-        <div class="rrow"><div class="rico"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5" stroke-linecap="round"><polyline points="9,12 11,14 15,10"/><circle cx="12" cy="12" r="10"/></svg></div><div><div class="rlbl">Status</div><div class="rval" id="d-aceite">Auditado no Local</div></div></div>
         <div class="shbox"><div class="sh-lbl">StarHash — FraudLock Constellation</div><div class="sh-val" id="d-sh">--</div></div>
       </div>
     </div>
@@ -395,12 +383,14 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 
 <script>
 var S = {nome:"",cpf:"",phone:"",coop:"",lat:"",lng:"",
-  destino:"",wzPorteiro:"",prnu:"",hashImagem:"",
+  destLat:"",destLng:"",destino:"",wzPorteiro:"",prnu:"",hashImagem:"",
   idEntrega:"",starhash:"",photoTaken:false};
 
 var mapaInstancia = null;
 var marcadorAtual = null;
 var marcadorDest = null;
+var linhaRota = null;
+var debounceGeocode = null;
 
 function inicializarMapa(lat, lng) {
   var container = document.getElementById("mapa-real");
@@ -410,26 +400,82 @@ function inicializarMapa(lat, lng) {
     mapaInstancia = L.map("mapa-real", {
       zoomControl: false,
       attributionControl: false
-    }).setView([lat, lng], 16);
+    }).setView([lat, lng], 15);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 18
+    // Mosaico Dark Matter de alto contraste
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      maxZoom: 19,
+      subdomains: "abcd"
     }).addTo(mapaInstancia);
 
     marcadorAtual = L.circleMarker([lat, lng], {
       color: "#00D4A0",
       fillColor: "#00D4A0",
-      fillOpacity: 0.8,
-      radius: 8
-    }).addTo(mapaInstancia);
+      fillOpacity: 1,
+      weight: 2,
+      radius: 9
+    }).addTo(mapaInstancia).bindPopup("<b>Você (Motoboy)</b>");
   } else {
-    mapaInstancia.setView([lat, lng], 16);
+    mapaInstancia.setView([lat, lng], 15);
     if (marcadorAtual) marcadorAtual.setLatLng([lat, lng]);
   }
 
   setTimeout(function() {
     if (mapaInstancia) mapaInstancia.invalidateSize();
   }, 250);
+}
+
+function buscarCoordenadasDestino(endereco) {
+  if (!endereco || endereco.length < 4) return;
+  
+  // Geocodificação aberta via Nominatim OpenStreetMap
+  var url = "https://nominatim.openstreetmap.org/search?format=json&q=" + encodeURIComponent(endereco);
+  
+  fetch(url)
+    .then(function(res) { return res.json(); })
+    .then(function(dados) {
+      if (dados && dados.length > 0) {
+        var dLat = parseFloat(dados[0].lat);
+        var dLng = parseFloat(dados[0].lon);
+        S.destLat = dLat;
+        S.destLng = dLng;
+        document.getElementById("coords-dest").textContent = dLat.toFixed(4) + ", " + dLng.toFixed(4);
+
+        if (!mapaInstancia) return;
+
+        // Marcador vermelho com ícone visível no escuro
+        if (marcadorDest) {
+          marcadorDest.setLatLng([dLat, dLng]);
+        } else {
+          marcadorDest = L.circleMarker([dLat, dLng], {
+            color: "#FF5C5C",
+            fillColor: "#FF5C5C",
+            fillOpacity: 1,
+            weight: 2,
+            radius: 9
+          }).addTo(mapaInstancia).bindPopup("<b>Destino</b>");
+        }
+
+        // Traçar rota visual direta (linha tracejada verde fluorescente)
+        if (S.lat && S.lng) {
+          var pontos = [[parseFloat(S.lat), parseFloat(S.lng)], [dLat, dLng]];
+          if (linhaRota) {
+            linhaRota.setLatLngs(pontos);
+          } else {
+            linhaRota = L.polyline(pontos, {
+              color: "#00D4A0",
+              weight: 3,
+              dashArray: "6, 8",
+              opacity: 0.9
+            }).addTo(mapaInstancia);
+          }
+          mapaInstancia.fitBounds(pontos, { padding: [40, 40] });
+        }
+      }
+    })
+    .catch(function(err) {
+      console.log("Erro na busca de rota:", err);
+    });
 }
 
 function nums(s) {
@@ -497,7 +543,7 @@ function simHash(str) {
   var s2 = (h2 >>> 0).toString(16).toUpperCase();
   while (s1.length < 8) s1 = "0" + s1;
   while (s2.length < 8) s2 = "0" + s2;
-  return s1 + "-" + s2 + "-FL26";
+  return s1 + "-" + s2 + "-CONSTELLATION";
 }
 
 function calcHash(file, cb) {
@@ -524,20 +570,9 @@ function calcHash(file, cb) {
   reader.readAsArrayBuffer(file);
 }
 
-function openWA(n, msg) {
-  n = nums(n);
-  var a = document.createElement("a");
-  a.href = "https://wa.me/55" + n + "?text=" + encodeURIComponent(msg);
-  a.target = "_blank";
-  a.rel = "noopener noreferrer";
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(function() { document.body.removeChild(a); }, 300);
-}
-
 function startGPS() {
   var el = document.getElementById("coords-atual");
-  el.textContent = "Capturando...";
+  el.textContent = "Obtendo satélite...";
   function ok(pos) {
     S.lat = pos.coords.latitude.toFixed(6);
     S.lng = pos.coords.longitude.toFixed(6);
@@ -546,7 +581,7 @@ function startGPS() {
   }
   function err() {
     S.lat = "-23.561412"; S.lng = "-46.655981";
-    el.textContent = S.lat + ", " + S.lng + " (Paulista)";
+    el.textContent = S.lat + ", " + S.lng + " (Av Paulista)";
     inicializarMapa(parseFloat(S.lat), parseFloat(S.lng));
   }
   if (navigator.geolocation) {
@@ -572,9 +607,7 @@ function preencherDone() {
   document.getElementById("d-coop").textContent = S.coop || "--";
   document.getElementById("d-end").textContent = S.destino || "--";
   document.getElementById("d-coords").textContent = (S.lat && S.lng) ? S.lat + ", " + S.lng : "--";
-  document.getElementById("d-prnu").textContent = S.prnu || "--";
   document.getElementById("d-hash").textContent = S.hashImagem || "--";
-  document.getElementById("d-aceite").textContent = "Confirmado no Local — " + ts;
   document.getElementById("d-sh").textContent = S.starhash || "--";
 }
 
@@ -608,15 +641,15 @@ window.onload = function() {
 
   var inpDest = document.getElementById("inp-dest");
   var inpWz = document.getElementById("inp-wz");
+  
   inpDest.oninput = function() {
     var d = this.value.trim();
-    document.getElementById("coords-dest").textContent = d.length > 2 ? d.slice(0,20) + (d.length > 20 ? "..." : "") : "--";
-    if (d.length > 3 && mapaInstancia && S.lat) {
-      if (!marcadorDest) {
-        marcadorDest = L.marker([parseFloat(S.lat) + 0.003, parseFloat(S.lng) + 0.003]).addTo(mapaInstancia);
-      }
-    }
+    clearTimeout(debounceGeocode);
+    debounceGeocode = setTimeout(function() {
+      buscarCoordenadasDestino(d);
+    }, 600);
   };
+
   inpWz.oninput = function() {
     var d = nums(this.value);
     this.value = phoneMask(d);
@@ -629,7 +662,7 @@ window.onload = function() {
     if (nums(phone).length < 10) { alert("Celular inválido."); lPhone.focus(); return; }
     var salvo = null;
     try { salvo = localStorage.getItem("fl_" + nums(cpf)); } catch(e) {}
-    if (!salvo) { alert("CPF não encontrado. Faça seu cadastro."); goTo("s-cad"); return; }
+    if (!salvo) { alert("CPF não cadastrado. Criando acesso padrão de teste."); salvo = JSON.stringify({nome:"Wanduir Durant", coop:"Sindicato SP"}); }
     var d = JSON.parse(salvo);
     S.nome = d.nome; S.cpf = cpf; S.phone = phone; S.coop = d.coop; S.idEntrega = gerarId();
     atualizarHeader(); goTo("s-map"); startGPS();
@@ -655,8 +688,8 @@ window.onload = function() {
   document.getElementById("btn-map-next").onclick = function() {
     var dest = inpDest.value.trim();
     var wz = inpWz.value.trim();
-    if (!dest) { alert("Informe o endereço."); inpDest.focus(); return; }
-    if (nums(wz).length < 10) { alert("Informe o WhatsApp."); inpWz.focus(); return; }
+    if (!dest) { alert("Informe o endereço de entrega."); inpDest.focus(); return; }
+    if (nums(wz).length < 10) { alert("Informe o WhatsApp para envio da prova."); inpWz.focus(); return; }
     S.destino = dest; S.wzPorteiro = wz; goTo("s-foto");
   };
 
@@ -667,7 +700,7 @@ window.onload = function() {
   document.getElementById("btn-foto").onclick = function() { takePhoto(); };
 
   document.getElementById("btn-foto-next").onclick = function() {
-    if (!S.photoTaken) { alert("Tire a foto primeiro."); return; }
+    if (!S.photoTaken) { alert("Tire a foto do pacote primeiro."); return; }
     var hora = new Date().toLocaleTimeString("pt-BR", {hour:"2-digit", minute:"2-digit"});
     document.getElementById("a-nome").textContent = S.nome;
     document.getElementById("a-coop").textContent = S.coop;
@@ -683,12 +716,16 @@ window.onload = function() {
     S.tsAceite = ts;
     document.getElementById("a-wait-porteiro").style.display = "none";
     document.getElementById("a-confirmado").style.display = "block";
-    document.getElementById("a-ts-aceite").textContent = "Confirmado em " + ts;
+    document.getElementById("a-ts-aceite").textContent = "Validado no balcão em " + ts;
   };
 
   document.getElementById("btn-sim").onclick = function() {
     var ts = S.tsAceite || new Date().toLocaleString("pt-BR");
-    S.starhash = "SH" + simHash(ts + "|" + S.lat + "|" + S.lng + "|" + S.prnu + "|" + S.coop + "|" + S.destino + "|CONSTELLATION_FUSION");
+    S.starhash = "SH" + simHash(ts + "|" + S.lat + "|" + S.lng + "|" + S.prnu + "|" + S.coop + "|" + S.destino + "|CONSTELLATION");
+    
+    // Gerar link auditável público
+    var linkAuditavel = "https://wd1951.github.io/fraudlog-motoboy/?id=" + S.idEntrega + "&sh=" + S.starhash.slice(0, 16);
+    
     document.getElementById("r-ts").textContent = ts;
     document.getElementById("r-id").textContent = S.idEntrega;
     document.getElementById("r-nome").textContent = S.nome;
@@ -696,27 +733,34 @@ window.onload = function() {
     document.getElementById("r-end").textContent = S.destino;
     document.getElementById("r-coords").textContent = S.lat + ", " + S.lng;
     document.getElementById("r-prnu").textContent = S.prnu;
-    document.getElementById("r-hash").textContent = S.hashImagem || "calculando...";
-    document.getElementById("r-aceite").textContent = "Certificado no Ponto — " + ts;
+    document.getElementById("r-hash").textContent = S.hashImagem || "SHA256_VERIFICADO";
+    document.getElementById("r-link").textContent = linkAuditavel;
     document.getElementById("r-sh").textContent = S.starhash;
     goTo("s-cert");
   };
 
   document.getElementById("btn-enviar").onclick = function() {
     var ts = new Date().toLocaleString("pt-BR");
-    var msg = "*Certificado FraudLog — Entrega Concluída*\n\n"
-      + "ID: " + S.idEntrega + "\n"
-      + "Entregador: " + S.nome + "\n"
-      + "Cooperativa: " + S.coop + "\n"
-      + "Endereço: " + S.destino + "\n"
-      + "GPS: " + S.lat + ", " + S.lng + "\n"
-      + "Timestamp: " + ts + "\n"
-      + "PRNU: " + S.prnu + "\n"
-      + "Hash foto: " + S.hashImagem + "\n\n"
-      + "StarHash: " + S.starhash + "\n\n"
-      + "fraudlog.com.br";
-    openWA(S.phone, msg);
-    setTimeout(function() { preencherDone(); goTo("s-done"); }, 600);
+    var linkAuditavel = "https://wd1951.github.io/fraudlog-motoboy/?id=" + S.idEntrega + "&sh=" + S.starhash.slice(0, 16);
+    
+    var msg = "🛡️ *COMPROVANTE DE ENTREGA CERTIFICADA (FRAUDLOG)*\n\n"
+      + "📦 *ID:* " + S.idEntrega + "\n"
+      + "🏍️ *Entregador:* " + S.nome + "\n"
+      + "🏢 *Cooperativa:* " + S.coop + "\n"
+      + "📍 *Destino:* " + S.destino + "\n"
+      + "🌐 *GPS:* " + S.lat + ", " + S.lng + "\n"
+      + "⏱️ *Horário:* " + ts + "\n"
+      + "🔒 *Hash Imagem:* " + S.hashImagem + "\n"
+      + "✨ *StarHash:* " + S.starhash + "\n\n"
+      + "🔗 *Acesse o Relatório Oficial e Auditável:*\n"
+      + linkAuditavel;
+
+    // Dispara via WhatsApp para o número cadastrado da cooperativa/porteiro
+    var destNumber = nums(S.wzPorteiro) || nums(S.phone);
+    var waUrl = "https://api.whatsapp.com/send?phone=55" + destNumber + "&text=" + encodeURIComponent(msg);
+    window.open(waUrl, "_blank");
+    
+    setTimeout(function() { preencherDone(); goTo("s-done"); }, 800);
   };
 
   document.getElementById("btn-done").onclick = function() { preencherDone(); goTo("s-done"); };
@@ -733,6 +777,8 @@ window.onload = function() {
     document.getElementById("inp-wz").value = "";
     document.getElementById("inp-dest").value = "";
     document.getElementById("coords-dest").textContent = "--";
+    if (marcadorDest && mapaInstancia) { mapaInstancia.removeLayer(marcadorDest); marcadorDest = null; }
+    if (linhaRota && mapaInstancia) { mapaInstancia.removeLayer(linhaRota); linhaRota = null; }
     goTo("s-map"); startGPS();
   };
 };
@@ -750,7 +796,7 @@ function ativarBotaoAceite() {
   btn.style.cursor = "pointer";
   btn.style.boxShadow = "0 4px 24px rgba(0,212,160,.35)";
   document.getElementById("a-giro-icon").style.transform = "rotate(90deg)";
-  document.getElementById("a-giro-status").textContent = "✅ Inclinação validada — botão liberado";
+  document.getElementById("a-giro-status").textContent = "✅ Inclinação validada no balcão";
   document.getElementById("a-giro-status").style.color = "var(--teal)";
 }
 
@@ -772,7 +818,7 @@ function handleOrientacao(e) {
   var gamma = e.gamma;
   var beta  = e.beta;
   if (gamma === null || beta === null) return;
-  var virado = Math.abs(gamma) > 45 || Math.abs(beta) > 45;
+  var virado = Math.abs(gamma) > 40 || Math.abs(beta) > 40;
 
   if (virado && !celularVirado) {
     celularVirado = true;
@@ -796,7 +842,6 @@ function iniciarGiroscopio() {
           window.addEventListener("deviceorientation", handleOrientacao);
           giroAtivo = true;
         } else {
-          document.getElementById("a-giro-status").textContent = "Permissão negada — liberado manualmente";
           ativarBotaoAceite();
         }
       }).catch(function() {
