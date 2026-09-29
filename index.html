@@ -10,10 +10,9 @@
 <meta name="apple-mobile-web-app-title" content="FraudLöcB">
 <title>FraudLöcB MOB — Digital Verification</title>
 
-<!-- Favicons Dinâmicos em Alta Resolução -->
-<link id="dynamic-favicon" rel="icon" type="image/png">
-<link id="dynamic-apple-icon" rel="apple-touch-icon">
-<link id="dynamic-manifest" rel="manifest">
+<!-- ÍCONE ESTÁTICO DE ALTA PRIORIDADE (RECONHECIDO NATIVAMENTE PELO LAUNCHER XIAOMI/MIUI) -->
+<link rel="icon" type="image/png" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230A0E14' stroke='%2338E1FF' stroke-width='4'/%3E%3Cpath d='M30 46V33C30 21.95 38.95 13 50 13C61.05 13 70 21.95 70 33V46' stroke='%2338E1FF' stroke-width='8' stroke-linecap='round' fill='none'/%3E%3Crect x='22' y='44' width='56' height='44' rx='14' fill='%2338E1FF'/%3E%3Ccircle cx='50' cy='62' r='6' fill='%230A0E14'/%3E%3Cpath d='M50 67V75' stroke='%230A0E14' stroke-width='4.5' stroke-linecap='round'/%3E%3Ccircle cx='86' cy='32' r='4' fill='%2338E1FF'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" sizes="192x192" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230A0E14' stroke='%2338E1FF' stroke-width='4'/%3E%3Cpath d='M30 46V33C30 21.95 38.95 13 50 13C61.05 13 70 21.95 70 33V46' stroke='%2338E1FF' stroke-width='8' stroke-linecap='round' fill='none'/%3E%3Crect x='22' y='44' width='56' height='44' rx='14' fill='%2338E1FF'/%3E%3Ccircle cx='50' cy='62' r='6' fill='%230A0E14'/%3E%3Cpath d='M50 67V75' stroke='%230A0E14' stroke-width='4.5' stroke-linecap='round'/%3E%3Ccircle cx='86' cy='32' r='4' fill='%2338E1FF'/%3E%3C/svg%3E">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -75,6 +74,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .fi{width:100%;background:var(--bg3);border:1.5px solid var(--border);border-radius:var(--r);padding:12px 14px;font-family:var(--mono);font-size:14px;color:var(--ink);outline:none;transition:border-color .2s}
 .fi:focus{border-color:var(--teal)}
 .btn-p{width:100%;background:linear-gradient(135deg,var(--teal-dk),var(--teal));color:#000;border:none;border-radius:50px;padding:14px;font-family:var(--sans);font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
+.btn-p:disabled{background:#182822 !important;color:#3d5a4c !important;cursor:not-allowed !important;box-shadow:none !important}
 .btn-s{width:100%;background:var(--teal-lt);color:var(--teal);border:1.5px solid var(--teal-md);border-radius:50px;padding:12px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:8px}
 .btn-wz{width:100%;background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:50px;padding:14px;font-family:var(--sans);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
 .btn-back{background:none;border:none;color:var(--teal);font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans)}
@@ -115,6 +115,11 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .frow input{flex:1;border:none;background:none;font-family:var(--mono);font-size:13px;color:var(--ink);outline:none}
 .frow input::placeholder{color:var(--muted)}
 
+.map-status-timer{
+  font-family:var(--mono);font-size:11px;color:var(--amber);text-align:center;
+  margin-top:6px;min-height:16px;font-weight:700;
+}
+
 .photo-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;background:var(--bg)}
 .cam-frame{width:100%;max-width:320px;aspect-ratio:4/3;border-radius:18px;overflow:hidden;position:relative;border:1.5px solid var(--border2)}
 .cam-ph{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:#0c141d;cursor:pointer}
@@ -144,7 +149,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 #qrcode{width:128px;height:128px}
 .qr-lbl{color:#000;font-size:10px;font-weight:700;margin-top:6px;font-family:var(--mono)}
 
-/* BARRA FIXA FLUTUANTE INFERIOR */
+/* BARRA FIXA FLUTUANTE INFERIOR NO RELATÓRIO */
 .cert-bottom-bar{
   position:fixed;bottom:0;left:0;right:0;background:rgba(10,14,20,0.98);
   border-top:1px solid var(--border2);padding:10px 14px;display:flex;
@@ -255,7 +260,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
   </div>
   <div class="map-panel">
     <div class="pt">Destino e Cooperativa</div>
-    <div class="ps">Auditoria de geofence e rota direta</div>
+    <div class="ps">Preencha com tranquilidade os dados para traçado</div>
     <div class="frow">
       <span style="font-size:12px;color:var(--red)">📍</span>
       <input type="text" id="inp-dest" placeholder="Endereço de entrega (Ex: Av Paulista 1000)">
@@ -264,7 +269,8 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
       <span style="font-size:12px;color:#25D366">🏢</span>
       <input type="text" id="inp-wz-coop" placeholder="WhatsApp da Cooperativa (11) 99999-9999" maxlength="15" inputmode="numeric">
     </div>
-    <button type="button" class="btn-p" id="btn-map-next">Fotografar Entrega no Local</button>
+    <div class="map-status-timer" id="map-timer-txt">⏳ Analisando rota e satélites (6s)...</div>
+    <button type="button" class="btn-p" id="btn-map-next" disabled>Fotografar Entrega no Local</button>
   </div>
 </div>
 
@@ -412,7 +418,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
     </div>
   </div>
 
-  <!-- BARRA DE AÇÕES SEMPRE FIXADA NO RODAPÉ -->
+  <!-- BARRA DE AÇÕES FIXA NO RODAPÉ -->
   <div class="cert-bottom-bar" id="cert-bottom-bar">
     <button type="button" class="btn-wz" id="btn-enviar-coop">📲 Enviar Zap</button>
     <button type="button" class="btn-s" onclick="window.print()">📄 PDF</button>
@@ -421,66 +427,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 </div>
 
 <script>
-// GERAÇÃO DO ÍCONE E MANIFESTO PWA EM ALTA DEFINIÇÃO PARA O ANDROID/XIAOMI
-(function configurarPWAeIcones() {
-  var canvas = document.createElement("canvas");
-  canvas.width = 512;
-  canvas.height = 512;
-  var ctx = canvas.getContext("2d");
-
-  // Moldura Fundo
-  ctx.fillStyle = "#0A0E14";
-  ctx.beginPath();
-  ctx.roundRect(0, 0, 512, 512, 100);
-  ctx.fill();
-  ctx.lineWidth = 14;
-  ctx.strokeStyle = "#38E1FF";
-  ctx.stroke();
-
-  // Arco do Cadeado
-  ctx.lineWidth = 36;
-  ctx.strokeStyle = "#38E1FF";
-  ctx.beginPath();
-  ctx.arc(256, 180, 90, Math.PI, 0, false);
-  ctx.stroke();
-
-  // Corpo do Cadeado
-  ctx.fillStyle = "#38E1FF";
-  ctx.beginPath();
-  ctx.roundRect(120, 230, 272, 210, 50);
-  ctx.fill();
-
-  // Fechadura
-  ctx.fillStyle = "#0A0E14";
-  ctx.beginPath();
-  ctx.arc(256, 320, 28, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillRect(246, 330, 20, 50);
-
-  // Ponto Satélite Lateral
-  ctx.fillStyle = "#38E1FF";
-  ctx.beginPath();
-  ctx.arc(430, 160, 20, 0, Math.PI * 2);
-  ctx.fill();
-
-  var iconPNG = canvas.toDataURL("image/png");
-  document.getElementById("dynamic-favicon").href = iconPNG;
-  document.getElementById("dynamic-apple-icon").href = iconPNG;
-
-  // Criação do Manifesto PWA oficial em tempo de execução
-  var manifestObj = {
-    name: "FraudLöcB MOB",
-    short_name: "FraudLöcB",
-    start_url: window.location.origin + window.location.pathname,
-    display: "standalone",
-    background_color: "#0A0E14",
-    theme_color: "#0A0E14",
-    icons: [{ src: iconPNG, sizes: "512x512", type: "image/png", purpose: "any maskable" }]
-  };
-  var blob = new Blob([JSON.stringify(manifestObj)], {type: 'application/json'});
-  document.getElementById("dynamic-manifest").href = URL.createObjectURL(blob);
-})();
-
 var S = {
   nome: "", cpf: "", phone: "", coop: "", coopPhone: "",
   lat: "", lng: "", destLat: "", destLng: "", destino: "",
@@ -595,21 +541,53 @@ function phoneMask(s) {
   return s;
 }
 
-var timersAuto = {};
-function autoAvancar(elementoAtual, elementoDestino, tamanhoExigido, callbackFinal) {
-  var id = elementoAtual.id;
-  if (timersAuto[id]) clearTimeout(timersAuto[id]);
-  
-  if (nums(elementoAtual.value).length >= tamanhoExigido) {
-    elementoAtual.style.borderColor = "var(--teal)";
-    timersAuto[id] = setTimeout(function() {
-      if (elementoDestino) {
-        elementoDestino.focus();
-      } else if (callbackFinal) {
-        callbackFinal();
-      }
-    }, 1800);
+// CONTROLE DO MAPA: 6 SEGUNDOS MÍNIMOS + CAMPOS PREENCHIDOS
+var tempoMapaPronto = false;
+var timerMapaInterval = null;
+
+function verificarLiberacaoBotaoMapa() {
+  var btn = document.getElementById("btn-map-next");
+  var dest = document.getElementById("inp-dest").value.trim();
+  var coopWz = nums(document.getElementById("inp-wz-coop").value);
+  var txt = document.getElementById("map-timer-txt");
+
+  if (!tempoMapaPronto) {
+    btn.disabled = true;
+    return;
   }
+
+  if (dest.length >= 3 && coopWz.length >= 10) {
+    btn.disabled = false;
+    btn.style.boxShadow = "0 0 16px rgba(0,212,160,0.4)";
+    txt.textContent = "✓ Rota e campos validados. Toque abaixo para prosseguir.";
+    txt.style.color = "var(--teal)";
+  } else {
+    btn.disabled = true;
+    txt.textContent = "Preencha o destino e o WhatsApp da Cooperativa para avançar.";
+    txt.style.color = "var(--muted)";
+  }
+}
+
+function iniciarContadorMapa() {
+  tempoMapaPronto = false;
+  var segundos = 6;
+  var txt = document.getElementById("map-timer-txt");
+  var btn = document.getElementById("btn-map-next");
+  btn.disabled = true;
+
+  if (timerMapaInterval) clearInterval(timerMapaInterval);
+
+  timerMapaInterval = setInterval(function() {
+    segundos--;
+    if (segundos > 0) {
+      txt.textContent = "⏳ Analisando rota e satélites (" + segundos + "s)...";
+      txt.style.color = "var(--amber)";
+    } else {
+      clearInterval(timerMapaInterval);
+      tempoMapaPronto = true;
+      verificarLiberacaoBotaoMapa();
+    }
+  }, 1000);
 }
 
 function goTo(id) {
@@ -626,6 +604,7 @@ function goTo(id) {
         recentralizarRota();
       }
     }, 200);
+    iniciarContadorMapa();
   }
   if (id === "s-aceite") {
     celularVirado = false;
@@ -780,38 +759,30 @@ window.onload = function() {
   var lPhone = document.getElementById("l-phone");
   var btnLogin = document.getElementById("btn-login");
 
-  lCpf.oninput = function() {
-    this.value = cpfMask(this.value);
-    autoAvancar(this, lPhone, 11, null);
-  };
-  lPhone.oninput = function() {
-    this.value = phoneMask(this.value);
-    autoAvancar(this, null, 11, function() { btnLogin.click(); });
-  };
+  lCpf.oninput = function() { this.value = cpfMask(this.value); };
+  lPhone.oninput = function() { this.value = phoneMask(this.value); };
 
   var cNome = document.getElementById("c-nome");
   var cCpf = document.getElementById("c-cpf");
   var cPhone = document.getElementById("c-phone");
   var cCoop = document.getElementById("c-coop");
-  cCpf.oninput = function() { 
-    this.value = cpfMask(this.value); 
-    autoAvancar(this, cPhone, 11, null);
-  };
-  cPhone.oninput = function() { 
-    this.value = phoneMask(this.value); 
-    autoAvancar(this, cCoop, 11, null);
-  };
+  cCpf.oninput = function() { this.value = cpfMask(this.value); };
+  cPhone.oninput = function() { this.value = phoneMask(this.value); };
 
   var inpDest = document.getElementById("inp-dest");
   var inpCoopWz = document.getElementById("inp-wz-coop");
   var btnMapNext = document.getElementById("btn-map-next");
 
+  // Escuta entradas no mapa sem avanço abrupto
+  inpDest.oninput = function() { verificarLiberacaoBotaoMapa(); };
+  inpDest.onblur = function() { 
+    atualizarDestinoNoMapa(this.value.trim()); 
+    verificarLiberacaoBotaoMapa();
+  };
   inpCoopWz.oninput = function() { 
     this.value = phoneMask(this.value); 
-    autoAvancar(this, null, 11, function() { btnMapNext.click(); });
+    verificarLiberacaoBotaoMapa();
   };
-
-  inpDest.onblur = function() { atualizarDestinoNoMapa(this.value.trim()); };
 
   document.getElementById("btn-recenter").onclick = function() { recentralizarRota(); };
 
