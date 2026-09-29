@@ -6,7 +6,16 @@
 <meta name="theme-color" content="#0A0E14">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FraudLöcB">
 <title>FraudLöcB MOB — Digital Verification</title>
+
+<!-- ÍCONE DO BROWSER E DO ECRÃ INICIAL DO TELEMÓVEL (SUBSTITUI O G CINZENTO) -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230A0E14' stroke='%2338E1FF' stroke-width='4'/%3E%3Cpath d='M30 46V33C30 21.95 38.95 13 50 13C61.05 13 70 21.95 70 33V46' stroke='%2338E1FF' stroke-width='8' stroke-linecap='round' fill='none'/%3E%3Crect x='22' y='44' width='56' height='44' rx='14' fill='%2338E1FF'/%3E%3Ccircle cx='50' cy='62' r='6' fill='%230A0E14'/%3E%3Cpath d='M50 67V75' stroke='%230A0E14' stroke-width='4.5' stroke-linecap='round'/%3E%3Ccircle cx='86' cy='32' r='4' fill='%2338E1FF'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%230A0E14' stroke='%2338E1FF' stroke-width='4'/%3E%3Cpath d='M30 46V33C30 21.95 38.95 13 50 13C61.05 13 70 21.95 70 33V46' stroke='%2338E1FF' stroke-width='8' stroke-linecap='round' fill='none'/%3E%3Crect x='22' y='44' width='56' height='44' rx='14' fill='%2338E1FF'/%3E%3Ccircle cx='50' cy='62' r='6' fill='%230A0E14'/%3E%3Cpath d='M50 67V75' stroke='%230A0E14' stroke-width='4.5' stroke-linecap='round'/%3E%3Ccircle cx='86' cy='32' r='4' fill='%2338E1FF'/%3E%3C/svg%3E">
+
+<!-- MANIFEST EMBUTIDO PARA INSTALAÇÃO COMO APP -->
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22FraudL%C3%B6cB%20MOB%22%2C%22short_name%22%3A%22FraudL%C3%B6cB%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230A0E14%22%2C%22theme_color%22%3A%22%230A0E14%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20100%20100'%253E%253Crect%20width%3D'100'%20height%3D'100'%20rx%3D'24'%20fill%3D'%25230A0E14'%20stroke%3D'%252338E1FF'%20stroke-width%3D'4'%2F%253E%253Cpath%20d%3D'M30%2046V33C30%2021.95%2038.95%2013%2050%2013C61.05%2013%2070%2021.95%2070%2033V46'%20stroke%3D'%252338E1FF'%20stroke-width%3D'8'%20stroke-linecap%3D'round'%20fill%3D'none'%2F%253E%253Crect%20x%3D'22'%20y%3D'44'%20width%3D'56'%20height%3D'44'%20rx%3D'14'%20fill%3D'%252338E1FF'%2F%253E%253Ccircle%20cx%3D'50'%20cy%3D'62'%20r%3D'6'%20fill%3D'%25230A0E14'%2F%253E%253Cpath%20d%3D'M50%2067V75'%20stroke%3D'%25230A0E14'%20stroke-width%3D'4.5'%20stroke-linecap%3D'round'%2F%253E%253Ccircle%20cx%3D'86'%20cy%3D'32'%20r%3D'4'%20fill%3D'%252338E1FF'%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
 <!-- Leaflet Engine Oficial Sem API Key -->
@@ -35,7 +44,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 .auth-inner{position:relative;z-index:1;width:100%;max-width:420px;margin:auto}
 .auth-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:26px 20px;box-shadow:var(--shadow2)}
 
-/* LOGOMARCA OFICIAL FRAUDLÖCB MOB */
 .brand-identity{display:flex;flex-direction:column;align-items:center;margin-bottom:16px}
 .brand-badge-box{
   width:94px;height:94px;background:linear-gradient(145deg, #1b2838, #0e1722);
@@ -406,7 +414,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16p
 </div>
 
 <script>
-// PWA Automático embutido
 if ("serviceWorker" in navigator) {
   var swCode = "self.addEventListener('fetch', function(e) {});";
   var blob = new Blob([swCode], {type: "application/javascript"});
@@ -425,7 +432,6 @@ var marcadorOrigem = null;
 var marcadorDestino = null;
 var rotaPolylinha = null;
 
-// Cálculo Haversine de Distância
 function calcularDistanciaMetros(lat1, lon1, lat2, lon2) {
   if (!lat1 || !lon1 || !lat2 || !lon2) return null;
   var R = 6371e3;
@@ -618,7 +624,6 @@ function renderizarQrCode(url) {
   });
 }
 
-// LINK ULTRA-RESILIENTE (QUERY STRING DIRETA)
 function gerarLinkAuditavel() {
   var baseUrl = window.location.origin + window.location.pathname;
   var q = "?id=" + encodeURIComponent(S.idEntrega)
@@ -678,11 +683,10 @@ function verificarModoAuditoria() {
       gf = obj.gf || "Auditoria de perímetro concluída";
       hashFoto = obj.hash; sh = obj.sh;
     } catch(e) {
-      console.warn("Base64 corrompido, tentando fallback:", e);
+      console.warn("Base64 corrompido:", e);
     }
   }
 
-  // Fallback para última entrega salva localmente
   if (!id && localStorage.getItem("fl_last_id")) {
     id = localStorage.getItem("fl_last_id");
     ts = localStorage.getItem("fl_last_ts");
@@ -809,7 +813,6 @@ window.onload = function() {
   document.getElementById("btn-sim").onclick = async function() {
     var ts = S.tsAceite || new Date().toLocaleString("pt-BR");
 
-    // Geofencing Haversine
     if (S.lat && S.lng && S.destLat && S.destLng) {
       var d = calcularDistanciaMetros(parseFloat(S.lat), parseFloat(S.lng), parseFloat(S.destLat), parseFloat(S.destLng));
       if (d !== null) {
